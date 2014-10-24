@@ -6,7 +6,11 @@
                 <div class="col-lg-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h1 > <i class="fa fa-book"></i> Les sociétés</h1>
+                            <i class="fa fa-book"></i> Les sociétés
+                            
+                            <a class="btn btn-default btn-xs" style="float: right" href="<c:url value="/admin/gerer-societes/creer"/>">
+												<i class="fa fa-plus-circle"></i> Ajouter une société
+											</a>
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">

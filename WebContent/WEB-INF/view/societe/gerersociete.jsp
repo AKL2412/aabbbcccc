@@ -43,26 +43,35 @@
 	<label>Email : </label>
 	<input type="text" disabled="disabled" placeholder="Adresse email de la société" value="${societe.email }"  name="email"/>
 </div>
-<div class="input c4">
+<div class="input c3">
 	<label>Téléphone : </label>
 	<input type="text" disabled="disabled" placeholder="N°telephonex de la société" value="${societe.telephone }" name="telephone"/>
 </div>
-<div class="input c4">
+<div class="input c3">
 	<label>CIMR : </label>
 	<input type="text" disabled="disabled" placeholder="N° CIMR de la société" value="${societe.cimr }" name="cimr"/>
 </div>
-<div class="input c4">
+<div class="input c3">
 	<label>Mutuelle : </label>
 	<input type="text" disabled="disabled" placeholder="N° Mutuelle de la société" value="${societe.mutuelle }" name="mutuelle"/>
 </div>
-<div class="input c4">
+<div class="input c3">
 	<label>Patente : </label>
 	<input type="text" disabled="disabled" placeholder="Patente de la société" value="${societe.patente }"  name="patente"/>
+</div>
+<div class="input c3">
+	<label>Nombre maximal de compte : </label>
+	<input type="text" disabled="disabled" placeholder="Nombre max de compte" value="${societe.maxcompte }" name="maxcompte"/>
+</div>
+<div class="input c3">
+	<label>Ville : </label>
+	<input type="text" disabled="disabled" placeholder="Non définie !!!" value="${societe.ville }" name="ville"/>
 </div>
 <div class="input c1">
 	<label>Adresse : </label>
 	<input type="text" disabled="disabled" placeholder="Adresse de la société" value="${societe.adresse }" name="adresse"/>
 </div>
+
 
 				
 			</div>

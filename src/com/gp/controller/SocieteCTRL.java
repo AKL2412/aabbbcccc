@@ -730,17 +730,47 @@ public class SocieteCTRL {
 					utilisateur.setMotdepasse(PassWord.hacher(utilisateur.getMotdepasse()));
 					
 					utilisateurService.enregistrer(utilisateur);
+					
 					model.addAttribute("message", "Compte ajouté");
 				}catch(Exception e){
 					model.addAttribute("message", "Erreur : "+e.getMessage());
 				}
-				return "scte/gerercompte";
+				return "redirect:/societe/"+slug+"/gerer-societe/comptes";
 			}
 			return "redirect:/erreur-lien?slug="+slug+"&code="+veri;
 		}
 		/*=============================================================*/
 		/*
 		 * Gestion des barèmes
+		 */
+		//Envoyer un bareme a l'administrateur
+		@RequestMapping(value="/gerer-baremes/envoyer",method = RequestMethod.GET)
+		public String envoyerbareme(ModelMap model,@PathVariable("slug") String slug){
+			
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+			String login = auth.getName();
+			Utilisateur u = utilisateurService.trouverParLogin(login);
+			Societe s = societeService.trouverParSlug(slug);
+			int veri = Tool.verificationLien(u, s);
+			
+			if(veri == 1){
+				model.addAttribute("link", "bareme");
+				model.addAttribute("action", "envoyer");
+				model.addAttribute("scte", s);
+				model.addAttribute("societe", s);
+				model.addAttribute("compte", u);
+				
+				return "scte/envoyerbareme";
+			}
+			return "redirect:/erreur-lien?slug="+slug+"&code="+veri;
+		}
+		
+		/*
+		 * Fin gestion barèmes
+		 * ==================================---------------***************
+		 */
+		/*
+		 * Gestion des cotisation
 		 */
 		//CNSS
 		@RequestMapping(value="/gerer-cotisation/cnss",method = RequestMethod.GET)

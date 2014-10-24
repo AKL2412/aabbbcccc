@@ -1,12 +1,16 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
  <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
- 
+  
  <div class="row">
+
                 <div class="col-lg-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             Les salariés
+                            <a class="btn btn-default btn-xs" style="float: right" href="<c:url value="/societe/${scte.slug }/gerer-salaries/ajouter"/>">
+												<i class="fa fa-plus-square"></i> Ajouter un salarié
+											</a>
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
@@ -68,7 +72,7 @@
                                  </div>
                                  </div>
  
-        
+      
             <script>
     $(document).ready(function() {
         $('#dataTables').dataTable();

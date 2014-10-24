@@ -14,7 +14,7 @@
  </c:if>
 <div class="panel panel-default">
 	<div class="panel-heading">
-	<h1><i class="fa fa-plus-square "></i> Ajouter une société</h1>
+	<i class="fa fa-plus-square "></i> Ajouter une société
 	
 	</div>
 	<form role="form" enctype="multipart/form-data" modelAttribute="societe" action="" method="post">

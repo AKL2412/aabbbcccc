@@ -3,32 +3,35 @@
 
 <c:choose>
 	<c:when test="${ compte.role.num == 2 }">
-		
-		<c:if test="${fn:length(societe.utilisateurs) > 0  }">
+		<div class="alert alert-success">
+			Compte par defaut : <span class="badge">${compte.login }</span>
+		</div>
+		<c:if test="${fn:length(societe.utilisateurs) > 1  }">
 		<table  class="table table-bordered table-striped table-condensed">
 				<thead>
 					<tr>
-						<th>Numero</th>
+						<th>Identifiant</th>
 						<th>Login du compte</th>
 						<th colspan="2">Statut</th>
 					</tr>
 				</thead>
 				<tbody>
 					<c:forEach items="${scte.utilisateurs }" var="c" varStatus="stat">
-					
+					<c:if test="${ c.role.num != 2 }">
 					<tr>
-					<td>${stat.index + 1 }</td>
+					<td>${c.utilisateurId  }</td>
 						<td>${c.login }</td>
 						<td>${c.role.detail }</td>
 						<td> 
-							<c:if test="${ c.role.num != 2 }">
-								<a class="btn btn-danger btn-xs supprimer-object" object="utilisateur" objectId="${c.utilisateurId }"> 
+							
+								<a class="btn btn-danger btn-xs supprimer-object" action="delete" object="utilisateur" objectId="${c.utilisateurId }"> 
 								<i class="fa-trash-o fa"></i> supprimer
 							</a>
-							</c:if>
+							
 							
 						</td>
 					</tr>
+					</c:if>
 					</c:forEach>
 					</tbody>
 					</table>
@@ -36,36 +39,46 @@
 		
 		<div class="add-compte">
 			
-			<div class="formulaire">
-			<div>${message }</div>
-				<form
-				modelAttribute="utilisateur" 
-				 action="<c:url value="/societe/${societe.slug}/gerer-societe/comptes/ajouter"/> " method="post">
-					<fieldset>
-						<legend>Ajouter un nouveau compte</legend>
-						<div class="input s3">
-						<label>Login : <img id="login-veri" src="<c:url value="/sources/img/loaderf.gif"/>" width="15"/></label>
-						<input type="text" required="required" id="login" placeholder="Login" name="login"/>
-						
+			
+			<c:choose>
+				<c:when test="${fn:length(societe.utilisateurs) < societe.maxcompte  }">
+					<div class="formulaire">
+						<div>${message }</div>
+							<form
+							modelAttribute="utilisateur" 
+							 action="<c:url value="/societe/${societe.slug}/gerer-societe/comptes/ajouter"/> " method="post">
+								<fieldset>
+									<legend>Ajouter un nouveau compte</legend>
+									<div class="input s3">
+									<label>Login : <img id="login-veri" src="<c:url value="/sources/img/loaderf.gif"/>" width="15"/></label>
+									<input type="text" required="required" id="login" placeholder="Login" name="login"/>
+									
+								</div>
+								<div class="input c3">
+									<label>Mot de passe :</label>
+									<input type="password" required="required" placeholder="Mot de passe" name="motdepasse"/>
+									
+								</div>
+								<div class="input c3">
+									<label>Confirmation mot de passe :</label>
+									<input type="password" required="required" placeholder="Conformation de mot de passe" name="_motdepasse"/>
+									
+								</div>
+								<div class="valider">
+								
+									<input type="submit" value="Enregistrer" class="btn btn-primary" >
+									<input type="reset" value = "Annuler" class="btn btn-primary">
+								</div>
+								</fieldset>
+							</form>
+						</div>
+				</c:when>
+				<c:otherwise>
+					<div class="alert alert-danger">
+						<i class="fa fa-warning"></i>	Vous avez atteint le nombre maximal de compte 
 					</div>
-					<div class="input c3">
-						<label>Mot de passe :</label>
-						<input type="password" required="required" placeholder="Mot de passe" name="motdepasse"/>
-						
-					</div>
-					<div class="input c3">
-						<label>Confirmation mot de passe :</label>
-						<input type="password" required="required" placeholder="Conformation de mot de passe" name="_motdepasse"/>
-						
-					</div>
-					<div class="valider">
-					
-						<input type="submit" value="Enregistrer" class="btn btn-primary" >
-						<input type="reset" value = "Annuler" class="btn btn-primary">
-					</div>
-					</fieldset>
-				</form>
-			</div>
+				</c:otherwise>
+			</c:choose>
 		</div>
 	</c:when>
 	<c:otherwise>

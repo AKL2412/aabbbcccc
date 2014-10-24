@@ -51,7 +51,7 @@
 		    		</div>
 		    		<div class="form-group c4 ">
 		    			<label>Deduire:</label>
-		    			<input type="number" class="form-control" name="deduire"/>
+		    			<textarea class="form-control" name="deduire"></textarea>
 		    		</div>
 		    		<input type="number"  name="idbareme" hidden="hidden" value="${bareme.baremeId }" required="required"/>
 		    	</div>
@@ -69,18 +69,35 @@
 	</c:when>
 	
 	<c:when test="${baremeAction == 'ajout-bareme' }">
-				<div class="panel panel-default">
+				<div class="panel panel-primary">
 		  <div class="panel-heading">
 		    <h3 class="panel-title">Ajouter un bareme</h3>
 		    
 		  </div>
-		  <form action="" method="post" modelAttribute ="bareme" modelAttribute ="tranche">
+		  <form action="" method="post" modelAttribute ="bareme" modelAttribute ="tranche" modelAttribute ="compagnie">
+		  
 		  <div class="panel-body">
+		  
+		  	<div class="panel-default panel">
+		  		<div class="panel-heading">La compagnie </div>
+		  		<div class="panel-body">
+		  		<div class="form-group c2">
+		  			<label>Nom de la compagnie</label>
+		  			<input type="text" class="form-control" placeholder="Nom de la compagnie" name="nom" required="required"/>
+		  		</div>
+		  		<div class="form-group c2">
+		  			<label>Description</label>
+		  			<textarea name="description" class="form-control"></textarea>
+		  		</div>
+		 	 </div>
+		 	 </div>
+		  
+		  
 		    <div id="bareme-form">
 		    <input type="text" hidden="hidden" name="action" required="required" value="a-b"/>
-		    		<div class="form-group c2 ">
+		    		<div class="form-group c4 ">
 		    			<label>Nom du barème :</label>
-		    			<input type="text" class="form-control" name="nom" required="required"/>
+		    			<input type="text" placeholder="Nom du barème" class="form-control" name="nom" required="required"/>
 		    		</div>
 		    		<div class="form-group c4 ">
 		    			<label>Type de tranche :</label>
@@ -94,8 +111,16 @@
 		    			<label>Type de barème :</label>
 		    			<select class="form-control" required="required" name="type">
 		    				<option value>type</option>
-		    				<option value="1">obligatoire</option>
-		    				<option value="0">optionnel</option>
+		    				<option value="Salarié">Salarié</option>
+		    				<option value="Patronal">Patronal</option>
+		    			</select>
+		    		</div>
+		    		<div class="form-group c4 ">
+		    			<label>Caractère de barème :</label>
+		    			<select class="form-control" required="required" name="type">
+		    				<option value>Caractère</option>
+		    				<option value="obligatoire">obligatoire</option>
+		    				<option value="optionnel">optionnel</option>
 		    			</select>
 		    		</div>
 		    	</div>

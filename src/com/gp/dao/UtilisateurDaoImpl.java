@@ -62,4 +62,12 @@ List<Utilisateur> Compteutilisateurs 	= crit
 return Compteutilisateurs;
 	}
 
+	@Override
+	public Utilisateur trouverParId(Integer id) {
+		Criteria crit = sessionfactory.getCurrentSession().createCriteria(Utilisateur.class);
+		crit.add(Restrictions.eq("utilisateurId", id));
+		Utilisateur compte = (Utilisateur) crit.uniqueResult();
+		return compte;
+	}
+
 }

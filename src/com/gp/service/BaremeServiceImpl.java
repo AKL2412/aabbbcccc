@@ -34,7 +34,7 @@ public class BaremeServiceImpl implements BaremeService {
 	}
 
 	@Override
-	public List<Bareme> trouverParCaractere(Integer caractere) {
+	public List<Bareme> trouverParCaractere(String caractere) {
 		// TODO Auto-generated method stub
 		return baremeDao.trouverParCaractere(caractere);
 	}

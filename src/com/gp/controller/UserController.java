@@ -73,4 +73,34 @@ public class UserController {
 		}
 	}
 	//*/
+	
+	@RequestMapping(value="/supprimer-update",method = RequestMethod.POST)
+	public void Suppresiondesobjets(ModelMap model,
+			HttpServletRequest req,
+			HttpServletResponse res)throws IOException{
+		res.setCharacterEncoding("utf-8");
+		res.setContentType("text/html");
+		PrintWriter out = res.getWriter();
+		try{
+			String type= req.getParameter("type");
+			Integer id = Integer.parseInt(req.getParameter("id"));
+			String action= req.getParameter("action");
+			if(action.equals("delete")){
+				/*
+				 * Supprimer un compte utilisateur
+				 */
+				if(type.equals("utilisateur")){
+				
+					Utilisateur u = utilisateurService.trouverParId(id);
+					utilisateurService.supprimer(u);
+					out.print("<i class=\"fa fa-check-square-o fa-2x\" style=\"color:#63ce71\" ></i> Le compte : <strong>"+u.getLogin()+"</strong> a été supprimé avec succès");
+				}
+			}else if(action.equals("update")){
+				
+			}
+			//out.print("ACTION : "+action+" | TYPE : "+type+" | ID : "+id);
+		}catch(Exception e){
+			out.print(e.getMessage());
+		}
+	}
 }

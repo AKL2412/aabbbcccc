@@ -39,4 +39,10 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 		return utilisateurDao.obtenirTous();
 	}
 
+	@Override
+	public Utilisateur trouverParId(Integer id) {
+		// TODO Auto-generated method stub
+		return utilisateurDao.trouverParId(id);
+	}
+
 }

@@ -1,55 +1,81 @@
 jQuery(document).ready(function($) {
+	
+	
+	//alert(getRacine());
+	//notifier("verificaion");
 
-	$(document).scroll(function(event) {
+	/*
+		Suppression des objets
+	*/
+	$('.supprimer-object').click(function(event) {
 		/* Act on the event */
-		if($('body').offset().top < 80 ){
-			$('.gp-menu-right').addClass('gp-menu-right-box-shadow');
+		
+		//$(this).insertAfter(img);
+		var elt = $(this);
+		var type = $(this).attr('object');
+		var id = $(this).attr('objectId');
+		var action = $(this).attr('action');
+		
+		if(type.length > 0 && id.length > 0 && action.length > 0){
+			var datas = {
+				action :action,
+				type : type,
+				id : id
+			}
+			//notifier("Type : "+type+" Identifiant : "+id,true);
+
+			deleteUpdate(datas,elt,action == "delete" ? true:false);
+			
 		}else{
-			$('.gp-menu-right').removeClass('gp-menu-right-box-shadow');
+			notifier("Erreur des données !!! ",false);
 		}
 		
+		
 	});
-	$('.message i').click(function(e){
-		$(this).parent().hide();
-	});
-// Small menu
-var smallMenu = $("#body .gp-menu-top .gp-widget .top-menu").hide();
-var smallActiveMenu = $("#body .gp-menu-top .sous-menu-top");
-
-var rightMenu = $('#body .gp-menu-right-main-content .gp-menu-right');
-	$('#voir').click(function(event) {
-		/* Act on the event */
-		alert($('.gp-menu-right').text())
-	});
-
-	//Show menu
-	$('#body .gp-menu-top .gp-widget i').click(function(event) {
-		event.stopPropagation();
-		smallMenu.html(rightMenu.html()).toggle();
-	});
-
-	/*________________________
-
-	*/
-	smallMenu.click(function(event) {
-		/* Act on the event */
-		event.stopPropagation();
-	});
-	$('html').click(function() {
-		smallMenu.hide();
-	});
-	var ul = $('<ul></ul>');
-	var liS = rightMenu.find('ul li.active');
-	var dlis = liS.clone(true, true);
-	$('#link-selected').html(dlis.find('a:first'));
-	ul.append(liS.find('ul').html());
-	smallActiveMenu.html(ul);
-
 
 	
 
 });
+	
+	function deleteUpdate(datas,elt,etat){
 
+		$('<img src="/GestPaie/sources/img/loaderf.gif" >').insertAfter(elt);
+		$.post(getRacine()+'/supprimer-update', datas, function(data, textStatus, xhr) {
+			/*optional stuff to do after success */
+			notifier(data,etat);
+			elt.next('img').remove();
+		});
+	}
+
+	function getRacine(){
+		var URL = window.location.href.toString().split(window.location.host)[1];
+	var URLs = URL.split('/');
+	var racine = URLs[1];
+	return "/"+racine;
+	}
+	function notifier(message,relaod){
+		var temps = 10;
+		var box = notifocationBox(message,temps);
+		$('body').append(box);
+		actualiser(box.find('.compteur'),temps,relaod);
+	}
+	function actualiser(elt,tps,relaod){
+		var t = setInterval(function(){
+			if(tps > 1 ){
+				tps --;
+				elt.text(tps);
+			}else{
+				clearInterval(t);
+				elt.parent().remove();
+				if(relaod)
+					location.reload();
+			}
+		},1000);
+	}
+
+	function notifocationBox(message,temps){
+		return $('<div id="notification">'+message+'<div class="compteur badge">'+temps+'</div></div>');
+	}
 	function createAlertBox(){
 		var box = $('<div id="alert-box"><div class="bg"><i class="glyphicon glyphicon-remove"></i></div></div>');
 		var main = $('<div class="alert-main"></div>');

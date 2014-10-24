@@ -65,7 +65,7 @@ public class AdminCTRL {
 		//*/
 		//System.out.print("pass : " +PassWord.hacher("google"));
 		model.addAttribute("societes", societeService.trouverTous());
-		model.addAttribute("baremes", baremeService.trouverParCaractere(1));
+		model.addAttribute("baremes", baremeService.trouverParCaractere("obligatoire"));
 		return "admin/accueil";
 		
 	}
@@ -374,10 +374,10 @@ public class AdminCTRL {
 		model.addAttribute("link", "bareme");
 		model.addAttribute("action", "lister");
 		try{
-			Integer c = Integer.parseInt(req.getParameter("char"));
+			String c = req.getParameter("char");
 			model.addAttribute("baremes", baremeService.trouverParCaractere(c));
 		}catch(Exception e){
-			model.addAttribute("baremes", baremeService.trouverParCaractere(1));
+			model.addAttribute("baremes", baremeService.trouverParCaractere("obligatoire"));
 		}
 		return "admin/listerbareme";
 		

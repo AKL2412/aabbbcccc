@@ -348,7 +348,7 @@
 		 * sZeroRecords - assuming that is given.
 		 */
 		if ( !oLanguage.sEmptyTable && zeroRecords &&
-			oDefaults.sEmptyTable === "No data available in table" )
+			oDefaults.sEmptyTable === "Aucune données disponibles" )
 		{
 			_fnMap( oLanguage, oLanguage, 'sZeroRecords', 'sEmptyTable' );
 		}
@@ -9304,7 +9304,7 @@
 		 *      } );
 		 *    } );
 		 */
-		"aLengthMenu": [ 10, 25, 50, 100 ],
+		"aLengthMenu": [ 1,3,5,10, 25, 50, 100 ],
 	
 	
 		/**
@@ -10479,7 +10479,7 @@
 				 *      } );
 				 *    } );
 				 */
-				"sFirst": "First",
+				"sFirst": "Prémier",
 	
 	
 				/**
@@ -10502,7 +10502,7 @@
 				 *      } );
 				 *    } );
 				 */
-				"sLast": "Last",
+				"sLast": "Dernier",
 	
 	
 				/**
@@ -10525,7 +10525,7 @@
 				 *      } );
 				 *    } );
 				 */
-				"sNext": "Next",
+				"sNext": "Suivant",
 	
 	
 				/**
@@ -10548,7 +10548,7 @@
 				 *      } );
 				 *    } );
 				 */
-				"sPrevious": "Previous"
+				"sPrevious": "Précédent"
 			},
 	
 			/**
@@ -10571,7 +10571,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sEmptyTable": "No data available in table",
+			"sEmptyTable": "Aucune données disponibles",
 	
 	
 			/**
@@ -10603,7 +10603,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sInfo": "Showing _START_ to _END_ of _TOTAL_ entries",
+			"sInfo": "Affichage _START_ à  _END_ sur _TOTAL_ entités",
 	
 	
 			/**
@@ -10624,7 +10624,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sInfoEmpty": "Showing 0 to 0 of 0 entries",
+			"sInfoEmpty": "Affichage 0 à 0 sur 0 entités",
 	
 	
 			/**
@@ -10813,7 +10813,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sSearch": "Search:",
+			"sSearch": "Rechercher:",
 	
 	
 			/**

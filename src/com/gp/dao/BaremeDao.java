@@ -8,6 +8,6 @@ public interface BaremeDao {
 	public Bareme trouverParId(Integer num);
 	public void enregistrer(Bareme bareme);
 	public boolean supprimer(Bareme bareme);
-	public List<Bareme> trouverParCaractere(Integer caractere);
+	public List<Bareme> trouverParCaractere(String caractere);
 
 }

@@ -6,7 +6,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+
 import static javax.persistence.GenerationType.IDENTITY;
+
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -27,6 +29,12 @@ public class Tranche implements java.io.Serializable {
 	private String formule;
 
 	public Tranche() {
+	}
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return "Tranche :  \ndebut : "+this.debut+"\nfin: "+this.fin+
+				"\nTaux : "+this.taux+"\n"+this.bareme+"\n------------------------------\n";
 	}
 
 	public Tranche(Bareme bareme, float debut, float fin, float taux) {

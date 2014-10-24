@@ -232,8 +232,8 @@ action="" method="post" role="form">
 	
 	
 	<div class="panel-footer">
-	<input type="submit" class="btn btn-success" value="Enregistrer" />
-<input type="reset" class="btn btn-warning" value="annuler" />
+	<input type="submit" class="btn btn-primary" value="Enregistrer" />
+<input type="reset" class="btn btn-default" value="annuler" />
 	</div>
 	</form>
 </div>

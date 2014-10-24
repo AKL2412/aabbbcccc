@@ -81,7 +81,7 @@ public class Salarie implements java.io.Serializable {
 		this.salarieId = salarieId;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "contratID")
 	public Contrat getContrat() {
 		return this.contrat;
@@ -91,7 +91,7 @@ public class Salarie implements java.io.Serializable {
 		this.contrat = contrat;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "etatcivileID")
 	public Etatcivile getEtatcivile() {
 		return this.etatcivile;
@@ -101,7 +101,7 @@ public class Salarie implements java.io.Serializable {
 		this.etatcivile = etatcivile;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "paieID")
 	public Paie getPaie() {
 		return this.paie;
@@ -111,7 +111,7 @@ public class Salarie implements java.io.Serializable {
 		this.paie = paie;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "posteID")
 	public Poste getPoste() {
 		return this.poste;
@@ -121,7 +121,7 @@ public class Salarie implements java.io.Serializable {
 		this.poste = poste;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "coordoneebancaireID")
 	public Coordonneebancaire getCoordonneebancaire() {
 		return this.coordonneebancaire;
@@ -131,7 +131,7 @@ public class Salarie implements java.io.Serializable {
 		this.coordonneebancaire = coordonneebancaire;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "immatriculationID")
 	public Immatriculation getImmatriculation() {
 		return this.immatriculation;
@@ -141,7 +141,7 @@ public class Salarie implements java.io.Serializable {
 		this.immatriculation = immatriculation;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "societeID")
 	public Societe getSociete() {
 		return this.societe;
@@ -169,7 +169,7 @@ public class Salarie implements java.io.Serializable {
 		this.image = image;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "salarie")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "salarie")
 	public Set<Prime> getPrimes() {
 		return this.primes;
 	}
@@ -178,7 +178,7 @@ public class Salarie implements java.io.Serializable {
 		this.primes = primes;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "salarie")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "salarie")
 	public Set<Conge> getConges() {
 		return this.conges;
 	}
@@ -187,7 +187,7 @@ public class Salarie implements java.io.Serializable {
 		this.conges = conges;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "salarie")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "salarie")
 	public Set<Ordrevirement> getOrdrevirements() {
 		return this.ordrevirements;
 	}
@@ -196,7 +196,7 @@ public class Salarie implements java.io.Serializable {
 		this.ordrevirements = ordrevirements;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "salarie")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "salarie")
 	public Set<Salariebareme> getSalariebaremes() {
 		return this.salariebaremes;
 	}
@@ -205,7 +205,7 @@ public class Salarie implements java.io.Serializable {
 		this.salariebaremes = salariebaremes;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "salarie")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "salarie")
 	public Set<Document> getDocuments() {
 		return this.documents;
 	}
@@ -213,11 +213,12 @@ public class Salarie implements java.io.Serializable {
 	public void setDocuments(Set<Document> documents) {
 		this.documents = documents;
 	}
-	
-	public String profil(){
-		if(this.image != null){
-			return this.societe.compteDefaut().getLogin()+"/salaries/"+this.dossier+"/images/"+this.image;
-		}else{
+
+	public String profil() {
+		if (this.image != null) {
+			return this.societe.compteDefaut().getLogin() + "/salaries/"
+					+ this.dossier + "/images/" + this.image;
+		} else {
 			return "profil/default.png";
 		}
 	}

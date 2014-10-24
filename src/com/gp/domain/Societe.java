@@ -45,11 +45,12 @@ public class Societe implements java.io.Serializable {
 	private String logo;
 	private String slug;
 	private String ville;
+	private int maxcompte;
 	private Set<Salarie> salaries = new HashSet<Salarie>(0);
 	private Set<Utilisateur> utilisateurs = new HashSet<Utilisateur>(0);
 	private Set<Exercice> exercices = new HashSet<Exercice>(0);
 	private Set<Societebareme> societebaremes = new HashSet<Societebareme>(0);
-
+	
 	public Societe() {
 	}
 	public String toString() {
@@ -73,7 +74,7 @@ public class Societe implements java.io.Serializable {
 	public Societe(String intituleSociete, String patente, String idfiscale,
 			String rcCodeTribunal, String cnss, String cimr, String telephone,
 			String fax, String email, String adresse, String mutuelle,
-			Date dateajout, String logo, String slug,String ville) {
+			Date dateajout, String logo, String slug,String ville,int maxcompte) {
 		this.intituleSociete = intituleSociete;
 		this.patente = patente;
 		this.idfiscale = idfiscale;
@@ -89,12 +90,13 @@ public class Societe implements java.io.Serializable {
 		this.logo = logo;
 		this.slug = slug;
 		this.ville = ville;
+		this.maxcompte = maxcompte;
 	}
 
 	public Societe(String intituleSociete, String patente, String idfiscale,
 			String rcCodeTribunal, String cnss, String cimr, String telephone,
 			String fax, String email, String adresse, String mutuelle,
-			Date dateajout, String logo, String slug, String ville,Set<Salarie> salaries,
+			Date dateajout, String logo, String slug, String ville,int maxcompte,Set<Salarie> salaries,
 			Set<Utilisateur> utilisateurs, Set<Exercice> exercices,
 			Set<Societebareme> societebaremes) {
 		this.intituleSociete = intituleSociete;
@@ -112,6 +114,7 @@ public class Societe implements java.io.Serializable {
 		this.logo = logo;
 		this.slug = slug;
 		this.ville = ville;
+		this.maxcompte = maxcompte;
 		this.salaries = salaries;
 		this.utilisateurs = utilisateurs;
 		this.exercices = exercices;
@@ -262,6 +265,14 @@ public class Societe implements java.io.Serializable {
 
 	public void setVille(String ville) {
 		this.ville = ville;
+	}
+	@Column(name = "maxcompte", nullable = false)
+	public int getMaxcompte() {
+		return this.maxcompte;
+	}
+
+	public void setMaxcompte(int maxcompte) {
+		this.maxcompte = maxcompte;
 	}
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "societe")
 	public Set<Salarie> getSalaries() {

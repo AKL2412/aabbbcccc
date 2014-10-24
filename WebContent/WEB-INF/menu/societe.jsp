@@ -112,6 +112,13 @@
 										<i class="fa fa-plus-circle"></i> Créer
 										 </a>
 									</li>
+									<c:if test="${action==\"envoyer\" && link == \"bareme\" }">
+										<li class="active ">
+										<a href="">
+										<i class="fa fa-paper-plane"></i> Envoyer barème
+										 </a>
+									</li>
+									</c:if>
 										<li class="<c:if test="${link == \"societe\" && action == \"visualiser\"}"> active </c:if>" >
 											<a href="<c:url value="/societe/${scte.slug }/gerer-societe" />">
 										

@@ -1,4 +1,4 @@
-aabbbcccc
-=========
+gestiondepaie
+=============
 
-projet de la paie
+Projet de gestion de paie (java 2ee)
