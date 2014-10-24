@@ -1,0 +1,11 @@
+@media only screen and (min-width: 64.063em) {
+  /* line 2, ../projet/sass/large.scss */
+  #body {
+    background-color: green;
+    width: 100%;
+  }
+  /* line 5, ../projet/sass/large.scss */
+  #body:before {
+    content: "only screen and (min-width:64.063em)";
+  }
+}

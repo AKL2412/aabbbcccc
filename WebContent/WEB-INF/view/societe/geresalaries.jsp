@@ -1,0 +1,1 @@
+<h1>Gérer salaries</h1>
