@@ -59,7 +59,7 @@ public class Compagnie implements java.io.Serializable {
 		this.nom = nom;
 	}
 
-	@Column(name = "description", nullable = false, length = 65535)
+	@Column(name = "description", nullable = true, length = 65535)
 	public String getDescription() {
 		return this.description;
 	}

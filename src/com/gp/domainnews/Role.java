@@ -1,6 +1,6 @@
 package com.gp.domainnews;
 
-// Generated 24 oct. 2014 14:58:33 by Hibernate Tools 3.4.0.CR1
+// Generated 28 oct. 2014 18:00:34 by Hibernate Tools 3.4.0.CR1
 
 import java.util.HashSet;
 import java.util.Set;

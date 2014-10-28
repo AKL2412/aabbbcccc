@@ -1,14 +1,12 @@
 package com.gp.domainnews;
 
-// Generated 24 oct. 2014 14:58:33 by Hibernate Tools 3.4.0.CR1
+// Generated 28 oct. 2014 18:00:34 by Hibernate Tools 3.4.0.CR1
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-
 import static javax.persistence.GenerationType.IDENTITY;
-
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -27,30 +25,28 @@ public class Tranche implements java.io.Serializable {
 	private float fin;
 	private float taux;
 	private String formule;
+	private String caractere;
 
 	public Tranche() {
 	}
-	@Override
-	public String toString() {
-		// TODO Auto-generated method stub
-		return "Tranche :  \ndebut : "+this.debut+"\nfin: "+this.fin+
-				"\nTaux : "+this.taux+"\n"+this.bareme+"\n------------------------------\n";
-	}
 
-	public Tranche(Bareme bareme, float debut, float fin, float taux) {
+	public Tranche(Bareme bareme, float debut, float fin, float taux,
+			String caractere) {
 		this.bareme = bareme;
 		this.debut = debut;
 		this.fin = fin;
 		this.taux = taux;
+		this.caractere = caractere;
 	}
 
 	public Tranche(Bareme bareme, float debut, float fin, float taux,
-			String formule) {
+			String formule, String caractere) {
 		this.bareme = bareme;
 		this.debut = debut;
 		this.fin = fin;
 		this.taux = taux;
 		this.formule = formule;
+		this.caractere = caractere;
 	}
 
 	@Id
@@ -108,6 +104,15 @@ public class Tranche implements java.io.Serializable {
 
 	public void setFormule(String formule) {
 		this.formule = formule;
+	}
+
+	@Column(name = "caractere", nullable = false, length = 50)
+	public String getCaractere() {
+		return this.caractere;
+	}
+
+	public void setCaractere(String caractere) {
+		this.caractere = caractere;
 	}
 
 }

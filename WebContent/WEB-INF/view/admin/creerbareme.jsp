@@ -50,8 +50,8 @@
 		    			<input type="number" class="form-control" name="taux" required="required"/>
 		    		</div>
 		    		<div class="form-group c4 ">
-		    			<label>Deduire:</label>
-		    			<textarea class="form-control" name="deduire"></textarea>
+		    			<label>formule:</label>
+		    			<textarea class="form-control" name="formule"></textarea>
 		    		</div>
 		    		<input type="number"  name="idbareme" hidden="hidden" value="${bareme.baremeId }" required="required"/>
 		    	</div>
@@ -70,28 +70,79 @@
 	
 	<c:when test="${baremeAction == 'ajout-bareme' }">
 				<div class="panel panel-primary">
+				<c:choose>
+		  	<c:when test="${compagnie != null }">
 		  <div class="panel-heading">
-		    <h3 class="panel-title">Ajouter un bareme</h3>
+		    <h3 class="panel-title">Ajouter un bareme | ${compagnie.nom }</h3>
 		    
 		  </div>
-		  <form action="" method="post" modelAttribute ="bareme" modelAttribute ="tranche" modelAttribute ="compagnie">
+		  
+		  		 <form action="" method="post" modelAttribute ="bareme"  modelAttribute ="tranche">
 		  
 		  <div class="panel-body">
 		  
-		  	<div class="panel-default panel">
-		  		<div class="panel-heading">La compagnie </div>
-		  		<div class="panel-body">
-		  		<div class="form-group c2">
-		  			<label>Nom de la compagnie</label>
-		  			<input type="text" class="form-control" placeholder="Nom de la compagnie" name="nom" required="required"/>
-		  		</div>
-		  		<div class="form-group c2">
-		  			<label>Description</label>
-		  			<textarea name="description" class="form-control"></textarea>
-		  		</div>
-		 	 </div>
-		 	 </div>
+		  	
 		  
+<%-- 		  <input type="text" hidden="hidden" name="_compagnie" required="required" value="${compagnie.compagnieId }"/> --%>
+		    <div id="bareme-form">
+		    <input type="text" hidden="hidden" name="action" required="required" value="a-b"/>
+		    		<div class="form-group c4 ">
+		    			<label>Nom du barème :</label>
+		    			<input type="text" placeholder="Nom du barème" class="form-control" name="nom" required="required"/>
+		    		</div>
+		    		<div class="form-group c4 ">
+		    			<label>Type de tranche :</label>
+		    			<select class="form-control" required="required" name="tranche">
+		    				<option value>Tranche</option>
+		    				<option value="somme">montant</option>
+		    				<option value="anciennente">année</option>
+		    			</select>
+		    		</div>
+		    		<div class="form-group c4 ">
+		    			<label>Type de barème :</label>
+		    			<select class="form-control" required="required" name="type">
+		    				<option value>type</option>
+		    				<option value="Salarié">Salarié</option>
+		    				<option value="Patronal">Patronal</option>
+		    			</select>
+		    		</div>
+		    		<div class="form-group c4 ">
+		    			<label>Caractère de barème :</label>
+		    			<select class="form-control" required="required" name="caractere">
+		    				
+		    				<option value="optionnel">optionnel</option>
+		    			</select>
+		    		</div>
+		    		<div class="form-group col-md-12 ">
+		    			<label>Description :</label>
+		    			<textarea class="form-control" name="description"></textarea>
+		    		</div>
+		    	</div>
+		  </div>
+		  
+		  <div class="panel-footer">
+		  <input type="submit" class="btn btn-primary"> 
+		  </div>
+		  </form>
+		  	</c:when>
+		  	<c:otherwise>
+		  		<div class="alert alert-danger">
+		  			Erreur
+		  		</div>
+		  	</c:otherwise>
+		  </c:choose>
+		 
+		</div>
+	</c:when>
+	<c:when test="${baremeAction == 'ajout-bareme-obligatoire' }">
+	<div class="panel panel-primary">
+		  <div class="panel-heading">
+		    <h3 class="panel-title">Ajouter un bareme obligatoire</h3>
+		    
+		  </div>
+		  		 <form action="" method="post" modelAttribute ="bareme" modelAttribute ="tranche">
+		  
+		  <div class="panel-body">
 		  
 		    <div id="bareme-form">
 		    <input type="text" hidden="hidden" name="action" required="required" value="a-b"/>
@@ -117,11 +168,15 @@
 		    		</div>
 		    		<div class="form-group c4 ">
 		    			<label>Caractère de barème :</label>
-		    			<select class="form-control" required="required" name="type">
+		    			<select class="form-control" required="required" name="caractere">
 		    				<option value>Caractère</option>
 		    				<option value="obligatoire">obligatoire</option>
 		    				<option value="optionnel">optionnel</option>
 		    			</select>
+		    		</div>
+		    		<div class="form-group col-md-12 ">
+		    			<label>Description :</label>
+		    			<textarea class="form-control" name="description"></textarea>
 		    		</div>
 		    	</div>
 		  </div>
@@ -130,6 +185,8 @@
 		  <input type="submit" class="btn btn-primary"> 
 		  </div>
 		  </form>
+		  	
+		 
 		</div>
 	</c:when>
 	<c:otherwise>

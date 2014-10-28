@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.gp.domain.Bareme;
+import com.gp.domain.Compagnie;
 import com.gp.domain.Exercice;
 import com.gp.domain.Role;
 import com.gp.domain.Societe;
@@ -45,7 +46,8 @@ public class AdminCTRL {
 	private BaremeService baremeService;
 	@Autowired
 	private TrancheService trancheService;
-	
+	@Autowired
+	private CompagnieService compagnieService;
 	
 	
 	@RequestMapping(value={"/accueil","/"},method = RequestMethod.GET)
@@ -280,6 +282,36 @@ public class AdminCTRL {
 	 * 	GERER LES Bareme
 	 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 	
+	// Les compagnies
+	
+	@RequestMapping(value="/gerer-baremes/les-compagnies",method = RequestMethod.GET)
+	public String lescompagnies(ModelMap model){
+		model.addAttribute("link", "bareme");
+		model.addAttribute("action", "compagnie");
+		model.addAttribute("compagnies", compagnieService.trouverTous());
+	
+		return "admin/gererbaremecompagnie";
+		
+	}
+	@RequestMapping(value="/gerer-baremes/les-compagnies",method = RequestMethod.POST)
+	public String lescompagniesSubmit(ModelMap model,
+			@ModelAttribute("compagnie") Compagnie compagnie){
+		compagnieService.enregistrer(compagnie);
+		return "redirect:/admin/gerer-baremes/les-compagnies";
+		
+	}
+	
+	@RequestMapping(value="/gerer-baremes/les-compagnies/voir/{idCompagnie}",method = RequestMethod.GET)
+	public String lescompagniesVoir(ModelMap model,
+			@PathVariable("idCompagnie") Integer idCompagnie){
+		model.addAttribute("link", "bareme");
+		model.addAttribute("action", "compagnieVoir");
+		model.addAttribute("compagnie", compagnieService.trouverParId(idCompagnie));
+	
+		return "admin/gererbaremecompagnievoir";
+		
+	}
+	
 		/*--------------------------------------------------------------------
 		 * 	ACCUEIL
 		 --------------------------------------------------------------------*/
@@ -290,13 +322,57 @@ public class AdminCTRL {
 		return "admin/gererbareme";
 		
 	}
+	@RequestMapping(value="/gerer-baremes/creer/{idCompagnie}",method = RequestMethod.GET)
+	public String creerbaremeCompagnie(ModelMap model,
+			@PathVariable("idCompagnie") Integer idCompagnie){
+		model.addAttribute("link", "bareme");
+		model.addAttribute("action", "creer");
+		model.addAttribute("t-act", "ajout-bareme");
+		model.addAttribute("baremeAction", "ajout-bareme");
+		model.addAttribute("compagnie", compagnieService.trouverParId(idCompagnie));
+		return "admin/creerbareme";
+		
+	}
+	@RequestMapping(value="/gerer-baremes/creer/{idCompagnie}",method = RequestMethod.POST)
+	public String creerbaremeSubmitCompagnie(ModelMap model,
+			@PathVariable("idCompagnie") Integer idCompagnie,
+			@ModelAttribute("tranche") Tranche tranche,
+			@ModelAttribute("bareme") Bareme bareme,
+			HttpServletRequest eq){
+		
+		String action = eq.getParameter("action");
+		model.addAttribute("link", "bareme");
+		model.addAttribute("action", "tranche");
+		model.addAttribute("baremeAction", "ajout-tranche");
+		System.out.println(action);
+		if(action.equals("a-b")){
+			bareme.setVersion("1.0.0");
+			bareme.setCompagnie(compagnieService.trouverParId(idCompagnie));
+			bareme.setDate(new Double(new DateTime().getMillis()));
+			bareme.setMaj(new Double(new DateTime().getMillis()));
+			baremeService.enregistrer(bareme);
+			System.out.println(bareme);
+			model.addAttribute("bareme", bareme);
+		}else{
+			Bareme b = baremeService.trouverParId(
+					Integer.parseInt(eq.getParameter("idbareme"))
+					);
+			tranche.setBareme(b);
+			System.out.println(tranche);
+			trancheService.enregistrer(tranche);
+			
+			model.addAttribute("bareme",baremeService.trouverParId(b.getBaremeId()) );
+		}
+		
+		return "admin/creerbareme";
+		
+	}
 	@RequestMapping(value="/gerer-baremes/creer",method = RequestMethod.GET)
 	public String creerbareme(ModelMap model){
 		model.addAttribute("link", "bareme");
 		model.addAttribute("action", "creer");
 		model.addAttribute("t-act", "ajout-bareme");
-		System.out.println("Bagara");
-		model.addAttribute("baremeAction", "ajout-bareme");
+		model.addAttribute("baremeAction", "ajout-bareme-obligatoire");
 		return "admin/creerbareme";
 		
 	}
@@ -312,7 +388,13 @@ public class AdminCTRL {
 		model.addAttribute("baremeAction", "ajout-tranche");
 		System.out.println(action);
 		if(action.equals("a-b")){
-		
+			bareme.setCompagnie(
+					compagnieService.trouverParId(
+								Integer.parseInt(
+										eq.getParameter("compagnie")
+										)
+							)
+					);
 			baremeService.enregistrer(bareme);
 			model.addAttribute("bareme", bareme);
 		}else{

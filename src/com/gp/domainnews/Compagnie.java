@@ -1,6 +1,6 @@
 package com.gp.domainnews;
 
-// Generated 24 oct. 2014 14:58:33 by Hibernate Tools 3.4.0.CR1
+// Generated 28 oct. 2014 18:00:34 by Hibernate Tools 3.4.0.CR1
 
 import java.util.HashSet;
 import java.util.Set;
@@ -28,9 +28,8 @@ public class Compagnie implements java.io.Serializable {
 	public Compagnie() {
 	}
 
-	public Compagnie(String nom, String description) {
+	public Compagnie(String nom) {
 		this.nom = nom;
-		this.description = description;
 	}
 
 	public Compagnie(String nom, String description, Set<Bareme> baremes) {
@@ -59,7 +58,7 @@ public class Compagnie implements java.io.Serializable {
 		this.nom = nom;
 	}
 
-	@Column(name = "description", nullable = false, length = 65535)
+	@Column(name = "description", length = 65535)
 	public String getDescription() {
 		return this.description;
 	}

@@ -50,7 +50,7 @@ public class LoginController {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String login = auth.getName();
 		Object role =  auth.getAuthorities().toArray()[0].toString();
-		System.out.print("login :"+login +"\n role : "+role);
+		//System.out.print("login :"+login +"\n role : "+role);
 		if(role.equals("ROLE_ADMIN")){
 			return "redirect:/admin/";
 		}else if(role.equals("ROLE_USER") || role.equals("ROLE_SOCIETE") ){
@@ -68,7 +68,7 @@ public class LoginController {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String login = auth.getName();
 		Object role =  auth.getAuthorities().toArray()[0].toString();
-		System.out.print("login :"+login +"\n role : "+role);
+		//System.out.print("login :"+login +"\n role : "+role);
 		model.addAttribute("role", role);
 		if(role.equals("ROLE_ADMIN")){
 			Utilisateur u = utilisateurService.trouverParLogin(login);
@@ -95,7 +95,7 @@ public class LoginController {
 	@RequestMapping(value="/utilisateur-connecte",method = RequestMethod.GET)
 	public String utilisateurconnecte(ModelMap model){
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		System.out.print(auth.getName());
+		//System.out.print(auth.getName());
 		return "utilisateurconnecte";
 	}
 	

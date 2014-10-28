@@ -74,6 +74,18 @@
 										<a href="<c:url value="/admin/gerer-baremes/creer"/>">
 										 	<i class="fa fa-plus-square"></i> Créer</a>
 										</li>
+										<li class="<c:if test="${ action==\"compagnie\" && link == \"bareme\"}"> active </c:if>">
+										<a href="<c:url value="/admin/gerer-baremes/les-compagnies"/>">
+										 	<i class="fa fa-tag"></i> les compagnies</a>
+										</li>
+										<c:if test="${link == \"bareme\" && action == \"compagnieVoir\"}"> 
+										<li class="active" >
+											<a href="">
+											
+											<i class="fa fa-eye"></i> Voir compagnie
+											</a> 
+										</li>
+										 </c:if>
 										<c:if test="${link == \"bareme\" && action == \"tranche\"}"> 
 										<li class="active" >
 											<a >
