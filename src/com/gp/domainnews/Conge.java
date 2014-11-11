@@ -1,6 +1,6 @@
 package com.gp.domainnews;
 
-// Generated 28 oct. 2014 18:00:34 by Hibernate Tools 3.4.0.CR1
+// Generated 10 nov. 2014 19:05:50 by Hibernate Tools 3.4.0.CR1
 
 import java.util.Date;
 import javax.persistence.Column;
@@ -24,22 +24,20 @@ public class Conge implements java.io.Serializable {
 
 	private Integer congeId;
 	private Salarie salarie;
-	private Integer annee;
+	private String details;
 	private Date datedebut;
 	private Date datefin;
-	private Integer jourrestant;
 	private Integer jourtotal;
 
 	public Conge() {
 	}
 
-	public Conge(Salarie salarie, Integer annee, Date datedebut, Date datefin,
-			Integer jourrestant, Integer jourtotal) {
+	public Conge(Salarie salarie, String details, Date datedebut, Date datefin,
+			Integer jourtotal) {
 		this.salarie = salarie;
-		this.annee = annee;
+		this.details = details;
 		this.datedebut = datedebut;
 		this.datefin = datefin;
-		this.jourrestant = jourrestant;
 		this.jourtotal = jourtotal;
 	}
 
@@ -64,13 +62,13 @@ public class Conge implements java.io.Serializable {
 		this.salarie = salarie;
 	}
 
-	@Column(name = "annee")
-	public Integer getAnnee() {
-		return this.annee;
+	@Column(name = "details", length = 65535)
+	public String getDetails() {
+		return this.details;
 	}
 
-	public void setAnnee(Integer annee) {
-		this.annee = annee;
+	public void setDetails(String details) {
+		this.details = details;
 	}
 
 	@Temporal(TemporalType.DATE)
@@ -91,15 +89,6 @@ public class Conge implements java.io.Serializable {
 
 	public void setDatefin(Date datefin) {
 		this.datefin = datefin;
-	}
-
-	@Column(name = "jourrestant")
-	public Integer getJourrestant() {
-		return this.jourrestant;
-	}
-
-	public void setJourrestant(Integer jourrestant) {
-		this.jourrestant = jourrestant;
 	}
 
 	@Column(name = "jourtotal")

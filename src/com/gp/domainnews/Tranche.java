@@ -1,6 +1,6 @@
 package com.gp.domainnews;
 
-// Generated 28 oct. 2014 18:00:34 by Hibernate Tools 3.4.0.CR1
+// Generated 10 nov. 2014 19:05:50 by Hibernate Tools 3.4.0.CR1
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,28 +25,24 @@ public class Tranche implements java.io.Serializable {
 	private float fin;
 	private float taux;
 	private String formule;
-	private String caractere;
 
 	public Tranche() {
 	}
 
-	public Tranche(Bareme bareme, float debut, float fin, float taux,
-			String caractere) {
+	public Tranche(Bareme bareme, float debut, float fin, float taux) {
 		this.bareme = bareme;
 		this.debut = debut;
 		this.fin = fin;
 		this.taux = taux;
-		this.caractere = caractere;
 	}
 
 	public Tranche(Bareme bareme, float debut, float fin, float taux,
-			String formule, String caractere) {
+			String formule) {
 		this.bareme = bareme;
 		this.debut = debut;
 		this.fin = fin;
 		this.taux = taux;
 		this.formule = formule;
-		this.caractere = caractere;
 	}
 
 	@Id
@@ -104,15 +100,6 @@ public class Tranche implements java.io.Serializable {
 
 	public void setFormule(String formule) {
 		this.formule = formule;
-	}
-
-	@Column(name = "caractere", nullable = false, length = 50)
-	public String getCaractere() {
-		return this.caractere;
-	}
-
-	public void setCaractere(String caractere) {
-		this.caractere = caractere;
 	}
 
 }

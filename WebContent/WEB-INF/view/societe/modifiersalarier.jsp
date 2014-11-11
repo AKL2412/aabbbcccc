@@ -2,7 +2,42 @@
  <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:choose>
 	<c:when test="${salarie != null }">
-	
+	 <div class="row">
+ 	<div class="c1 image">
+			<div class="col-md-2">
+				<img width="100" class="img-thumbnail" src="<c:url value="/documents/${salarie.profil() }"/>" />
+				</div>
+				<div class="col-md-8">
+				
+					<div class="row">
+						<c:if test="${!salarie.baremeAjour() }">
+							<div class="alert alert-danger">
+								<i class="fa fa-warning"></i>
+								Veuillez renseigner le code de ce salarie pour certains barèmes[OBLIGATOIRE]  : 
+								<a href="<c:url value="/societe/${slug }/gerer-salaries/bareme-salarie/${salarie.salarieId }" /> ">
+								<i class="fa fa-edit"></i>
+								Renseigner code</a>
+							</div>
+						</c:if>
+					</div>
+			
+					<div class="row">
+						<ol class="breadcrumb">
+						  
+						  <li><a href="<c:url value="/societe/${slug }/gerer-salaries/consulter-salarie/${salarie.salarieId }" /> ">Consulter</a></li>
+						  <li class="active">Modifier</li>
+						  <li><a href="<c:url value="/societe/${slug }/gerer-salaries/supprimer-salarie/${salarie.salarieId }" /> ">Supprimer</a></li>
+						   <li><a href="<c:url value="/societe/${slug }/gerer-salaries/conges-salarie/${salarie.salarieId }" /> ">Congés</a></li>
+						  <li><a href="<c:url value="/societe/${slug }/gerer-salaries/bareme-salarie/${salarie.salarieId }" /> ">Barèmes</a></li>
+						 
+						</ol>
+					</div>
+					
+				</div>
+				
+			</div>
+ 
+ </div>
 	 <c:if test="${message }">
  <div class="message">
  <i class="fi-x"></i>
@@ -58,20 +93,17 @@ action="" method="post">
 <fieldset>
 <legend>Immatriculation :</legend>
 <input type="number" value="${immatriculation.immatriculationId }" name="immatriculationId" hidden="hidden">
-<div class="input c4">
+<div class="input c3">
 	<label>CIN : </label>
 	<input type="text" placeholder="cin du salarié" name="cin" value="${immatriculation.cin }"/>
 </div>
 
-<div class="input c4">
-	<label>CNSS : </label>
-	<input type="text" placeholder="cnss du salarié" name="cnss" value="${immatriculation.cnss }"/>
-</div>
-<div class="input c4">
+
+<div class="input c3">
 	<label>Pays: </label>
 	<input type="text" placeholder="pays du salarié" name="pays" value="${immatriculation.pays }"/>
 </div>
-<div class="input c4">
+<div class="input c3">
 	<label>Date de naissance: </label>
 	<input type="date" placeholder="date denaissance du salarié" value="${immatriculation.datenaissance }" name="_datenaissance"/>
 </div>

@@ -1,6 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <c:choose>
 	<c:when test="${compagnie != null }">
@@ -8,7 +9,7 @@
 			<div class="panel-heading">
 				<h1>${compagnie.nom }</h1>
 			</div>
-			<div class="panel-body">
+			<div class="panel-body text-justify">
 				${compagnie.description }
 			</div>
 		</div>
@@ -22,8 +23,9 @@
 				</a>
 			</div>
 			<div class="panel-body">
-			
+			<c:if test="${fn:length(compagnie.baremes) > 0 }">
 			<div class="table-responsive">
+			
                                 <table class="table table-striped table-bordered table-hover" id="dataTables">
                                     <thead>
                                         <tr>
@@ -39,7 +41,7 @@
                                     	<c:forEach items="${compagnie.baremes }" var="c">
  											<tr>
  												<td>
- 													<a href="">
+ 													<a href="<c:url value="/admin/gerer-baremes/voir/${c.baremeId}"/> ">
  														${c.nom }
  													</a>
  												</td>
@@ -61,12 +63,18 @@
  												${limite }
  												
  												</td>
- 												<td></td>
+ 												<td>
+ 													<a class="btn btn-danger btn-xs supprimer-object" action="delete" object="bareme" objectId="${c.baremeId }">
+ 													<i class="fa fa-trash"></i>
+ 													Supprimer
+ 													</a>
+ 												</td>
  											</tr>
  										</c:forEach>
                                     </tbody>
                                   </table>
                                  </div>
+                                 </c:if>
 				
 			</div>
 		</div>

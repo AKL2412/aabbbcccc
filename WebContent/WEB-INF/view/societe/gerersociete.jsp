@@ -11,6 +11,7 @@
 					
 					<a href="<c:url value="/societe/${slug }/gerer-societe/exercices" />">Exercices</a>
 					<a  href="<c:url value="/societe/${slug }/gerer-salaries/lister"/>">Salariés</a>
+					<a  href="<c:url value="/societe/${scte.slug }/gerer-bareme/information" />">Barèmes</a>
 				</div>
 				<div class="nom">
 					${societe.intituleSociete }

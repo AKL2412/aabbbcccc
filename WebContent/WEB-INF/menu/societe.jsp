@@ -46,12 +46,20 @@
 										</li>
 										 </c:if>
 										 <c:if test="${link == \"salarie\" && action == \"conges\"}"> 
-										<li class="active" >
-											<a >
-											
-											<i class="fa fa-calendar"></i> Congés
-											</a> 
-										</li>
+											<li class="active" >
+												<a >
+												
+												<i class="fa fa-calendar"></i> Congés
+												</a> 
+											</li>
+										 </c:if>
+										  <c:if test="${link == \"salarie\" && action == \"baremesalarie\"}"> 
+											<li class="active" >
+												<a >
+												
+												<i class="fa fa-cubes"></i> Baremes salarie
+												</a> 
+											</li>
 										 </c:if>
 										 <c:if test="${link == \"salarie\" && action == \"modifier\"}">
 										<li class="  active" >
@@ -107,11 +115,11 @@
 									<i class="fa fa-cubes"></i>	gérer barèmes <span class="fa arrow"></span>
 									</a>
 									<ul class="nav nav-second-level">
-									<li class="<c:if test="${ action==\"creer\" && link == \"bareme\"}"> active </c:if>">
-										<a href="<c:url value="/admin/gerer-baremes/creer"/>">
-										<i class="fa fa-plus-circle"></i> Créer
-										 </a>
-									</li>
+<%-- 									<li class="<c:if test="${ action==\"creer\" && link == \"bareme\"}"> active </c:if>"> --%>
+<%-- 										<a href="<c:url value="/admin/gerer-baremes/creer"/>"> --%>
+<!-- 										<i class="fa fa-plus-circle"></i> Créer -->
+<!-- 										 </a> -->
+<!-- 									</li> -->
 									<c:if test="${action==\"envoyer\" && link == \"bareme\" }">
 										<li class="active ">
 										<a href="">
@@ -119,10 +127,10 @@
 										 </a>
 									</li>
 									</c:if>
-										<li class="<c:if test="${link == \"societe\" && action == \"visualiser\"}"> active </c:if>" >
-											<a href="<c:url value="/societe/${scte.slug }/gerer-societe" />">
+										<li class="<c:if test="${link == \"bareme\" && action == \"information\"}"> active </c:if>" >
+											<a href="<c:url value="/societe/${scte.slug }/gerer-bareme/information" />">
 										
-											<i class="fa fa-eye"></i> Informations
+											<i class="fa fa-eye"></i> Détails
 											</a> 
 										</li>
 							</ul>
@@ -163,6 +171,13 @@
 										</li>
 										 </c:if>
 									</ul>
+								</li>
+								<li class="<c:if test="${link == \"boitereception\"}"> active </c:if>">
+									<a href="<c:url value="/societe/${scte.slug }/boite-de-reception"/> ">
+										
+											<i class="fa fa-envelope-o"></i> Boite de Réception
+											
+											</a>
 								</li>
 </ul>
 <!--  

@@ -25,4 +25,10 @@ public class SalarieServiceImpl implements SalarieService {
 		return salarieDao.supprimer(s);
 	}
 
+	@Override
+	public Salarie trouverParId(Integer id) {
+		// TODO Auto-generated method stub
+		return salarieDao.trouverParId(id);
+	}
+
 }

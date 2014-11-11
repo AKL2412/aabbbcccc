@@ -23,11 +23,32 @@ jQuery(document).ready(function($) {
 				id : id
 			}
 			//notifier("Type : "+type+" Identifiant : "+id,true);
+			
 
-			deleteUpdate(datas,elt,action == "delete" ? true:false);
+			if(action == "delete"){
+				
+				conrfimerDelete(datas,elt,true);
+			}else{
+				if(type == "salariebareme"){
+				datas['salarie'] = $(this).attr('salarie');
+				datas['bareme'] = $(this).attr('bareme');
+				var code =$('#'+$(this).attr('input')).val();
+				//alert(code);
+				//return true;
+				datas['code'] =code;
+				if(code == ""){
+					notifier("Le code du salarie ",false);
+					return false;
+				}
+				
+
+			}
+			deleteUpdate(datas,elt, true);
+			}
+			
 			
 		}else{
-			notifier("Erreur des donnÃ©es !!! ",false);
+			notifier("Erreur des données !!! ",false);
 		}
 		
 		
@@ -36,7 +57,20 @@ jQuery(document).ready(function($) {
 	
 
 });
-	
+	function conrfimerDelete(datas,elt,etat){
+
+		var divC = $('<div id="confirm-delete"><div class="back"></div><div class="box col-lg-12 container"><div class="rows"><div class="alert alert-warning"><i class=" fa fa-warning"></i>Veuillez confirmer la suppression !!</div></div><div class="row"><button class="btn btn-primary " id="confirme">Conrfimer</button>   <button class="btn btn-danger" id="annule">Annuler</button></div></div></div>');
+		divC.find('#confirme').click(function(event) {
+			deleteUpdate(datas,elt,etat);
+			divC.remove();
+		});
+		divC.find('#annule').click(function(event) {
+			/* Act on the event */
+			divC.remove();
+		});
+		$('body').prepend(divC);
+
+	}
 	function deleteUpdate(datas,elt,etat){
 
 		$('<img src="/GestPaie/sources/img/loaderf.gif" >').insertAfter(elt);
@@ -49,9 +83,9 @@ jQuery(document).ready(function($) {
 
 	function getRacine(){
 		var URL = window.location.href.toString().split(window.location.host)[1];
-	var URLs = URL.split('/');
-	var racine = URLs[1];
-	return "/"+racine;
+		var URLs = URL.split('/');
+		var racine = URLs[1];
+		return "/"+racine;
 	}
 	function notifier(message,relaod){
 		var temps = 10;

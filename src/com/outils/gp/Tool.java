@@ -1,6 +1,11 @@
 package com.outils.gp;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import com.gp.domain.Societe;
 import com.gp.domain.Utilisateur;
@@ -15,6 +20,92 @@ public class Tool {
 		if(slug.length() > 0)
 			slug = slug.substring(0, slug.length()-1);
 		return slug;
+	}
+	public static List<?> order(List<?> liste,String fonction){
+		List<Object> retour = new ArrayList<Object>();
+		if(liste.size() > 0){
+			Object fObj =  liste.get(0);
+			int id = 0;
+			while(1 <= liste.size()){
+				id  =  maxId(liste,fonction);
+				for(Object o:liste){
+					int lId = getId(o, fonction);
+					
+					if(lId <= id ){
+						id = lId;
+						fObj = o;
+						
+					}
+				}
+				liste.remove(fObj);
+				retour.add(fObj);
+			}
+		}
+		return retour;
+	}
+	private static int maxId(List<?> liste,String f){
+		int maxid = 0;
+		for(Object o :liste){
+			int lid = getId(o,f);
+			if(maxid < lid)
+				maxid = lid;
+		}
+		
+		return maxid;
+	}
+	private static int maxId(Set<?> liste,String f){
+		int maxid = 0;
+		for(Object o :liste){
+			int lid = getId(o,f);
+			if(maxid < lid)
+				maxid = lid;
+		}
+		
+		return maxid;
+	}
+	private static int getId(Object o,String fonction){
+		int id = 0;
+		java.lang.reflect.Method method = null;
+		try {
+			  method = o.getClass().getMethod(fonction);
+			} catch (SecurityException e) {
+				System.out.println("Erreur SecurityException : "+e.getMessage());
+			} catch (NoSuchMethodException e) {
+				System.out.println("Erreur NoSuchMethodException : "+e.getMessage());
+			}
+		
+		try {
+			  
+			  id = (int) method.invoke(o);
+			} catch (IllegalArgumentException e) {
+			} catch (IllegalAccessException e) {
+			} catch (InvocationTargetException e) {
+				
+			}
+		return id;
+	}
+	
+	public static Set<?> order(Set<?> liste,String fonction){
+		Set<Object> retour =  new HashSet<Object>();
+		if(liste.size() > 0){
+			Object fObj =  null;
+			int id = 0;
+			while(1 <= liste.size()){
+				id  =  maxId(liste,fonction);
+				for(Object o:liste){
+					int lId = getId(o, fonction);
+					
+					if(lId <= id ){
+						id = lId;
+						fObj = o;
+						
+					}
+				}
+				liste.remove(fObj);
+				retour.add(fObj);
+			}
+		}
+		return retour;
 	}
 	public static int verificationLien(Utilisateur u,Societe s){
 		if(u != null ){

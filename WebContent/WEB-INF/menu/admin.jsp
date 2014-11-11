@@ -42,11 +42,11 @@
 											</a> 
 										</li>
 								</c:if> 
-								 <c:if test="${link == \"societe\" && action == \"excercice\"}"> 
+								 <c:if test="${link == \"societe\" && action == \"bareme\"}"> 
 										<li class="active" >
 											<a >
 											
-											<i class="fa fa-tasks"></i> Exercices
+											<i class="fa fa-tasks"></i> Barèmes
 											</a> 
 										</li>
 										 </c:if>
@@ -123,4 +123,8 @@
                         
 
                        	 </li>
+                       	 
+                       	 <li class="<c:if test="${link == \"reception\"}">active</c:if>">
+                            <a  href="<c:url value="/admin/boite-de-reception"/>"> <i class="fa fa-envelope-o"></i> Boite de reception</a>
+                        </li>
                     </ul>

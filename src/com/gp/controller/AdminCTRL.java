@@ -1,10 +1,14 @@
 package com.gp.controller;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +28,7 @@ import com.gp.domain.Compagnie;
 import com.gp.domain.Exercice;
 import com.gp.domain.Role;
 import com.gp.domain.Societe;
+import com.gp.domain.Societebareme;
 import com.gp.domain.Tranche;
 import com.gp.domain.Utilisateur;
 import com.gp.service.*;
@@ -48,29 +53,33 @@ public class AdminCTRL {
 	private TrancheService trancheService;
 	@Autowired
 	private CompagnieService compagnieService;
-	
+	@Autowired
+	private SocietebaremeService societebaremeService;
 	
 	@RequestMapping(value={"/accueil","/"},method = RequestMethod.GET)
 	public String loginReussi(ModelMap model){
 		model.addAttribute("link", "accueil");
-		/*
-		Role r = new Role();
-		r.setRoleId(2);
-		r.setCode("ROLE_USER");
-		Utilisateur u = new Utilisateur();
-		u.setLogin("user");
-		u.setMotdepasse(PassWord.hacher("user"));
-		u.setEnabled(true);
+		//List<Bareme> liste = baremeService.trouverParCaractere("obligatoire");
+		//System.out.println("Brute : \n"+liste+"\n------------------------\n Ordonnée : \n"+Tool.order(liste, "getBaremeId"));
 		
-		u.setRole(r);
-		utilisateurService.enregistrer(u);
-		//*/
-		//System.out.print("pass : " +PassWord.hacher("google"));
 		model.addAttribute("societes", societeService.trouverTous());
 		model.addAttribute("baremes", baremeService.trouverParCaractere("obligatoire"));
 		return "admin/accueil";
 		
 	}
+	/****************************************************************************
+	 * BOITE DE RECPTION
+	 ******************************************************************************/
+	@RequestMapping(value="/boite-de-reception",method = RequestMethod.GET)
+	public String BOITEDERECPTION(ModelMap model){
+		model.addAttribute("link", "reception");
+		//model.addAttribute("societes", societeService.trouverTous());
+		//model.addAttribute("baremes", baremeService.trouverParCaractere("obligatoire"));
+		model.addAttribute("title", 15+" Messages");
+		return "admin/boite";
+		
+	}
+	
 	/*=================================================================
 	 * 	GERER LES SOCIETES
 	 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
@@ -118,7 +127,7 @@ public class AdminCTRL {
 		societe.setSlug(Tool.creerSlug(societe.getIntituleSociete()).toLowerCase());
 		societeService.enregistrer(societe);
 		//Creation du compte de la societe
-		
+		//new DateTime()
 		String pass = PassWord.generer();
 		Utilisateur u = new Utilisateur();
 		u.setEnabled(true);
@@ -204,51 +213,63 @@ public class AdminCTRL {
 	/*
 	 * 		Les exercies d'une societe
 	 */
-		@RequestMapping(value="/gerer-societes/{slugScte}/exercices",method = RequestMethod.GET)
+		@RequestMapping(value="/gerer-societes/{slugScte}/baremes",method = RequestMethod.GET)
 		public String Exerciesociete(ModelMap model,
 				@PathVariable("slugScte") String slugScte){
 			Societe s = societeService.trouverParSlug(slugScte);
 			model.addAttribute("slug", slugScte);
 			if(s!=null){
 				model.addAttribute("link", "societe");
-				model.addAttribute("action", "excercice");
+				model.addAttribute("action", "bareme");
 				model.addAttribute("societe", s);
+				model.addAttribute("compagnies", compagnieService.trouverTous());
 				return "admin/exercicesociete";
 			}
 			return "redirect:/erreur-lien?slug="+slugScte+"&code="+-2;	
 		}
-		@RequestMapping(value="/gerer-societes/{slugScte}/exercices",method = RequestMethod.POST)
-		public String ExerciesocieteSubmite(ModelMap model,
-				@PathVariable("slugScte") String slugScte,
-				@ModelAttribute("societe") Exercice exercice,
-				HttpServletRequest req){
-			Societe s = societeService.trouverParSlug(slugScte);
-			model.addAttribute("slug", slugScte);
-			if(s!=null){
-				model.addAttribute("link", "societe");
-				model.addAttribute("action", "excercice");
-				model.addAttribute("societe", s);
+		@RequestMapping(value="/gerer-societes/ajout-bareme",method = RequestMethod.POST)
+		public void ExerciesocieteSubmite(ModelMap model,
+				HttpServletRequest req,
+				HttpServletResponse res) throws IOException{
+				res.setCharacterEncoding("utf-8");
+				res.setContentType("text/html");
+				PrintWriter out = res.getWriter();
 				try{
-					DateTime dd = new DateTime(req.getParameter("_dateDebut"));
-					DateTime df = new DateTime(req.getParameter("_dateFin"));
-					exercice.setDateDebut(dd.toDate());
-					exercice.setDateFin(df.toDate());
-					if(dd.getMillis() > df.getMillis() ){
-						model.addAttribute("message", "La date de debut doit être inférieure ou égale à la date de fin ");
-					}else{
-						exercice.setSociete(s);
-						exerciceService.enregistrer(exercice);
-						model.addAttribute("message", "Exercice enregistré avec succès ");
-						System.out.println(exercice);
+					String action = req.getParameter("action");
+					if(action.equals("getBareme")){
+							out.print("<option value=\"\">Barème</option>");
+						for(Bareme b : compagnieService.trouverParId(Integer.parseInt(req.getParameter("compagnieId"))).getBaremes()){
+							out.print("<option value=\""+b.getBaremeId()+"\">"+b.getNom()+"</option>");
+						}
+					}else if(action.equals("addBareme")){
+						Societe s = societeService.trouverParSlug(
+								req.getParameter("slug")
+								);
+						Bareme b = baremeService.trouverParId(
+								Integer.parseInt(req.getParameter("baremeId"))
+								);
+						
+						if(s.disposerBareme(b.getBaremeId())){
+							out.print("La société <strong>"+s.getIntituleSociete()+" </strong>dispose déjà du barème <i><u>"+ b.getNom()+"</u></i> de la compagnie <strong>"+b.getCompagnie().getNom()+
+									"</strong>");
+						}else{
+							
+							Societebareme sb = new Societebareme();
+							sb.setBareme(b);
+							sb.setSociete(s);
+							societebaremeService.enregistrer(sb);
+							out.print("le barème <u><i>"+b.getNom()+"</i></u> de la compagnie <strong>"+b.getCompagnie().getNom()+
+									"</strong> a été affecté à la société "+s.getIntituleSociete()+" avec succès");
+						}
+						
+						
 					}
 				}catch(Exception e){
-					model.addAttribute("message","Erreur date : "+ e.getMessage());
-					System.out.println(e.getMessage());
+					out.print(e.getMessage());
 				}
 				
-				return "admin/exercicesociete";
-			}
-			return "redirect:/erreur-lien?slug="+slugScte+"&code="+-2;	
+			
+			//return "redirect:/erreur-lien?slug="+slugScte+"&code="+-2;	
 		}
 	/*
 	 *********************************************************************
@@ -344,23 +365,20 @@ public class AdminCTRL {
 		model.addAttribute("link", "bareme");
 		model.addAttribute("action", "tranche");
 		model.addAttribute("baremeAction", "ajout-tranche");
-		System.out.println(action);
+		//System.out.println(action);
 		if(action.equals("a-b")){
 			bareme.setVersion("1.0.0");
 			bareme.setCompagnie(compagnieService.trouverParId(idCompagnie));
-			bareme.setDate(new Double(new DateTime().getMillis()));
-			bareme.setMaj(new Double(new DateTime().getMillis()));
 			baremeService.enregistrer(bareme);
-			System.out.println(bareme);
+			//System.out.println(bareme);
 			model.addAttribute("bareme", bareme);
 		}else{
 			Bareme b = baremeService.trouverParId(
 					Integer.parseInt(eq.getParameter("idbareme"))
 					);
 			tranche.setBareme(b);
-			System.out.println(tranche);
+			//System.out.println(tranche);
 			trancheService.enregistrer(tranche);
-			
 			model.addAttribute("bareme",baremeService.trouverParId(b.getBaremeId()) );
 		}
 		
@@ -373,6 +391,7 @@ public class AdminCTRL {
 		model.addAttribute("action", "creer");
 		model.addAttribute("t-act", "ajout-bareme");
 		model.addAttribute("baremeAction", "ajout-bareme-obligatoire");
+		model.addAttribute("compagnies", compagnieService.trouverTous());
 		return "admin/creerbareme";
 		
 	}
@@ -386,16 +405,23 @@ public class AdminCTRL {
 		model.addAttribute("link", "bareme");
 		model.addAttribute("action", "tranche");
 		model.addAttribute("baremeAction", "ajout-tranche");
-		System.out.println(action);
+		//System.out.println(action);
 		if(action.equals("a-b")){
+			bareme.setVersion("1.0.0");
 			bareme.setCompagnie(
 					compagnieService.trouverParId(
 								Integer.parseInt(
-										eq.getParameter("compagnie")
+										eq.getParameter("_compagnie")
 										)
 							)
 					);
 			baremeService.enregistrer(bareme);
+			for(Societe st:societeService.trouverTous()){
+				Societebareme sb = new Societebareme();
+				sb.setBareme(bareme);
+				sb.setSociete(st);
+				societebaremeService.enregistrer(sb);
+			}
 			model.addAttribute("bareme", bareme);
 		}else{
 			Bareme b = baremeService.trouverParId(
@@ -413,24 +439,23 @@ public class AdminCTRL {
 	public String Ajouttranche(ModelMap model,
 			@ModelAttribute("bareme") Bareme bareme,
 			@ModelAttribute("tranche") Tranche tranche,
+			@PathVariable("idBareme") Integer idBareme,
 			HttpServletRequest eq){
 		
 		String action = eq.getParameter("action");
 		model.addAttribute("link", "bareme");
 		model.addAttribute("action", "tranche");
 		model.addAttribute("baremeAction", "ajout-tranche");
-		System.out.println(action);
+		//System.out.println(action);
 		if(action.equals("a-b")){
 		
 			baremeService.enregistrer(bareme);
 			model.addAttribute("bareme", bareme);
 		}else{
-			Bareme b = baremeService.trouverParId(
-					Integer.parseInt(eq.getParameter("idbareme"))
-					);
+			Bareme b = baremeService.trouverParId(idBareme);
 			tranche.setBareme(b);
 			trancheService.enregistrer(tranche);
-			model.addAttribute("bareme",baremeService.trouverParId(b.getBaremeId()) );
+			model.addAttribute("bareme",baremeService.trouverParId(idBareme) );
 		}
 		
 		return "admin/creerbareme";
@@ -464,7 +489,7 @@ public class AdminCTRL {
 		return "admin/listerbareme";
 		
 	}
-	@RequestMapping(value="/gerer-baremes/modifier/{idBareme}",method = RequestMethod.GET)
+	@RequestMapping(value={"/gerer-baremes/modifier/{idBareme}","/gerer-baremes/voir/{idBareme}"},method = RequestMethod.GET)
 	public String modifierbareme(ModelMap model,
 			@PathVariable("idBareme") Integer idBareme,
 			HttpServletRequest req){

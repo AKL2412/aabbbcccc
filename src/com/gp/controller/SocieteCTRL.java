@@ -2,8 +2,6 @@ package com.gp.controller;
 
 import java.io.File;
 
-import javax.annotation.PostConstruct;
-import javax.persistence.PostLoad;
 import javax.servlet.http.HttpServletRequest;
 
 import org.joda.time.DateTime;
@@ -20,19 +18,22 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.gp.domain.Affectation;
+import com.gp.domain.Conge;
 import com.gp.domain.Contrat;
 import com.gp.domain.Coordonneebancaire;
 import com.gp.domain.Enfant;
 import com.gp.domain.Etatcivile;
 import com.gp.domain.Exercice;
 import com.gp.domain.Immatriculation;
+import com.gp.domain.Message;
 import com.gp.domain.Paie;
 import com.gp.domain.Poste;
-import com.gp.domain.Role;
 import com.gp.domain.Salarie;
+import com.gp.domain.Salariebareme;
 import com.gp.domain.Societe;
 import com.gp.domain.Utilisateur;
 import com.gp.service.AffectationService;
+import com.gp.service.CongeService;
 import com.gp.service.ContratService;
 import com.gp.service.CoordonneebancaireService;
 import com.gp.service.EnfantService;
@@ -43,12 +44,13 @@ import com.gp.service.PaieService;
 import com.gp.service.PosteService;
 import com.gp.service.RoleService;
 import com.gp.service.SalarieService;
+import com.gp.service.SalariebaremeService;
 import com.gp.service.SocieteService;
+import com.gp.service.SocietebaremeService;
 import com.gp.service.UtilisateurService;
 import com.outils.gp.Fichier;
 import com.outils.gp.PassWord;
 import com.outils.gp.Tool;
-import com.sun.org.apache.xml.internal.security.Init;
 
 @Controller
 @RequestMapping(value="/societe/{slug}")
@@ -79,7 +81,12 @@ public class SocieteCTRL {
 	private RoleService roleService;
 	@Autowired
 	private EnfantService enfantService;
-	
+	@Autowired
+	SocietebaremeService societebaremeService;
+	@Autowired
+	SalariebaremeService salariebaremeService;
+	@Autowired
+	CongeService congeService;
 	
 	@RequestMapping(value={"/accueil","/"},method = RequestMethod.GET)
 	public String loginReussi(ModelMap model,@PathVariable("slug") String slug){
@@ -207,12 +214,6 @@ public class SocieteCTRL {
 					
 				}
 				salarieService.enregistrer(salarie);
-//				System.out.println(contrat);
-//				System.out.println(paie);
-//				System.out.println(coordonneebancaire);
-//				System.out.println(immatriculation);
-//				System.out.println(etatcivil);
-//				System.out.println(poste);
 				model.addAttribute("message", "Salarié ajouté");
 			}catch(Exception e){
 				System.out.println(e.getMessage());
@@ -477,6 +478,114 @@ public class SocieteCTRL {
 		
 	}
 	
+	/*--------------------------------------------------------------------------
+	 * Affectation de baremes aux salaries
+	 */
+	@RequestMapping(value="/gerer-salaries/bareme-salarie/{idSalarie}",method = RequestMethod.GET)
+	public String baremesalarie(ModelMap model,@PathVariable("slug") String slug,
+			@PathVariable("idSalarie") Integer idSalarie){
+		
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String login = auth.getName();
+		Utilisateur u = utilisateurService.trouverParLogin(login);
+		Societe s = societeService.trouverParSlug(slug);
+		int veri = Tool.verificationLien(u, s);
+		
+		if(veri == 1){
+			model.addAttribute("link", "salarie");
+			model.addAttribute("action", "baremesalarie");
+			model.addAttribute("slug", slug);
+			model.addAttribute("scte", s);
+			Salarie r = s.recupererSalarie(idSalarie);
+			if(r == null)
+				return "redirect:/erreur-lien?slug="+slug+"&code=1&id="+idSalarie;
+			model.addAttribute("salarie",r);
+			if(!r.baremeAjour())
+				model.addAttribute("baremesO",r.getSociete().baremeObligatoires());
+			return "scte/baremesalarier";
+		}
+		return "redirect:/erreur-lien?slug="+slug+"&code="+veri;
+	}
+	
+	@RequestMapping(value="/gerer-salaries/ajout-bareme-optionnel/{idSalarie}",method = RequestMethod.GET)
+	public String baremesalarieOptionnel(ModelMap model,@PathVariable("slug") String slug,
+			@PathVariable("idSalarie") Integer idSalarie){
+		
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String login = auth.getName();
+		Utilisateur u = utilisateurService.trouverParLogin(login);
+		Societe s = societeService.trouverParSlug(slug);
+		int veri = Tool.verificationLien(u, s);
+		
+		if(veri == 1){
+			model.addAttribute("link", "salarie");
+			model.addAttribute("action", "baremesalarie");
+			model.addAttribute("slug", slug);
+			model.addAttribute("scte", s);
+			Salarie r = s.recupererSalarie(idSalarie);
+			if(r == null)
+				return "redirect:/erreur-lien?slug="+slug+"&code=1&id="+idSalarie;
+			model.addAttribute("salarie",r);
+			model.addAttribute("baremes",r.getSociete().baremePropres());
+			model.addAttribute("type","ajout-bareme");
+			model.addAttribute("url", "/societe/"+slug+"/gerer-salaries/ajout-bareme-optionnel/"+idSalarie);
+			
+			
+			return "scte/modificationbloc";
+		}
+		return "redirect:/erreur-lien?slug="+slug+"&code="+veri;
+	}
+	@RequestMapping(value="/gerer-salaries/ajout-bareme-optionnel/{idSalarie}",method = RequestMethod.POST)
+	public String baremesalarieOptionnelSubmit(ModelMap model,@PathVariable("slug") String slug,
+			@PathVariable("idSalarie") Integer idSalarie,
+			HttpServletRequest req){
+		
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String login = auth.getName();
+		Utilisateur u = utilisateurService.trouverParLogin(login);
+		Societe s = societeService.trouverParSlug(slug);
+		int veri = Tool.verificationLien(u, s);
+		
+		if(veri == 1){
+			Salarie r = s.recupererSalarie(idSalarie);
+			if(r == null)
+				return "redirect:/erreur-lien?slug="+slug+"&code=1&id="+idSalarie;
+			try{
+				//System.out.println(req.getParameter("code")+" \n "+req.getParameter("societebaremeId")+"\n "+r);
+				Salariebareme sb = new Salariebareme();
+				
+				sb.setSalarie(r);
+				
+				sb.setSalarieId(
+						req.getParameter("code")
+						);
+				
+				//*
+				sb.setSocietebareme(
+						societebaremeService.trouverParId(
+								Integer.parseInt(req.getParameter("societebaremeId"))
+								)
+						);
+				//*/
+				//System.out.print(sb);
+				salariebaremeService.enregistrer(sb);
+				return "redirect:/societe/"+slug+"/gerer-salaries/bareme-salarie/"+idSalarie;
+			}catch(Exception e){
+				System.out.println(e.getMessage());
+				
+			}
+			return "scte/modificationbloc";
+		}
+		return "redirect:/erreur-lien?slug="+slug+"&code="+veri;
+	}
+	
+	/*
+	 * ************************************
+	 */
+	
 	/*
 	 *  Les congés
 	 */
@@ -494,15 +603,46 @@ public class SocieteCTRL {
 		Utilisateur u = utilisateurService.trouverParLogin(login);
 		Societe s = societeService.trouverParSlug(slug);
 		int veri = Tool.verificationLien(u, s);
+		DateTime today = new DateTime("2014-11-10");
 		
+		System.out.print("Today : "+today+" \nTomorrow : "+today.plusDays(1));
 		if(veri == 1){
 			model.addAttribute("link", "salarie");
 			model.addAttribute("action", "conges");
 			model.addAttribute("slug", slug);
 			model.addAttribute("scte", s);
 			Salarie r = s.recupererSalarie(idSalarie);
+			if(r == null)
+				return "redirect:/erreur-lien?slug="+slug+"&code=1&id="+idSalarie;
 			model.addAttribute("salarie",r);
+			model.addAttribute("date", new DateTime().toString("YYYY-MM-dd"));
 			return "scte/congessalarier";
+		}
+		return "redirect:/erreur-lien?slug="+slug+"&code="+veri;
+	}
+	@RequestMapping(value="/gerer-salaries/conges-salarie/{idSalarie}",method = RequestMethod.POST)
+	public String congessalarieSubmit(ModelMap model,@PathVariable("slug") String slug,
+			@PathVariable("idSalarie") Integer idSalarie,
+			@ModelAttribute("conge") Conge conge
+			){
+		
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String login = auth.getName();
+		Utilisateur u = utilisateurService.trouverParLogin(login);
+		Societe s = societeService.trouverParSlug(slug);
+		int veri = Tool.verificationLien(u, s);
+		
+		if(veri == 1){
+			Salarie r = s.recupererSalarie(idSalarie);
+			if(r == null)
+				return "redirect:/erreur-lien?slug="+slug+"&code=1&id="+idSalarie;
+			conge.setSalarie(r);
+			r.setNbrejour(r.getNbrejour() - conge.getJourtotal());
+			congeService.enregistrer(conge);
+			salarieService.enregistrer(r);
+			System.out.println(conge);
+			return "redirect:/societe/"+slug+"/gerer-salaries/conges-salarie/"+idSalarie;
 		}
 		return "redirect:/erreur-lien?slug="+slug+"&code="+veri;
 	}
@@ -764,6 +904,77 @@ public class SocieteCTRL {
 			}
 			return "redirect:/erreur-lien?slug="+slug+"&code="+veri;
 		}
+		//Envoyer un bareme a l'administrateur
+				@RequestMapping(value="/gerer-baremes/envoyer",method = RequestMethod.POST)
+				public String envoyerbaremeSubmit(ModelMap model,@PathVariable("slug") String slug,
+						@ModelAttribute("message") Message message){
+					
+					Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+					String login = auth.getName();
+					Utilisateur u = utilisateurService.trouverParLogin(login);
+					Societe s = societeService.trouverParSlug(slug);
+					int veri = Tool.verificationLien(u, s);
+					
+					if(veri == 1){
+						message.setUtilisateurByDestinataire(utilisateurService.trouverParLogin("admin"));
+						message.setUtilisateurByEmetteur(u);
+						message.setDate(new DateTime().toDate());
+						System.out.println(message);
+						return "redirect:/societe/"+slug+"/gerer-baremes/envoyer";
+					}
+					return "redirect:/erreur-lien?slug="+slug+"&code="+veri;
+				}
+		
+		//Envoyer un bareme a l'administrateur
+				@RequestMapping(value="/boite-de-reception",method = RequestMethod.GET)
+				public String boitereception(ModelMap model,@PathVariable("slug") String slug,HttpServletRequest req){
+					
+					Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+					String login = auth.getName();
+					Utilisateur u = utilisateurService.trouverParLogin(login);
+					Societe s = societeService.trouverParSlug(slug);
+					int veri = Tool.verificationLien(u, s);
+					
+					if(veri == 1){
+						String rubrique = "boite-de-reception";
+						model.addAttribute("link", "boitereception");
+						model.addAttribute("scte", s);
+						model.addAttribute("societe", s);
+						model.addAttribute("compte", u);
+						try{
+							rubrique = req.getParameter("rubrique");
+							rubrique = rubrique != null ? rubrique : "boite-de-reception";
+							
+						}catch(Exception e){
+						}
+						model.addAttribute("title", rubrique);
+						model.addAttribute("rubrique", rubrique);
+						
+						return "scte/boitereception";
+					}
+					return "redirect:/erreur-lien?slug="+slug+"&code="+veri;
+				}
+		//Envoyer un bareme a l'administrateur
+				@RequestMapping(value="/gerer-bareme/information",method = RequestMethod.GET)
+				public String informationbareme(ModelMap model,@PathVariable("slug") String slug){
+					
+					Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+					String login = auth.getName();
+					Utilisateur u = utilisateurService.trouverParLogin(login);
+					Societe s = societeService.trouverParSlug(slug);
+					int veri = Tool.verificationLien(u, s);
+					
+					if(veri == 1){
+						model.addAttribute("link", "bareme");
+						model.addAttribute("action", "information");
+						model.addAttribute("scte", s);
+						model.addAttribute("societe", s);
+						model.addAttribute("compte", u);
+						
+						return "scte/detailsbareme";
+					}
+					return "redirect:/erreur-lien?slug="+slug+"&code="+veri;
+				}
 		
 		/*
 		 * Fin gestion barèmes

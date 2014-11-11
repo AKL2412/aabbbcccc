@@ -6,7 +6,8 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title></title>
+ <script src=" <c:url value="/sources/js/app.js"/>"></script>
 </head>
 <body>
 	
@@ -61,6 +62,7 @@
 							<th>Nom</th>
 							<th>Prenom</th>
 							<th>Date de naissance</th>
+							<th></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -69,6 +71,13 @@
 				    			<td>${en.nom }</td>
 				    			<td>${en.prenom }</td>
 				    			<td>${en.datenaissance }</td>
+				    			<td>
+				    				<a class="btn btn-danger btn-xs supprimer-object" action="delete" object="enfant" objectId="${en.enfantId }" >
+				    					<i class="fa fa-trash"></i>
+				    					Supprimer
+				    				</a>
+				    			
+				    			</td>
 				    		</tr>
 				    			
 				   		 </c:forEach>
@@ -85,8 +94,31 @@
 			
 			</div>
 		</c:when>
-		<c:when test='${type == "poste" }'>
-			<h1>${titre }</h1>
+		<c:when test='${type == "ajout-bareme" }'>
+		
+			<div class="alert alert-info">Ajout de bareme au salarie ${salarie.etatcivile.prenom } ${salarie.etatcivile.nom }</div>
+			<form role="form" method="post" action="<c:url value="${url }"/>">
+				<div class="form-group">
+					<label>Le barème : </label>
+					<select name="societebaremeId" class="form-control" required="required">
+						<option value>Choisir un barème</option>
+						<c:forEach items="${baremes }" var="b">
+							<c:if test="${!salarie.possederBareme(b.societebaremeId) }">
+								<option value="${b.societebaremeId }">${b.bareme.nom } | ${b.bareme.compagnie.nom }</option>
+							</c:if>
+						</c:forEach>
+					</select>
+				</div>
+				<div class="form-group">
+					<label>Le code du salarié : </label>
+					<input type="text" name="code" class="form-control" required="required" placeholder="Le code du salarie"/>
+				</div>
+				<div class=" form-group">
+					<input type="submit" value="Ajouter" class="btn btn-primary"/>
+				</div>
+			</form>
+			
+			
 		</c:when>
 		<c:when test='${type == "coordonneebancaire" }'>
 			<h1>${titre }</h1>

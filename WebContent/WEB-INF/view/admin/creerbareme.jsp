@@ -4,7 +4,14 @@
 <c:choose>
 	<c:when test="${baremeAction == 'ajout-tranche' and  bareme != null }">
 		<div class="panel panel-success">
-		<div class="panel-heading">Les tanches du barème : ${bareme.nom }</div>
+		<div class="panel-heading">Les tanches du barème : 
+		<a href="<c:url value="/admin/gerer-baremes/voir/${bareme.baremeId}"/> ">
+ 														${bareme.nom } <span class="badge">${bareme.tranche }</span>
+ 													</a> | 
+		<a href="<c:url value="/admin/gerer-baremes/les-compagnies/voir/${bareme.compagnie.compagnieId }" />" >
+		    	${bareme.compagnie.nom }
+		    </a>
+		</div>
 			  <div class="panel-body">
 			    <c:if test="${fn:length(bareme.tranches) >0 }">
 			    	<table class="table table_striped table-condensed table-bordered">
@@ -13,6 +20,7 @@
 			    			<th>Debut</th>
 			    			<th>Fin</th>
 			    			<th>Taux</th>
+			    			<th>Formule</th>
 			    		</tr>
 			    	</thead>
 			    	<tbody>
@@ -21,6 +29,7 @@
 			    				<td>${t.debut }</td>
 			    				<td>${t.fin }</td>
 			    				<td>${t.taux }</td>
+			    				<td>${t.formule }</td>
 			    		</c:forEach>
 			    	</tbody>
 			    </table>
@@ -33,7 +42,8 @@
 		    <h3 class="panel-title">Ajouter une tranche : </h3>
 		    
 		  </div>
-		  <form action="" method="post" modelAttribute ="bareme" modelAttribute ="tranche">
+		  <form action="" method="post"  modelAttribute ="tranche">
+		  <input type="text" hidden="hidden" name="idbareme" required="required" value="${bareme.baremeId }"/>
 		  <div class="panel-body">
 		    <div id="bareme-form">
 		    <input type="text" hidden="hidden" name="action" required="required" value="a-t"/>
@@ -53,7 +63,6 @@
 		    			<label>formule:</label>
 		    			<textarea class="form-control" name="formule"></textarea>
 		    		</div>
-		    		<input type="number"  name="idbareme" hidden="hidden" value="${bareme.baremeId }" required="required"/>
 		    	</div>
 		  </div>
 		  
@@ -73,7 +82,11 @@
 				<c:choose>
 		  	<c:when test="${compagnie != null }">
 		  <div class="panel-heading">
-		    <h3 class="panel-title">Ajouter un bareme | ${compagnie.nom }</h3>
+		    <h3 class="panel-title">Ajouter un bareme | 
+		    <a href="<c:url value="/admin/gerer-baremes/les-compagnies/voir/${compagnie.compagnieId }" />" >
+		    	${compagnie.nom }
+		    </a>
+		    </h3>
 		    
 		  </div>
 		  
@@ -83,7 +96,7 @@
 		  
 		  	
 		  
-<%-- 		  <input type="text" hidden="hidden" name="_compagnie" required="required" value="${compagnie.compagnieId }"/> --%>
+		  
 		    <div id="bareme-form">
 		    <input type="text" hidden="hidden" name="action" required="required" value="a-b"/>
 		    		<div class="form-group c4 ">
@@ -143,6 +156,18 @@
 		  		 <form action="" method="post" modelAttribute ="bareme" modelAttribute ="tranche">
 		  
 		  <div class="panel-body">
+		  <fieldset>
+		  	<legend>La compagnie : </legend>
+		  	<div class="form-group col-md-4">
+		  		<select name="_compagnie" id="select-compagnie" class="form-control" required="required">
+		  			<option value>Compagnie</option>
+		  			<c:forEach items="${compagnies }" var="c">
+		  				<option value="${c.compagnieId }">${c.nom }</option>
+		  			</c:forEach>
+		  			<option value="add-compagnie">Ajouter une compagnie</option>
+		  		</select>
+		  	</div>
+		  </fieldset>
 		  
 		    <div id="bareme-form">
 		    <input type="text" hidden="hidden" name="action" required="required" value="a-b"/>
@@ -169,9 +194,7 @@
 		    		<div class="form-group c4 ">
 		    			<label>Caractère de barème :</label>
 		    			<select class="form-control" required="required" name="caractere">
-		    				<option value>Caractère</option>
 		    				<option value="obligatoire">obligatoire</option>
-		    				<option value="optionnel">optionnel</option>
 		    			</select>
 		    		</div>
 		    		<div class="form-group col-md-12 ">
@@ -193,3 +216,17 @@
 		Erreur
 	</c:otherwise>
 </c:choose>
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+	$('#select-compagnie').change(function(event) {
+		/* Act on the event */
+		var val = $(this).val();
+		if(val == 'add-compagnie'){
+			var url = getRacine()+'/admin/gerer-baremes/les-compagnies';
+			window.location.replace(url);
+			//alert(url);
+		}
+	});
+});
+
+</script>

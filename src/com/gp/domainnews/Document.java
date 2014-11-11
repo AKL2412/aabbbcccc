@@ -1,6 +1,6 @@
 package com.gp.domainnews;
 
-// Generated 28 oct. 2014 18:00:34 by Hibernate Tools 3.4.0.CR1
+// Generated 10 nov. 2014 19:05:50 by Hibernate Tools 3.4.0.CR1
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

@@ -10,13 +10,29 @@
 				<img width="100" class="img-thumbnail" src="<c:url value="/documents/${salarie.profil() }"/>" />
 				</div>
 				<div class="col-md-8">
-				<br>
-					<ol class="breadcrumb">
-					  <li class="active">Consulter</li>
-					  <li><a href="<c:url value="/societe/${slug }/gerer-salaries/modifier-salarie/${salarie.salarieId }" /> ">Modifier</a></li>
-					  <li><a href="<c:url value="/societe/${slug }/gerer-salaries/supprimer-salarie/${salarie.salarieId }" /> ">Supprimer</a></li>
-					   <li><a href="<c:url value="/societe/${slug }/gerer-salaries/conges-salarie/${salarie.salarieId }" /> ">Congés</a></li>
-					</ol>
+				
+					<div class="row">
+						<c:if test="${!salarie.baremeAjour() }">
+							<div class="alert alert-danger">
+								<i class="fa fa-warning"></i>
+								Veuillez renseigner le code de ce salarie pour certains barèmes[OBLIGATOIRE] : 
+								<a href="<c:url value="/societe/${slug }/gerer-salaries/bareme-salarie/${salarie.salarieId }" /> ">
+								<i class="fa fa-edit"></i>
+								Renseigner code</a>
+							</div>
+						</c:if>
+					</div>
+			
+					<div class="row">
+						<ol class="breadcrumb">
+						  <li class="active">Consulter</li>
+						  <li><a href="<c:url value="/societe/${slug }/gerer-salaries/modifier-salarie/${salarie.salarieId }" /> ">Modifier</a></li>
+						  <li><a href="<c:url value="/societe/${slug }/gerer-salaries/supprimer-salarie/${salarie.salarieId }" /> ">Supprimer</a></li>
+						   <li><a href="<c:url value="/societe/${slug }/gerer-salaries/conges-salarie/${salarie.salarieId }" /> ">Congés</a></li>
+						   <li><a href="<c:url value="/societe/${slug }/gerer-salaries/bareme-salarie/${salarie.salarieId }" /> ">Barèmes</a></li>
+						</ol>
+					</div>
+					
 				</div>
 				
 			</div>
@@ -75,10 +91,6 @@
 						<td>${salarie.immatriculation.cin }</td>
 					</tr>
 					<tr>
-						<td> <strong>CNSS</strong> </td>
-						<td>${salarie.immatriculation.cnss }</td>
-					</tr>
-					<tr>
 						<td> <strong>Date de naissance</strong> </td>
 						<td>${salarie.immatriculation.datenaissance }</td>
 					</tr>
@@ -96,9 +108,31 @@
 					</tr>
 				</tbody>
 			</table>
-			
-			
 				
+			</div>
+			
+			<div class="col-lg-6 block" >
+			<div class=" titre-bloc">Barèmes </div>
+			<table class="table table-striped table-condensed">
+				<thead>
+					<tr>
+						<th>Nom</th>
+						<th>Compagnie</th>
+						<th>Status</th>
+					
+					</tr>
+				</thead>
+				<tbody>
+					<c:forEach items="${salarie.salariebaremes }" var="sb">
+						<tr>
+							<td>${sb.societebareme.bareme.nom }</td>
+							<td>${sb.societebareme.bareme.compagnie.nom }</td>
+							<td>${sb.societebareme.bareme.caractere }</td>
+						
+						</tr>
+					</c:forEach>
+				</tbody>
+			</table>
 				
 			</div>
 			

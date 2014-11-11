@@ -24,6 +24,11 @@
 		<h1>Non habilité !!!</h1>
 		
 	</c:when>
+	<c:when test="${code == 1 }">
+		<i class="fa fa-warning"></i>
+		Le salarie avec l'identifiant [ID : ${id }] n'existe pas
+		
+	</c:when>
 </c:choose>
 </div>
 

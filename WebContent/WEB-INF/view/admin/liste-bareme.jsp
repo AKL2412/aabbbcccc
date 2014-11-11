@@ -3,14 +3,18 @@
 <c:choose>
 	<c:when test="${bareme != null }">
 	<div class="panel panel-default">
-		<div class="panel-heading"><h1>${bareme.nom }</h1></div>
+		<div class="panel-heading">
+		<a href="<c:url value="/admin/gerer-baremes/les-compagnies/voir/${bareme.compagnie.compagnieId }" />" >
+		    	${bareme.compagnie.nom }
+		    </a> &gt; Barème : <span class="badge"> ${bareme.nom }</span> </div>
 		<div class="panel-body">
-		<table class="table table_striped table-condensed table-bordered">
+		<table class="table table-striped table-condensed table-bordered">
 			    	<thead>
 			    		<tr>
 			    			<th>Debut</th>
 			    			<th>Fin</th>
 			    			<th>Taux</th>
+			    			<th colspan="2">Formule</th>
 			    		</tr>
 			    	</thead>
 			    	<tbody>
@@ -19,6 +23,12 @@
 			    				<td>${t.debut }</td>
 			    				<td>${t.fin }</td>
 			    				<td>${t.taux }</td>
+			    				<td>${t.formule }</td>
+			    				<td>
+			    				<a class="btn btn-danger btn-xs supprimer-object" action="delete" object="tranche" objectId="${t.trancheId }">
+			    					<i class="fa fa-trash"></i>
+			    					Supprimer
+			    				</a>
 			    		</c:forEach>
 			    	</tbody>
 			    </table>

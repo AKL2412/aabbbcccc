@@ -22,7 +22,6 @@
                                             <th>Nom et prénoms</th>
                                             <th>Matricule</th>
                                             <th>CIN</th>
-                                            <th>CNSS</th>
                                             <th>Date naissance</th>
                                             <th>Service</th>
                                             <th>Département</th>
@@ -46,9 +45,6 @@
  												</td>
  												<td>
  													${s.immatriculation.cin }
- 												</td>
- 												<td>
- 													${s.immatriculation.cnss }
  												</td>
  												<td>
  													${s.immatriculation.datenaissance }

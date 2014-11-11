@@ -1,7 +1,9 @@
 package com.gp.domainnews;
 
-// Generated 28 oct. 2014 18:00:34 by Hibernate Tools 3.4.0.CR1
+// Generated 10 nov. 2014 19:05:50 by Hibernate Tools 3.4.0.CR1
 
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,6 +12,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -22,15 +25,21 @@ public class Societebareme implements java.io.Serializable {
 	private Integer societebaremeId;
 	private Societe societe;
 	private Bareme bareme;
-	private int date;
+	private Set<Salariebareme> salariebaremes = new HashSet<Salariebareme>(0);
 
 	public Societebareme() {
 	}
 
-	public Societebareme(Societe societe, Bareme bareme, int date) {
+	public Societebareme(Societe societe, Bareme bareme) {
 		this.societe = societe;
 		this.bareme = bareme;
-		this.date = date;
+	}
+
+	public Societebareme(Societe societe, Bareme bareme,
+			Set<Salariebareme> salariebaremes) {
+		this.societe = societe;
+		this.bareme = bareme;
+		this.salariebaremes = salariebaremes;
 	}
 
 	@Id
@@ -64,13 +73,13 @@ public class Societebareme implements java.io.Serializable {
 		this.bareme = bareme;
 	}
 
-	@Column(name = "date", nullable = false)
-	public int getDate() {
-		return this.date;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "societebareme")
+	public Set<Salariebareme> getSalariebaremes() {
+		return this.salariebaremes;
 	}
 
-	public void setDate(int date) {
-		this.date = date;
+	public void setSalariebaremes(Set<Salariebareme> salariebaremes) {
+		this.salariebaremes = salariebaremes;
 	}
 
 }

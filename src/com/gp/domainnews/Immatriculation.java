@@ -1,6 +1,6 @@
 package com.gp.domainnews;
 
-// Generated 28 oct. 2014 18:00:34 by Hibernate Tools 3.4.0.CR1
+// Generated 10 nov. 2014 19:05:50 by Hibernate Tools 3.4.0.CR1
 
 import java.util.Date;
 import java.util.HashSet;
@@ -26,7 +26,6 @@ public class Immatriculation implements java.io.Serializable {
 	private Integer immatriculationId;
 	private String adresse;
 	private String cin;
-	private String cnss;
 	private Date datenaissance;
 	private String mail;
 	private String nationalite;
@@ -37,12 +36,11 @@ public class Immatriculation implements java.io.Serializable {
 	public Immatriculation() {
 	}
 
-	public Immatriculation(String adresse, String cin, String cnss,
-			Date datenaissance, String mail, String nationalite, String pays,
-			String ville, Set<Salarie> salaries) {
+	public Immatriculation(String adresse, String cin, Date datenaissance,
+			String mail, String nationalite, String pays, String ville,
+			Set<Salarie> salaries) {
 		this.adresse = adresse;
 		this.cin = cin;
-		this.cnss = cnss;
 		this.datenaissance = datenaissance;
 		this.mail = mail;
 		this.nationalite = nationalite;
@@ -78,15 +76,6 @@ public class Immatriculation implements java.io.Serializable {
 
 	public void setCin(String cin) {
 		this.cin = cin;
-	}
-
-	@Column(name = "cnss")
-	public String getCnss() {
-		return this.cnss;
-	}
-
-	public void setCnss(String cnss) {
-		this.cnss = cnss;
 	}
 
 	@Temporal(TemporalType.DATE)

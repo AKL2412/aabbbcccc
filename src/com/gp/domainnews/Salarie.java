@@ -1,6 +1,6 @@
 package com.gp.domainnews;
 
-// Generated 28 oct. 2014 18:00:34 by Hibernate Tools 3.4.0.CR1
+// Generated 10 nov. 2014 19:05:50 by Hibernate Tools 3.4.0.CR1
 
 import java.util.HashSet;
 import java.util.Set;
@@ -32,6 +32,7 @@ public class Salarie implements java.io.Serializable {
 	private Societe societe;
 	private String dossier;
 	private String image;
+	private int nbrejour;
 	private Set<Prime> primes = new HashSet<Prime>(0);
 	private Set<Conge> conges = new HashSet<Conge>(0);
 	private Set<Ordrevirement> ordrevirements = new HashSet<Ordrevirement>(0);
@@ -41,14 +42,15 @@ public class Salarie implements java.io.Serializable {
 	public Salarie() {
 	}
 
-	public Salarie(String dossier) {
+	public Salarie(String dossier, int nbrejour) {
 		this.dossier = dossier;
+		this.nbrejour = nbrejour;
 	}
 
 	public Salarie(Contrat contrat, Etatcivile etatcivile, Paie paie,
 			Poste poste, Coordonneebancaire coordonneebancaire,
 			Immatriculation immatriculation, Societe societe, String dossier,
-			String image, Set<Prime> primes, Set<Conge> conges,
+			String image, int nbrejour, Set<Prime> primes, Set<Conge> conges,
 			Set<Ordrevirement> ordrevirements,
 			Set<Salariebareme> salariebaremes, Set<Document> documents) {
 		this.contrat = contrat;
@@ -60,6 +62,7 @@ public class Salarie implements java.io.Serializable {
 		this.societe = societe;
 		this.dossier = dossier;
 		this.image = image;
+		this.nbrejour = nbrejour;
 		this.primes = primes;
 		this.conges = conges;
 		this.ordrevirements = ordrevirements;
@@ -164,6 +167,15 @@ public class Salarie implements java.io.Serializable {
 
 	public void setImage(String image) {
 		this.image = image;
+	}
+
+	@Column(name = "nbrejour", nullable = false)
+	public int getNbrejour() {
+		return this.nbrejour;
+	}
+
+	public void setNbrejour(int nbrejour) {
+		this.nbrejour = nbrejour;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "salarie")

@@ -10,7 +10,7 @@ jQuery(document).ready(function($) {
 		 	}catch(e){id = 0;}
 		 	var slug = $('#presente-scte').attr('slug');
 		 	var main = boxAlert();
-		 	var url = '/GestPaie/societe/'+slug+'/gerer-salaries/modifier/'+type+'/'+id;
+		 	var url = getRacine()+'/societe/'+slug+'/gerer-salaries/modifier/'+type+'/'+id;
 		 	
 		 	$.ajax({
 		 		url: url,

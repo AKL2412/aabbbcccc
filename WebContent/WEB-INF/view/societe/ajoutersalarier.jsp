@@ -58,20 +58,20 @@ action="" method="post" role="form">
 <div class="panel panel-default">
 <div class="panel-heading"> <div class="badge">Immatriculation </div> </div>
 	<div class="panel-body">	
-				<div class=" col-md-3 col-ms-6 col-xs-12 form-group">
+				<div class=" col-md-4 col-ms-6 col-xs-12 form-group">
 					<label>CIN : </label>
 					<input type="text" required="required" class="form-control" placeholder="cin du salarié" name="cin"/>
 				</div>
 				
-				<div class="col-md-3 col-ms-6 col-xs-12 form-group">
-					<label>CNSS : </label>
-					<input type="text" required="required" class="form-control" placeholder="cnss du salarié" name="cnss"/>
-				</div>
-				<div class="col-md-3 col-ms-6 col-xs-12 form-group">
+<!-- 				<div class="col-md-3 col-ms-6 col-xs-12 form-group"> -->
+<!-- 					<label>CNSS : </label> -->
+<!-- 					<input type="text" required="required" class="form-control" placeholder="cnss du salarié" name="cnss"/> -->
+<!-- 				</div> -->
+				<div class="col-md-4 col-ms-6 col-xs-12 form-group">
 					<label>Pays: </label>
 					<input type="text" required="required" class="form-control" placeholder="pays du salarié" name="pays"/>
 				</div>
-				<div class="col-md-3 col-ms-6 col-xs-12 form-group">
+				<div class="col-md-4 col-ms-6 col-xs-12 form-group">
 					<label>Date de naissance: </label>
 					<input type="date" required="required" class="form-control" placeholder="date denaissance du salarié" name="_datenaissance"/>
 				</div>

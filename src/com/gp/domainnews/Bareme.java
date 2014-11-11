@@ -1,17 +1,14 @@
 package com.gp.domainnews;
 
-// Generated 28 oct. 2014 18:00:34 by Hibernate Tools 3.4.0.CR1
+// Generated 10 nov. 2014 19:05:50 by Hibernate Tools 3.4.0.CR1
 
 import java.util.HashSet;
 import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-
 import static javax.persistence.GenerationType.IDENTITY;
-
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -32,48 +29,35 @@ public class Bareme implements java.io.Serializable {
 	private String nom;
 	private String tranche;
 	private String type;
-	private double date;
-	private Double maj;
 	private String caractere;
 	private String description;
 	private Set<Tranche> tranches = new HashSet<Tranche>(0);
 	private Set<Societebareme> societebaremes = new HashSet<Societebareme>(0);
-	private Set<Salariebareme> salariebaremes = new HashSet<Salariebareme>(0);
-	@Override
-	public String toString() {
-		// TODO Auto-generated method stub
-		return "Bareme :  \nNom : "+this.nom+"\nCompagnie : "+this.compagnie.getNom()+"\ntranche: "+this.tranche+
-				"\nType : "+this.type+"\nversion : "+this.version+"\n------------------------------\n";
-	}
+
 	public Bareme() {
 	}
 
 	public Bareme(Compagnie compagnie, String nom, String tranche, String type,
-			double date, String caractere, String description) {
+			String caractere, String description) {
 		this.compagnie = compagnie;
 		this.nom = nom;
 		this.tranche = tranche;
 		this.type = type;
-		this.date = date;
 		this.caractere = caractere;
 		this.description = description;
 	}
 
 	public Bareme(Compagnie compagnie, String nom, String tranche, String type,
-			double date, Double maj, String caractere, String description,
-			Set<Tranche> tranches, Set<Societebareme> societebaremes,
-			Set<Salariebareme> salariebaremes) {
+			String caractere, String description, Set<Tranche> tranches,
+			Set<Societebareme> societebaremes) {
 		this.compagnie = compagnie;
 		this.nom = nom;
 		this.tranche = tranche;
 		this.type = type;
-		this.date = date;
-		this.maj = maj;
 		this.caractere = caractere;
 		this.description = description;
 		this.tranches = tranches;
 		this.societebaremes = societebaremes;
-		this.salariebaremes = salariebaremes;
 	}
 
 	@Id
@@ -134,24 +118,6 @@ public class Bareme implements java.io.Serializable {
 		this.type = type;
 	}
 
-	@Column(name = "date", nullable = false, precision = 22, scale = 0)
-	public double getDate() {
-		return this.date;
-	}
-
-	public void setDate(double date) {
-		this.date = date;
-	}
-
-	@Column(name = "maj", precision = 22, scale = 0)
-	public Double getMaj() {
-		return this.maj;
-	}
-
-	public void setMaj(Double maj) {
-		this.maj = maj;
-	}
-
 	@Column(name = "caractere", nullable = false)
 	public String getCaractere() {
 		return this.caractere;
@@ -186,15 +152,6 @@ public class Bareme implements java.io.Serializable {
 
 	public void setSocietebaremes(Set<Societebareme> societebaremes) {
 		this.societebaremes = societebaremes;
-	}
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "bareme")
-	public Set<Salariebareme> getSalariebaremes() {
-		return this.salariebaremes;
-	}
-
-	public void setSalariebaremes(Set<Salariebareme> salariebaremes) {
-		this.salariebaremes = salariebaremes;
 	}
 
 }

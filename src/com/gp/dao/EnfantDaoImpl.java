@@ -17,7 +17,7 @@ public class EnfantDaoImpl implements EnfantDao {
 	@Override
 	public Enfant trouverParId(Integer id) {
 		Criteria crit = sessionfactory.getCurrentSession().createCriteria(Enfant.class);
-		crit.add(Restrictions.eq("etatcivileId", id));
+		crit.add(Restrictions.eq("enfantId", id));
 		return (Enfant) crit.uniqueResult();
 	}
 

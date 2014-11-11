@@ -27,12 +27,16 @@
 
     <!-- Custom CSS -->
     <link href=" <c:url value="/sources/css/sb-admin-2.css"/>" rel="stylesheet">
-
+	
+<!-- 	jquery ui css -->
+<link href=" <c:url value="/sources/css/jquery-ui.min.css"/>" rel="stylesheet">
+<link href=" <c:url value="/sources/css/jquery-ui.structure.min.css"/>" rel="stylesheet">
+<link href=" <c:url value="/sources/css/jquery-ui.theme.min.css"/>" rel="stylesheet">
     <!-- Morris Charts CSS -->
     <link href=" <c:url value="/sources/css/plugins/morris.css "/>" rel="stylesheet">
 
     <!-- Custom Fonts -->
-    <link href=" <c:url value="/sources/font-awesome-4.1.0/css/font-awesome.min.css"/>" rel="stylesheet" type="text/css">
+    <link href=" <c:url value="/sources/font-awesome-4.2.0/css/font-awesome.min.css"/>" rel="stylesheet" type="text/css">
 	<style type="text/css">
 		li.active>a{
 		background:#eee;
@@ -47,7 +51,7 @@
 </head>
 
 <body>
-
+	
 
     <div id="wrapper">
     
@@ -129,6 +133,7 @@
     <!-- DataTables JavaScript -->
     <script src=" <c:url value="/sources/js/plugins/dataTables/jquery.dataTables.js"/>"></script>
     <script src=" <c:url value="/sources/js/plugins/dataTables/dataTables.bootstrap.js"/>"></script>
+
 
 </body>
 

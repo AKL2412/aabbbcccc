@@ -8,7 +8,7 @@
 				<div class="lien">
 					<a href="<c:url value="/admin/gerer-societes/modifier/${societe.slug }" />">Modifier</a>
 					<a href="#">Supprimer</a>
-					<a href="<c:url value="/admin/gerer-societes/${societe.slug }/exercices" />">Exercices</a>
+					<a href="<c:url value="/admin/gerer-societes/${societe.slug }/baremes" />">Barèmes</a>
 					<a href="#">Salariés</a>
 				</div>
 				<div class="nom">

@@ -3,8 +3,10 @@ package com.gp.domain;
 // Generated 19 sept. 2014 17:14:43 by Hibernate Tools 3.4.0.CR1
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -53,24 +55,7 @@ public class Societe implements java.io.Serializable {
 	
 	public Societe() {
 	}
-	public String toString() {
-		return "Intitule :"+this.intituleSociete+"\nDate d'ajout : "+this.dateajout+"\nLogo : "+this.logo;
-	}
-	public String lienLogo(){
-		Utilisateur u = this.compteDefaut();
-		if(u != null){
-			return u.getLogin()+File.separator+"logos"+File.separator+this.logo;
-		}
-		return "vide";
-			
-	}
-	public Utilisateur compteDefaut(){
-		for(Utilisateur u:this.utilisateurs){
-			if(u.getRole().getNum() == 2)
-				return u;
-		}
-		return null;
-	}
+	
 	public Societe(String intituleSociete, String patente, String idfiscale,
 			String rcCodeTribunal, String cnss, String cimr, String telephone,
 			String fax, String email, String adresse, String mutuelle,
@@ -315,6 +300,63 @@ public class Societe implements java.io.Serializable {
 		}
 		return null;
 			
+	}
+	
+	/*
+	 * Mes fonctions
+	 */
+	public String toString() {
+		return "Intitule :"+this.intituleSociete+"\nDate d'ajout : "+this.dateajout+"\nLogo : "+this.logo;
+	}
+	public String lienLogo(){
+		Utilisateur u = this.compteDefaut();
+		if(u != null){
+			return u.getLogin()+File.separator+"logos"+File.separator+this.logo;
+		}
+		return "vide";
+			
+	}
+	public boolean disposerBareme(Integer baremeId){
+		for(Societebareme sb:this.societebaremes){
+			if(sb.getBareme().getBaremeId().equals(baremeId))
+				return true;
+		}
+		return false;
+	}
+	public Utilisateur compteDefaut(){
+		for(Utilisateur u:this.utilisateurs){
+			if(u.getRole().getNum() == 2)
+				return u;
+		}
+		return null;
+	}
+	public List<Societebareme> baremeObligatoires(){
+		List<Societebareme> listes = new ArrayList<Societebareme>();
+		
+		for(Societebareme sb:this.societebaremes){
+			if(sb.getBareme().getCaractere().equals("obligatoire"))
+				listes.add(sb);
+		}
+		
+		return listes;
+	}
+	public List<Societebareme> baremeObligatoires(Boolean t){
+		List<Societebareme> listes = new ArrayList<Societebareme>();
+		for(Societebareme sb:this.societebaremes){
+			if(sb.getBareme().getCaractere().equals("obligatoire"))
+				listes.add(sb);
+		}
+		
+		return listes;
+	}
+	public List<Societebareme> baremePropres(){
+		List<Societebareme> listes = new ArrayList<Societebareme>();
+		for(Societebareme sb:this.societebaremes){
+			
+			if(sb.getBareme().getCaractere().equals("optionnel"))  listes.add(sb);
+		}
+		
+		return listes;
 	}
 
 }

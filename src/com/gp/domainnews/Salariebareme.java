@@ -1,6 +1,6 @@
 package com.gp.domainnews;
 
-// Generated 28 oct. 2014 18:00:34 by Hibernate Tools 3.4.0.CR1
+// Generated 10 nov. 2014 19:05:50 by Hibernate Tools 3.4.0.CR1
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,20 +20,18 @@ import javax.persistence.Table;
 public class Salariebareme implements java.io.Serializable {
 
 	private Integer salariebaremeId;
-	private Bareme bareme;
+	private Societebareme societebareme;
 	private Salarie salarie;
 	private String salarieId;
-	private int date;
 
 	public Salariebareme() {
 	}
 
-	public Salariebareme(Bareme bareme, Salarie salarie, String salarieId,
-			int date) {
-		this.bareme = bareme;
+	public Salariebareme(Societebareme societebareme, Salarie salarie,
+			String salarieId) {
+		this.societebareme = societebareme;
 		this.salarie = salarie;
 		this.salarieId = salarieId;
-		this.date = date;
 	}
 
 	@Id
@@ -49,12 +47,12 @@ public class Salariebareme implements java.io.Serializable {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "bareme", nullable = false)
-	public Bareme getBareme() {
-		return this.bareme;
+	public Societebareme getSocietebareme() {
+		return this.societebareme;
 	}
 
-	public void setBareme(Bareme bareme) {
-		this.bareme = bareme;
+	public void setSocietebareme(Societebareme societebareme) {
+		this.societebareme = societebareme;
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -74,15 +72,6 @@ public class Salariebareme implements java.io.Serializable {
 
 	public void setSalarieId(String salarieId) {
 		this.salarieId = salarieId;
-	}
-
-	@Column(name = "date", nullable = false)
-	public int getDate() {
-		return this.date;
-	}
-
-	public void setDate(int date) {
-		this.date = date;
 	}
 
 }
