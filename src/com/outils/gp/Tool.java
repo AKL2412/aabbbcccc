@@ -7,6 +7,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.joda.time.DateTime;
+
 import com.gp.domain.Societe;
 import com.gp.domain.Utilisateur;
 
@@ -110,9 +112,10 @@ public class Tool {
 	public static int verificationLien(Utilisateur u,Societe s){
 		if(u != null ){
 			if(s != null){
-				if(u.getSociete().getSocieteId().equals(s.getSocieteId()))
+				if(u.getSociete().getSocieteId().equals(s.getSocieteId())){
+					//System.out.println(s.exoEncours());
 					return 1;
-				else
+				}else
 					return 0;
 			}
 			return -2;
@@ -143,13 +146,9 @@ public class Tool {
 		    return nbre;
 		}
 	public static String NomDeDossierSalarie(String nom) {
-		 String [] t = nom.split(" ");
-		 String r ="";
-		 for(String s :t) {
-			 r+= effacerLesPoint(s)+"-";
-		 }
-		 if(r.length() > 1)
-			 r = r.substring(0, r.length() - 1);
+		
+		 String r =nom+""+new DateTime().toString("ddMMYYYYHms");
+		 
 		return r;
 		}
 	
@@ -172,5 +171,60 @@ public class Tool {
 			str += t[i];
 		}
 		return str;
+	}
+	
+	public static String mois(int num){
+		String [] mois = {"Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Aout","Septembre","Octobre","Novembre","Décembre"};
+		try{
+			String t = mois[num-1];
+			//System.out.println("Le mois est : "+num+" = "+t);
+			return t;
+		}catch(Exception e){
+			return e.getMessage();
+		}
+	}
+	
+	public static boolean recherche(String nom,String q){
+		String [] qs = q.split(" ");
+		for(String s:qs){
+			if(!Tool.rechercheInterne(nom,s)) return false;
+		}
+		return true;
+	}
+	private static boolean rechercheInterne(String nom,String uq){
+		//System.out.println("Nom : "+nom+" -- pq : "+uq+" position : "+nom.toLowerCase().indexOf(uq.toLowerCase()));
+		if(nom.toLowerCase().indexOf(uq.toLowerCase()) != -1) return true;
+		return false;
+	}
+	
+	public static Anciennete anciennete(DateTime debut,DateTime fin){
+		Anciennete anciennete = new Anciennete();
+		int jours = 0;
+		int mois = 0;
+		int annee = 0;
+		DateTime temp = debut;
+		int dmois = temp.getMonthOfYear();
+		int dannee = temp.getYear();
+		if(temp.getMillis() <= fin.getMillis())
+		while(temp.getMillis() <= fin.getMillis()){
+			temp = temp.plusDays(1);
+			jours++;
+			if(temp.getMonthOfYear() != dmois){
+				 dmois = temp.getMonthOfYear();
+				mois++;
+				jours = 1;
+			}
+			if(temp.getYear() != dannee){
+				dannee = temp.getYear();
+				annee++;
+			}
+			
+			System.out.println(temp.toString("EEEE dd MMMM YYYY"));
+		}
+		
+		anciennete.setAnnee(annee);
+		anciennete.setMois(mois);
+		anciennete.setJours(jours);
+		return anciennete;
 	}
 }

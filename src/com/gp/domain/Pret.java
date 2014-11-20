@@ -1,16 +1,12 @@
 package com.gp.domain;
 
-// Generated 14 sept. 2014 16:09:18 by Hibernate Tools 3.4.0.CR1
+// Generated 18 nov. 2014 13:28:11 by Hibernate Tools 3.4.0.CR1
 
-import java.util.HashSet;
-import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -22,17 +18,12 @@ public class Pret implements java.io.Serializable {
 
 	private Integer pretId;
 	private Float montant;
-	private Integer ordrevirementId;
-	private Set<Ordrevirement> ordrevirements = new HashSet<Ordrevirement>(0);
 
 	public Pret() {
 	}
 
-	public Pret(Float montant, Integer ordrevirementId,
-			Set<Ordrevirement> ordrevirements) {
+	public Pret(Float montant) {
 		this.montant = montant;
-		this.ordrevirementId = ordrevirementId;
-		this.ordrevirements = ordrevirements;
 	}
 
 	@Id
@@ -53,24 +44,6 @@ public class Pret implements java.io.Serializable {
 
 	public void setMontant(Float montant) {
 		this.montant = montant;
-	}
-
-	@Column(name = "ordrevirementID")
-	public Integer getOrdrevirementId() {
-		return this.ordrevirementId;
-	}
-
-	public void setOrdrevirementId(Integer ordrevirementId) {
-		this.ordrevirementId = ordrevirementId;
-	}
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "pret")
-	public Set<Ordrevirement> getOrdrevirements() {
-		return this.ordrevirements;
-	}
-
-	public void setOrdrevirements(Set<Ordrevirement> ordrevirements) {
-		this.ordrevirements = ordrevirements;
 	}
 
 }

@@ -1,6 +1,6 @@
 package com.gp.domainnews;
 
-// Generated 10 nov. 2014 19:05:50 by Hibernate Tools 3.4.0.CR1
+// Generated 20 nov. 2014 15:33:35 by Hibernate Tools 3.4.0.CR1
 
 import java.util.HashSet;
 import java.util.Set;
@@ -33,10 +33,12 @@ public class Salarie implements java.io.Serializable {
 	private String dossier;
 	private String image;
 	private int nbrejour;
-	private Set<Prime> primes = new HashSet<Prime>(0);
+	private Set<Avance> avances = new HashSet<Avance>(0);
+	private Set<Commission> commissions = new HashSet<Commission>(0);
 	private Set<Conge> conges = new HashSet<Conge>(0);
-	private Set<Ordrevirement> ordrevirements = new HashSet<Ordrevirement>(0);
+	private Set<Salaire> salaires = new HashSet<Salaire>(0);
 	private Set<Salariebareme> salariebaremes = new HashSet<Salariebareme>(0);
+	private Set<Primesalarie> primesalaries = new HashSet<Primesalarie>(0);
 	private Set<Document> documents = new HashSet<Document>(0);
 
 	public Salarie() {
@@ -50,9 +52,10 @@ public class Salarie implements java.io.Serializable {
 	public Salarie(Contrat contrat, Etatcivile etatcivile, Paie paie,
 			Poste poste, Coordonneebancaire coordonneebancaire,
 			Immatriculation immatriculation, Societe societe, String dossier,
-			String image, int nbrejour, Set<Prime> primes, Set<Conge> conges,
-			Set<Ordrevirement> ordrevirements,
-			Set<Salariebareme> salariebaremes, Set<Document> documents) {
+			String image, int nbrejour, Set<Avance> avances,
+			Set<Commission> commissions, Set<Conge> conges,
+			Set<Salaire> salaires, Set<Salariebareme> salariebaremes,
+			Set<Primesalarie> primesalaries, Set<Document> documents) {
 		this.contrat = contrat;
 		this.etatcivile = etatcivile;
 		this.paie = paie;
@@ -63,10 +66,12 @@ public class Salarie implements java.io.Serializable {
 		this.dossier = dossier;
 		this.image = image;
 		this.nbrejour = nbrejour;
-		this.primes = primes;
+		this.avances = avances;
+		this.commissions = commissions;
 		this.conges = conges;
-		this.ordrevirements = ordrevirements;
+		this.salaires = salaires;
 		this.salariebaremes = salariebaremes;
+		this.primesalaries = primesalaries;
 		this.documents = documents;
 	}
 
@@ -179,12 +184,21 @@ public class Salarie implements java.io.Serializable {
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "salarie")
-	public Set<Prime> getPrimes() {
-		return this.primes;
+	public Set<Avance> getAvances() {
+		return this.avances;
 	}
 
-	public void setPrimes(Set<Prime> primes) {
-		this.primes = primes;
+	public void setAvances(Set<Avance> avances) {
+		this.avances = avances;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "salarie")
+	public Set<Commission> getCommissions() {
+		return this.commissions;
+	}
+
+	public void setCommissions(Set<Commission> commissions) {
+		this.commissions = commissions;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "salarie")
@@ -197,12 +211,12 @@ public class Salarie implements java.io.Serializable {
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "salarie")
-	public Set<Ordrevirement> getOrdrevirements() {
-		return this.ordrevirements;
+	public Set<Salaire> getSalaires() {
+		return this.salaires;
 	}
 
-	public void setOrdrevirements(Set<Ordrevirement> ordrevirements) {
-		this.ordrevirements = ordrevirements;
+	public void setSalaires(Set<Salaire> salaires) {
+		this.salaires = salaires;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "salarie")
@@ -212,6 +226,15 @@ public class Salarie implements java.io.Serializable {
 
 	public void setSalariebaremes(Set<Salariebareme> salariebaremes) {
 		this.salariebaremes = salariebaremes;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "salarie")
+	public Set<Primesalarie> getPrimesalaries() {
+		return this.primesalaries;
+	}
+
+	public void setPrimesalaries(Set<Primesalarie> primesalaries) {
+		this.primesalaries = primesalaries;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "salarie")

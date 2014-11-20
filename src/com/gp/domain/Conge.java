@@ -58,7 +58,7 @@ public class Conge implements java.io.Serializable {
 		this.congeId = congeId;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "salarieID")
 	public Salarie getSalarie() {
 		return this.salarie;
@@ -125,6 +125,15 @@ public class Conge implements java.io.Serializable {
 	public String toString() {
 		// TODO Auto-generated method stub
 		return "Conge: \nDu : "+this.datedebut+"\nAu : "+this.datefin+"\nMotif : "+this.details+"\nSalarie : "+this.salarie;
+	}
+	
+	/*
+	 * Mes fonctions
+	 */
+	public boolean annulable(){
+		if(new DateTime(this.datedebut).getMillis() > new DateTime().getMillis())
+			return true;
+		return false;
 	}
 
 }

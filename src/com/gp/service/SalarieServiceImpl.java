@@ -1,5 +1,7 @@
 package com.gp.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -29,6 +31,12 @@ public class SalarieServiceImpl implements SalarieService {
 	public Salarie trouverParId(Integer id) {
 		// TODO Auto-generated method stub
 		return salarieDao.trouverParId(id);
+	}
+
+	@Override
+	public List<Salarie> recherche(String q) {
+		// TODO Auto-generated method stub
+		return salarieDao.recherche(q);
 	}
 
 }

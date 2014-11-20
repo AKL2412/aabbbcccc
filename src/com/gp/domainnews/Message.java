@@ -1,16 +1,13 @@
 package com.gp.domainnews;
 
-// Generated 10 nov. 2014 19:05:50 by Hibernate Tools 3.4.0.CR1
+// Generated 20 nov. 2014 15:33:35 by Hibernate Tools 3.4.0.CR1
 
 import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-
 import static javax.persistence.GenerationType.IDENTITY;
-
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -148,14 +145,6 @@ public class Message implements java.io.Serializable {
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-	/*
-	 * Mes fonctions
-	 */
-	@Override
-	public String toString() {
-		// TODO Auto-generated method stub
-		return "Message :\n Send by "+this.utilisateurByEmetteur.getLogin()+"\nReceiver : "+this.utilisateurByDestinataire.getLogin();
 	}
 
 }

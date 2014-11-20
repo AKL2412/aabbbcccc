@@ -2,13 +2,17 @@
 
 <c:choose>
 	<c:when test="${salarie != null }">
-		 <div class="row">
+<div class="row">
  	<div class="c1 image">
 			<div class="col-md-2">
-				<img width="100" class="img-thumbnail" src="<c:url value="/documents/${salarie.profil() }"/>" />
+				<img width="150" class="img-thumbnail" src="<c:url value="/documents/${salarie.profil() }"/>" />
 				</div>
 				<div class="col-md-8">
-				
+					<div class="row">
+						<h2>
+						<u>${salarie.etatcivile.prenom } ${salarie.etatcivile.nom }</u>
+						</h2>
+					</div>
 					<div class="row">
 						<c:if test="${!salarie.baremeAjour() }">
 							<div class="alert alert-danger">
@@ -27,9 +31,16 @@
 						  <li><a href="<c:url value="/societe/${slug }/gerer-salaries/consulter-salarie/${salarie.salarieId }" /> ">Consulter</a></li>
 						  <li><a href="<c:url value="/societe/${slug }/gerer-salaries/modifier-salarie/${salarie.salarieId }" /> ">Modifier</a></li>
 						  <li><a href="<c:url value="/societe/${slug }/gerer-salaries/supprimer-salarie/${salarie.salarieId }" /> ">Supprimer</a></li>
-						   <li class="active">Congés</li>
+						    <li class="active">Congés</li>
 						  <li><a href="<c:url value="/societe/${slug }/gerer-salaries/bareme-salarie/${salarie.salarieId }" /> ">Barèmes</a></li>
-						 
+						  <li   >
+						 <a href="<c:url value="/societe/${slug }/gerer-salaries/avances-salarie/${salarie.salarieId }" /> ">
+						  Avances
+						  </a>
+						 </li>
+						 <li><a href="<c:url value="/societe/${slug }/gerer-salaries/commissions-salarie/${salarie.salarieId }" /> ">commissions</a></li>
+						 <li><a href="<c:url value="/societe/${slug }/gerer-salaries/primes-salarie/${salarie.salarieId }" /> ">Primes</a></li>
+						<li><a href="<c:url value="/societe/${slug }/gerer-salaries/etat-cotisation-salarie/${salarie.salarieId }" /> ">Etat cotisation</a></li>
 						</ol>
 					</div>
 					
@@ -38,6 +49,8 @@
 			</div>
  
  </div>
+ 
+ 
  <div class="row">
  	<div class="alert alert-success col-md-4 col-md-offset-4 text-center">
  		Nombre de jour restant : ${salarie.nbrejour }
@@ -91,13 +104,14 @@
  	<div class="container">
  		<div class="panel panel-success">
  		<div class="panel-heading">
- 			<i class="fa fa-calendar-o"></i>
+ 			
  			Les congés pris par ${salarie.etatcivile.prenom } ${salarie.etatcivile.nom }
  		</div>
  		<div class="panel-body">
  			<table class="table table-striped table-condensed table-bordered">
  				<thead>
  					<tr>
+ 						<th><i class="fa fa-calendar-o"></i></th>
  						<th>Date de debut</th>
  						<th>Date de fin</th>
  						<th>Nombre de jours</th>
@@ -107,6 +121,13 @@
  				<tbody>
  					<c:forEach items="${salarie.conges }" var="c">
  						<tr>
+ 							<td>
+ 								<c:if test="${c.annulable() }">
+ 									<button class="btn btn-danger btn-xs supprimer-object" action="delete" object="conge" objectId="${c.congeId }">
+ 										annuler
+ 									</button>
+ 								</c:if>
+ 							</td>
  							<td>${c.datedebut }</td>
  							<td>${c.datefin }</td>
  							<td>${c.jourtotal }</td>

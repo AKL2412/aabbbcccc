@@ -26,7 +26,7 @@
 	</c:when>
 	<c:when test="${code == 1 }">
 		<i class="fa fa-warning"></i>
-		Le salarie avec l'identifiant [ID : ${id }] n'existe pas
+		${objet } avec l'identifiant [ID : ${id }] n'existe pas
 		
 	</c:when>
 </c:choose>

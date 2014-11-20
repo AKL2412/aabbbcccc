@@ -5,11 +5,13 @@ jQuery(document).ready(function($) {
 		/* Act on the event */
 		if($(this).val() == 0 ){
 
-			$('#box-contenu').html($('#unMessage'));
+			$('#box-contenu').html($('#unMessage').html());
 		}else if($(this).val() == 1 ){
-			$('#box-contenu').html($('#unBareme'));
+			$('#box-contenu').html($('#unBareme').html());
 		}else{
-
+			$(this).val("");
+			$('#box-contenu').html("");
+			
 		}
 	});
 });

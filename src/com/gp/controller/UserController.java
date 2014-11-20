@@ -17,19 +17,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.gp.domain.Bareme;
 import com.gp.domain.Compagnie;
+import com.gp.domain.Conge;
 import com.gp.domain.Enfant;
+import com.gp.domain.Primesalarie;
 import com.gp.domain.Salarie;
 import com.gp.domain.Salariebareme;
 import com.gp.domain.Utilisateur;
 import com.gp.domain.Societebareme;
-import com.gp.service.BaremeService;
-import com.gp.service.CompagnieService;
-import com.gp.service.EnfantService;
-import com.gp.service.SalarieService;
-import com.gp.service.SalariebaremeService;
-import com.gp.service.SocietebaremeService;
-import com.gp.service.TrancheService;
-import com.gp.service.UtilisateurService;
+import com.gp.service.*;
 
 
 @Controller
@@ -49,9 +44,12 @@ public class UserController {
 	CompagnieService compagnieService;
 	@Autowired
 	SalarieService salarieService;
-
+	@Autowired
+	CongeService congeService;
 	@Autowired
 	private EnfantService enfantService;
+	@Autowired
+	private PrimesalarieService primesalarieService;
 	/*-------------------------------------------------------------------
 	 *	GESTION DE SON PROPRE COMPTE 
 	 ------------------------------------------------------------------
@@ -82,6 +80,7 @@ public class UserController {
 		model.addAttribute("code", req.getParameter("code"));
 		try{
 			model.addAttribute("id", req.getParameter("id"));
+			model.addAttribute("objet", req.getParameter("objet"));
 		}catch(Exception e){}
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String login = auth.getName();
@@ -161,6 +160,23 @@ public class UserController {
 							+ "L'enfant <strong> <i>"+sb.getNom()+" "+sb.getPrenom()+"</i></strong> a été supprimé avec succès ");
 					else
 						out.print("Suppression échouée !!");
+				}else if(type.equals("conge")){
+					Conge c = congeService.trouverParId(id);
+					Salarie s = c.getSalarie();
+					
+					s.setNbrejour(s.getNbrejour() + c.getJourtotal());
+					congeService.supprimer(c);
+					salarieService.enregistrer(s);
+					out.print("<i class=\"fa fa-check-square-o fa-2x\" style=\"color:#63ce71\" ></i> Le congé a été annuler avec succès ! ");
+				}else if(type.equals("primesalarie")){
+					Primesalarie ps = primesalarieService.trouverParId(id);
+					
+					if(primesalarieService.supprimer(ps))
+					out.print("<i class=\"fa fa-check-square-o fa-2x\" style=\"color:#63ce71\" ></i> La prime :<strong>"+ps.getPrime().getNom()+
+							"</strong> a été rétirée au salarié <strong>"+ps.getSalarie().getEtatcivile().getPrenom()+" "+
+							ps.getSalarie().getEtatcivile().getNom()+"</strong> avec succès");
+					else
+						out.print("<i class=\"fa fa-check-square-o fa-2x\" style=\"color:red\" ></i> ERREUR");
 				}
 				
 			}else if(action.equals("update")){

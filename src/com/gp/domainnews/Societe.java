@@ -1,6 +1,6 @@
 package com.gp.domainnews;
 
-// Generated 10 nov. 2014 19:05:50 by Hibernate Tools 3.4.0.CR1
+// Generated 20 nov. 2014 15:33:35 by Hibernate Tools 3.4.0.CR1
 
 import java.util.Date;
 import java.util.HashSet;
@@ -11,6 +11,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -24,6 +26,7 @@ import javax.persistence.TemporalType;
 public class Societe implements java.io.Serializable {
 
 	private Integer societeId;
+	private Parametre parametre;
 	private String intituleSociete;
 	private String patente;
 	private String idfiscale;
@@ -44,6 +47,7 @@ public class Societe implements java.io.Serializable {
 	private Set<Utilisateur> utilisateurs = new HashSet<Utilisateur>(0);
 	private Set<Exercice> exercices = new HashSet<Exercice>(0);
 	private Set<Societebareme> societebaremes = new HashSet<Societebareme>(0);
+	private Set<Prime> primes = new HashSet<Prime>(0);
 
 	public Societe() {
 	}
@@ -69,13 +73,14 @@ public class Societe implements java.io.Serializable {
 		this.maxcompte = maxcompte;
 	}
 
-	public Societe(String intituleSociete, String patente, String idfiscale,
-			String rcCodeTribunal, String cnss, String cimr, String telephone,
-			String fax, String email, String adresse, String mutuelle,
-			Date dateajout, String logo, String slug, String ville,
-			int maxcompte, Set<Salarie> salaries,
+	public Societe(Parametre parametre, String intituleSociete, String patente,
+			String idfiscale, String rcCodeTribunal, String cnss, String cimr,
+			String telephone, String fax, String email, String adresse,
+			String mutuelle, Date dateajout, String logo, String slug,
+			String ville, int maxcompte, Set<Salarie> salaries,
 			Set<Utilisateur> utilisateurs, Set<Exercice> exercices,
-			Set<Societebareme> societebaremes) {
+			Set<Societebareme> societebaremes, Set<Prime> primes) {
+		this.parametre = parametre;
 		this.intituleSociete = intituleSociete;
 		this.patente = patente;
 		this.idfiscale = idfiscale;
@@ -96,6 +101,7 @@ public class Societe implements java.io.Serializable {
 		this.utilisateurs = utilisateurs;
 		this.exercices = exercices;
 		this.societebaremes = societebaremes;
+		this.primes = primes;
 	}
 
 	@Id
@@ -107,6 +113,16 @@ public class Societe implements java.io.Serializable {
 
 	public void setSocieteId(Integer societeId) {
 		this.societeId = societeId;
+	}
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "parametre")
+	public Parametre getParametre() {
+		return this.parametre;
+	}
+
+	public void setParametre(Parametre parametre) {
+		this.parametre = parametre;
 	}
 
 	@Column(name = "intituleSociete", nullable = false)
@@ -289,5 +305,16 @@ public class Societe implements java.io.Serializable {
 	public void setSocietebaremes(Set<Societebareme> societebaremes) {
 		this.societebaremes = societebaremes;
 	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "societe")
+	public Set<Prime> getPrimes() {
+		return this.primes;
+	}
+
+	public void setPrimes(Set<Prime> primes) {
+		this.primes = primes;
+	}
+	
+	
 
 }

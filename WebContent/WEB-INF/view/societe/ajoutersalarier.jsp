@@ -90,7 +90,7 @@ action="" method="post" role="form">
 				</div>
 				<div class="col-md-4 col-ms-4 col-xs-12 form-group">
 					<label>Photo: </label>
-					<input type="file" required="required" class="form-control" name="file" placeholder="file"/>
+					<input type="file"  class="form-control" name="file" placeholder="file"/>
 				</div>
 		
 			</div>

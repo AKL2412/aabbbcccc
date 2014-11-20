@@ -5,10 +5,14 @@
 	 <div class="row">
  	<div class="c1 image">
 			<div class="col-md-2">
-				<img width="100" class="img-thumbnail" src="<c:url value="/documents/${salarie.profil() }"/>" />
+				<img width="150" class="img-thumbnail" src="<c:url value="/documents/${salarie.profil() }"/>" />
 				</div>
 				<div class="col-md-8">
-				
+				<div class="row">
+						<h2>
+						<u>${salarie.etatcivile.prenom } ${salarie.etatcivile.nom }</u>
+						</h2>
+					</div>
 					<div class="row">
 						<c:if test="${!salarie.baremeAjour() }">
 							<div class="alert alert-danger">
@@ -29,7 +33,10 @@
 						  <li><a href="<c:url value="/societe/${slug }/gerer-salaries/supprimer-salarie/${salarie.salarieId }" /> ">Supprimer</a></li>
 						   <li><a href="<c:url value="/societe/${slug }/gerer-salaries/conges-salarie/${salarie.salarieId }" /> ">Congés</a></li>
 						  <li><a href="<c:url value="/societe/${slug }/gerer-salaries/bareme-salarie/${salarie.salarieId }" /> ">Barèmes</a></li>
-						 
+						 <li><a href="<c:url value="/societe/${slug }/gerer-salaries/avances-salarie/${salarie.salarieId }" /> ">Avances</a></li>
+						<li><a href="<c:url value="/societe/${slug }/gerer-salaries/commissions-salarie/${salarie.salarieId }" /> ">commissions</a></li>
+						 <li><a href="<c:url value="/societe/${slug }/gerer-salaries/primes-salarie/${salarie.salarieId }" /> ">Primes</a></li>
+						<li><a href="<c:url value="/societe/${slug }/gerer-salaries/etat-cotisation-salarie/${salarie.salarieId }" /> ">Etat cotisation</a></li>
 						</ol>
 					</div>
 					
@@ -87,6 +94,10 @@ action="" method="post">
 		<option value="femme">Femme</option>
 	</select>
 </div>
+<div class="col-md-4 col-ms-4 col-xs-12 form-group">
+					<label>Photo: </label>
+					<input type="file"  class="form-control" name="file" placeholder="file"/>
+				</div>
 
 </fieldset>
 <br>

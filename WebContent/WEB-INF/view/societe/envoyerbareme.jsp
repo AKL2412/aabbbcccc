@@ -47,11 +47,11 @@
  <!--  					un Bareme  -->
  				<div id="unBareme" class="contenuMessage">
  					<div class="form-group col-md-12">
- 						<label>Objet : </label>
- 						<input type="text" required="required" name="objet" class="form-control" placeholder="Objet du message">
+ 						<label>Nom du barème : </label>
+ 						<input type="text" required="required" name="objet" class="form-control" placeholder="Nom du barèmee">
  					</div>
  					<div id="add-tranche">
- 					
+ 						
  					</div>
  					<div class="form-group col-md-12">
  						<label>Description du barème: </label>

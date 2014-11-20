@@ -50,12 +50,13 @@ http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
 		<value> com.gp.domain.Etatcivile</value>
 		<value> com.gp.domain.Exercice</value>
 		<value> com.gp.domain.Immatriculation</value>
-		<value> com.gp.domain.Ordrevirement</value>
+		<value> com.gp.domain.Commission</value>
 		<value> com.gp.domain.Paie</value>
 		<value> com.gp.domain.Poste</value>
 		<value> com.gp.domain.Tranche</value>
 		<value> com.gp.domain.Pret</value>
 		<value> com.gp.domain.Prime</value>
+		<value> com.gp.domain.Primesalarie</value>
 		<value> com.gp.domain.Role</value>
 		<value> com.gp.domain.Salarie</value>
 		<value> com.gp.domain.Societe</value>
@@ -64,8 +65,10 @@ http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
 		<value> com.gp.domain.Message</value>
 		<value> com.gp.domain.Compagnie</value>
 		<value> com.gp.domain.Salariebareme</value>
-		
-		
+		<value> com.gp.domain.Parametre</value>
+		<value> com.gp.domain.Primedate</value>
+		<value> com.gp.domain.Primesalarie</value>
+		<value> com.gp.domain.Salaire</value>
 	</list>
 		</property>
 		<property name="hibernateProperties">

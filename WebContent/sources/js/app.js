@@ -54,7 +54,58 @@ jQuery(document).ready(function($) {
 		
 	});
 
+
+/*
+	Pliage et depliage des panels
+*/
+$.each($('.panel .panel-heading'), function(index, val) {
+	 /* iterate through array or object */
+	 var i = $('<i class="fa fa-chevron-down plis" etat="down"></i>');
+	 var heading = $(val);
+	 heading.prepend(i);
+	 i.click(function(event) {
+	 	/* Act on the event */
+	 	var i = $(this);
+	 	var panel = i.parent().parent();
+	 	if(i.attr('etat') == 'down'){
+	 		i.removeClass('fa-chevron-down')
+	 		i.addClass('fa-chevron-up')
+	 		i.attr('etat', 'up');
+	 	}else{
+	 		i.removeClass('fa-chevron-up')
+	 		i.addClass('fa-chevron-down')
+	 		i.attr('etat', 'down');
+	 	}
+	 	panel.find('.panel-body').toggle(100);
+		panel.find('.panel-footer').toggle(100);
+	 });
+});
+///***********************************************************************************
+	/*
+		Voir un objet en boite modale
+	*/
+
+		 $('.voir-boite-modale').click(function(event) {
+		 	var btn = $(this);
+		 	var url = btn.attr('url');
+		 	var main = boxAlert();
+		 	$.ajax({
+		 		url: url,
+		 		type: 'GET',
+		 		dataType: 'html',
+		 		data: {},
+		 	})
+		 	.done(function(data) {
+		 		main.html(data);
+		 	})
+		 	.fail(function() {
+		 		console.log("error");
+		 	}).always(function() {console.log("complete");});
+		 	
+		 	
+		 });
 	
+	//=============================================================================
 
 });
 	function conrfimerDelete(datas,elt,etat){

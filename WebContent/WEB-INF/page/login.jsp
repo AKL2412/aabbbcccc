@@ -90,7 +90,7 @@
             <div class="col-md-4 col-md-offset-4">
                 <div class="login-panel panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Please Sign In</h3>
+                        <h3 class="panel-title">Authentifiez vous</h3>
                     </div>
                     <div class="panel-body">
                         <form role="form" name='f' action="<c:url value="/j_spring_security_check"/>" method="post">
@@ -103,12 +103,12 @@
                                 </div>
                                 <div class="checkbox">
                                     <label>
-                                        <input  name="j_remember_me" type="checkbox" value="Remember Me">Remember Me
+                                        <input  name="j_remember_me" type="checkbox" value="Remember Me">Se souvenir de moi
                                     </label>
                                 </div>
                                 <!-- Change this to a button or input when using this as a form -->
                                 
-                                <input type="submit" class="btn btn-lg btn-success btn-block" value="Login"/>
+                                <input type="submit" class="btn btn-lg btn-success btn-block" value="Connecter"/>
                             </fieldset>
                         </form>
                         

@@ -2,14 +2,16 @@
 
 <ul class="nav" id="side-menu">
                         <li class="sidebar-search">
-                            <div class="input-group custom-search-form">
-                                <input type="text" class="form-control" placeholder="Search salarié...">
+                            <form method="get" action="<c:url value="/societe/${scte.slug }/recherche"/>">
+                            	<div class="input-group custom-search-form">
+                                <input type="text" name="q" class="form-control" placeholder="Search salarié...">
                                 <span class="input-group-btn">
                                 <button class="btn btn-default" type="button">
                                     <i class="fa fa-search"></i>
                                 </button>
                             </span>
                             </div>
+                            </form>
                             <!-- /input-group -->
                         </li>
                         <li class="<c:if test="${link == \"accueil\"}"> active </c:if>">
@@ -45,11 +47,35 @@
 											</a> 
 										</li>
 										 </c:if>
+										 <c:if test="${link == \"salarie\" && action == \"etatcotisation\"}"> 
+										<li class="active" >
+											<a >
+											<i class="fa fa-money"></i> Etat de cotisation
+											
+											</a> 
+										</li>
+										 </c:if>
+										  <c:if test="${link == \"salarie\" && action == \"primes-collectives\"}"> 
+										<li class="active" >
+											<a >
+											
+											<i class="fa fa-trophy"></i> Les primes
+											</a> 
+										</li>
+										 </c:if>
 										 <c:if test="${link == \"salarie\" && action == \"conges\"}"> 
 											<li class="active" >
 												<a >
 												
 												<i class="fa fa-calendar"></i> Congés
+												</a> 
+											</li>
+										 </c:if>
+										 <c:if test="${link == \"salarie\" && action == \"avances\"}"> 
+											<li class="active" >
+												<a >
+												
+												<i class="fa fa-money"></i>  Avances
 												</a> 
 											</li>
 										 </c:if>
@@ -81,7 +107,7 @@
                                  <li class="<c:if test="${link == \"cotisation\" && action == \"cnss\"}"> active </c:if>">
                                 <a  href="<c:url value="/societe/${scte.slug }/gerer-cotisation/cnss"/>" >
                                 
-												<i class="fa fa-cube"></i>  CNSS
+												<i class="fa fa-cube"></i>  Les barèmes Obligatoires
 								</a>
 								</li>
 								<li class="<c:if test="${link == \"cotisation\" && action == \"patronale\"}"> active </c:if>">

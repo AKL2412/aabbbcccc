@@ -1,6 +1,10 @@
 package com.gp.controller;
 
 import java.io.File;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.Map;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -18,6 +22,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.gp.domain.Affectation;
+import com.gp.domain.Avance;
+import com.gp.domain.Bareme;
+import com.gp.domain.Commission;
 import com.gp.domain.Conge;
 import com.gp.domain.Contrat;
 import com.gp.domain.Coordonneebancaire;
@@ -27,12 +34,19 @@ import com.gp.domain.Exercice;
 import com.gp.domain.Immatriculation;
 import com.gp.domain.Message;
 import com.gp.domain.Paie;
+import com.gp.domain.Parametre;
 import com.gp.domain.Poste;
+import com.gp.domain.Prime;
+import com.gp.domain.Primedate;
+import com.gp.domain.Primesalarie;
 import com.gp.domain.Salarie;
 import com.gp.domain.Salariebareme;
 import com.gp.domain.Societe;
 import com.gp.domain.Utilisateur;
 import com.gp.service.AffectationService;
+import com.gp.service.AvanceService;
+import com.gp.service.BaremeService;
+import com.gp.service.CommissionService;
 import com.gp.service.CongeService;
 import com.gp.service.ContratService;
 import com.gp.service.CoordonneebancaireService;
@@ -41,7 +55,11 @@ import com.gp.service.EtatcivilService;
 import com.gp.service.ExerciceService;
 import com.gp.service.ImmatriculationService;
 import com.gp.service.PaieService;
+import com.gp.service.ParametreService;
 import com.gp.service.PosteService;
+import com.gp.service.PrimeService;
+import com.gp.service.PrimedateService;
+import com.gp.service.PrimesalarieService;
 import com.gp.service.RoleService;
 import com.gp.service.SalarieService;
 import com.gp.service.SalariebaremeService;
@@ -87,6 +105,23 @@ public class SocieteCTRL {
 	SalariebaremeService salariebaremeService;
 	@Autowired
 	CongeService congeService;
+	@Autowired
+	ParametreService parametreService;
+	@Autowired
+	AvanceService avanceService;
+	@Autowired
+	CommissionService commissionService;
+	@Autowired
+	PrimeService primeService;
+	@Autowired
+	PrimedateService primedateService;
+	@Autowired
+	private PrimesalarieService primesalarieService;
+	@Autowired
+	private BaremeService baremeService;
+	
+	
+	
 	
 	@RequestMapping(value={"/accueil","/"},method = RequestMethod.GET)
 	public String loginReussi(ModelMap model,@PathVariable("slug") String slug){
@@ -96,16 +131,80 @@ public class SocieteCTRL {
 		Utilisateur u = utilisateurService.trouverParLogin(login);
 		Societe s = societeService.trouverParSlug(slug);
 		int veri = Tool.verificationLien(u, s);
-		
+		//System.out.print(new DateTime().toString("ddMMYYYYHms"));
 		if(veri == 1){
 			model.addAttribute("link", "accueil");
 			model.addAttribute("slug", slug);
 			model.addAttribute("scte", s);
+//			DateTime today = new DateTime();
+//			DateTime uneSe = today.plusDays(7);
+//			System.out.print("Today : "+today.toString("EEEE dd-MM-YYYY H:m:s")+"\nUne semaine : "+uneSe.toString("EEEE dd-MM-YYYY H:m:s"));
 			return "scte/accueil";
 		}
 		return "redirect:/erreur-lien?slug="+slug+"&code="+veri;
 		
 	}
+	
+	
+	/*
+	 * Les paramètres
+	 */
+	
+	//ACCUEIL DE PARAMETRE
+	@RequestMapping(value="/parametres",method = RequestMethod.GET)
+	public String parametres(ModelMap model,@PathVariable("slug") String slug
+			){
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String login = auth.getName();
+		Utilisateur u = utilisateurService.trouverParLogin(login);
+		Societe s = societeService.trouverParSlug(slug);
+		int veri = Tool.verificationLien(u, s);
+		
+		if(veri == 1){
+			
+			model.addAttribute("link", "parametre");
+			model.addAttribute("action", "param");
+			model.addAttribute("slug", slug);
+			model.addAttribute("scte", s);
+			return "scte/parametre";
+		}
+		return "redirect:/erreur-lien?slug="+slug+"&code="+veri;
+	}
+	
+	// SUBMIT DE LA DEFINITION DU DELAI DE NOTIFICATION
+	
+	@RequestMapping(value="/submit-delai-notification",method = RequestMethod.POST)
+	public String submitdelaidenotification(ModelMap model,@PathVariable("slug") String slug,
+			HttpServletRequest req
+			){
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String login = auth.getName();
+		Utilisateur u = utilisateurService.trouverParLogin(login);
+		Societe s = societeService.trouverParSlug(slug);
+		int veri = Tool.verificationLien(u, s);
+		
+		if(veri == 1){
+			try{
+				Integer delai = Integer.parseInt(req.getParameter("delai"));
+				Parametre p = s.getParametre();
+				p.setAlertefinperiodeessai(delai);
+				parametreService.enregistrer(p);
+				System.out.println(delai);
+			}catch(Exception e){
+				System.out.println(e.getMessage());
+			}
+			
+			
+			return "redirect:/societe/"+slug+"/parametres";
+		}
+		return "redirect:/erreur-lien?slug="+slug+"&code="+veri;
+	}
+	
+	
+	
+	
 	
 	/*================================================================
 	 * Gere les salaries
@@ -203,7 +302,7 @@ public class SocieteCTRL {
 				String folderScte = s.compteDefaut().getLogin();
 				String cheminSauvegarde = req.getServletContext().getInitParameter("documents-societes");
 				cheminSauvegarde += folderScte+File.separator+"salaries";
-				String cheminSalarie = Tool.NomDeDossierSalarie(etatcivil.getNom()+" "+etatcivil.getPrenom());
+				String cheminSalarie = Tool.NomDeDossierSalarie("salarie");
 				cheminSauvegarde += File.separator+cheminSalarie;
 				Fichier.creerDossier(cheminSauvegarde);
 				salarie.setDossier(cheminSalarie);
@@ -213,6 +312,7 @@ public class SocieteCTRL {
 					salarie.setImage(logo);
 					
 				}
+				salarie.setNbrejour(22);
 				salarieService.enregistrer(salarie);
 				model.addAttribute("message", "Salarié ajouté");
 			}catch(Exception e){
@@ -241,6 +341,46 @@ public class SocieteCTRL {
 			model.addAttribute("slug", slug);
 			model.addAttribute("scte", s);
 			return "scte/listersalarier";
+		}
+		return "redirect:/erreur-lien?slug="+slug+"&code="+veri;
+	}
+	/*
+	 * Voir etat de salaire,cotisation d'un salarie
+	 */
+	@RequestMapping(value="/gerer-salaries/etat-cotisation-salarie/{idSalarie}",method = RequestMethod.GET)
+	public String etatcotisation(ModelMap model,@PathVariable("slug") String slug,
+			@PathVariable("idSalarie") Integer idSalarie,
+			HttpServletRequest req){
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String login = auth.getName();
+		Utilisateur u = utilisateurService.trouverParLogin(login);
+		Societe s = societeService.trouverParSlug(slug);
+		int veri = Tool.verificationLien(u, s);
+		
+		if(veri == 1){
+			model.addAttribute("link", "salarie");
+			model.addAttribute("action", "etatcotisation");
+			model.addAttribute("slug", slug);
+			model.addAttribute("scte", s);
+			Salarie r = s.recupererSalarie(idSalarie);
+			model.addAttribute("title","Consultation|erreur");
+			if(r != null)
+				model.addAttribute("title",r.getEtatcivile().getPrenom()+" "+r.getEtatcivile().getNom());
+			else
+				return "redirect:/erreur-lien?slug="+slug+"&code=1&id="+idSalarie+"&objet=Salarie";
+			model.addAttribute("salarie",r);
+			
+			try{
+				Integer IdExo = Integer.parseInt(req.getParameter("exo"));
+				Integer mois = Integer.parseInt(req.getParameter("mois"));
+				
+			}catch(Exception e){
+				
+			}
+			
+			
+			return "scte/etatcotisation";
 		}
 		return "redirect:/erreur-lien?slug="+slug+"&code="+veri;
 	}
@@ -321,7 +461,8 @@ public class SocieteCTRL {
 			@ModelAttribute("contrat") Contrat contrat,
 			@ModelAttribute("paie") Paie paie,
 			@ModelAttribute("affectation") Affectation affectation,
-			@ModelAttribute("poste") Poste poste){
+			@ModelAttribute("poste") Poste poste,
+			@RequestParam("file") MultipartFile file){
 		
 		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -373,6 +514,19 @@ public class SocieteCTRL {
 				model.addAttribute("paie",r.getPaie());
 				model.addAttribute("poste",r.getPoste());
 				model.addAttribute("affectation",r.getPoste().getAffectation());
+				
+				String folderScte = s.compteDefaut().getLogin();
+				String cheminSauvegarde = req.getServletContext().getInitParameter("documents-societes");
+				cheminSauvegarde += folderScte+File.separator+"salaries";
+				String cheminSalarie = r.getDossier();
+				cheminSauvegarde += File.separator+cheminSalarie;
+				Fichier.creerDossier(cheminSauvegarde);
+				r.setDossier(cheminSalarie);
+				if(! file.isEmpty()){
+					String logo = Fichier.uploder(file, "logo", cheminSauvegarde+File.separator+"images");
+					r.setImage(logo);
+					salarieService.enregistrer(r);
+				}
 			}
 			model.addAttribute("salarie",r);
 			return "redirect:/societe/"+slug+"/gerer-salaries/consulter-salarie/"+idSalarie;
@@ -499,7 +653,7 @@ public class SocieteCTRL {
 			model.addAttribute("scte", s);
 			Salarie r = s.recupererSalarie(idSalarie);
 			if(r == null)
-				return "redirect:/erreur-lien?slug="+slug+"&code=1&id="+idSalarie;
+				return "redirect:/erreur-lien?slug="+slug+"&code=1&id="+idSalarie+"&objet=Salarie";
 			model.addAttribute("salarie",r);
 			if(!r.baremeAjour())
 				model.addAttribute("baremesO",r.getSociete().baremeObligatoires());
@@ -526,7 +680,7 @@ public class SocieteCTRL {
 			model.addAttribute("scte", s);
 			Salarie r = s.recupererSalarie(idSalarie);
 			if(r == null)
-				return "redirect:/erreur-lien?slug="+slug+"&code=1&id="+idSalarie;
+				return "redirect:/erreur-lien?slug="+slug+"&code=1&id="+idSalarie+"&objet=Salarie";
 			model.addAttribute("salarie",r);
 			model.addAttribute("baremes",r.getSociete().baremePropres());
 			model.addAttribute("type","ajout-bareme");
@@ -552,7 +706,7 @@ public class SocieteCTRL {
 		if(veri == 1){
 			Salarie r = s.recupererSalarie(idSalarie);
 			if(r == null)
-				return "redirect:/erreur-lien?slug="+slug+"&code=1&id="+idSalarie;
+				return "redirect:/erreur-lien?slug="+slug+"&code=1&id="+idSalarie+"&objet=Salarie";
 			try{
 				//System.out.println(req.getParameter("code")+" \n "+req.getParameter("societebaremeId")+"\n "+r);
 				Salariebareme sb = new Salariebareme();
@@ -613,7 +767,7 @@ public class SocieteCTRL {
 			model.addAttribute("scte", s);
 			Salarie r = s.recupererSalarie(idSalarie);
 			if(r == null)
-				return "redirect:/erreur-lien?slug="+slug+"&code=1&id="+idSalarie;
+				return "redirect:/erreur-lien?slug="+slug+"&code=1&id="+idSalarie+"&objet=Salarie";
 			model.addAttribute("salarie",r);
 			model.addAttribute("date", new DateTime().toString("YYYY-MM-dd"));
 			return "scte/congessalarier";
@@ -636,7 +790,7 @@ public class SocieteCTRL {
 		if(veri == 1){
 			Salarie r = s.recupererSalarie(idSalarie);
 			if(r == null)
-				return "redirect:/erreur-lien?slug="+slug+"&code=1&id="+idSalarie;
+				return "redirect:/erreur-lien?slug="+slug+"&code=1&id="+idSalarie+"&objet=Salarie";
 			conge.setSalarie(r);
 			r.setNbrejour(r.getNbrejour() - conge.getJourtotal());
 			congeService.enregistrer(conge);
@@ -647,7 +801,329 @@ public class SocieteCTRL {
 		return "redirect:/erreur-lien?slug="+slug+"&code="+veri;
 	}
 	
+	/*-------------------------------------------------------------------------------------------------------
+	 * Les avances salarié
+	 */
+	@RequestMapping(value="/gerer-salaries/avances-salarie/{idSalarie}",method = RequestMethod.GET)
+	public String avancssalarieSubmit(ModelMap model,@PathVariable("slug") String slug,
+			@PathVariable("idSalarie") Integer idSalarie
+			){
+		
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String login = auth.getName();
+		Utilisateur u = utilisateurService.trouverParLogin(login);
+		Societe s = societeService.trouverParSlug(slug);
+		int veri = Tool.verificationLien(u, s);
+		
+		if(veri == 1){
+			model.addAttribute("link", "salarie");
+			model.addAttribute("action", "avances");
+			model.addAttribute("slug", slug);
+			model.addAttribute("scte", s);
+			Salarie r = s.recupererSalarie(idSalarie);
+			if(r == null)
+				return "redirect:/erreur-lien?slug="+slug+"&code=1&id="+idSalarie+"&objet=Salarie";
+			model.addAttribute("salarie",r);
+			DateTime today = new DateTime();
+			Map<Integer, String> mois = new TreeMap<Integer, String>();
+			
+			for(int i = today.getMonthOfYear();i<=new DateTime(s.exoEncours().getDateFin()).getMonthOfYear();i++ ){
+				mois.put(i,Tool.mois(i));
+			}
+				
+			model.addAttribute("mois", mois);
+			model.addAttribute("moisActuelle", today.getMonthOfYear());
+			//System.out.println(today.getMonthOfYear()+"\nDate : "+today.toString("EEEE dd-MMMM-YYYY H:m:s"));
+			return "scte/avancessalarier";
+		}
+		return "redirect:/erreur-lien?slug="+slug+"&code="+veri;
+	}
+	
+	@RequestMapping(value="/gerer-salaries/avances-salarie/{idSalarie}",method = RequestMethod.POST)
+	public String avancsSubmitsalarieSubmit(ModelMap model,@PathVariable("slug") String slug,
+			@PathVariable("idSalarie") Integer idSalarie,
+			@ModelAttribute("avance") Avance avance
+			){
+		
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String login = auth.getName();
+		Utilisateur u = utilisateurService.trouverParLogin(login);
+		Societe s = societeService.trouverParSlug(slug);
+		int veri = Tool.verificationLien(u, s);
+		
+		if(veri == 1){
+			Salarie r = s.recupererSalarie(idSalarie);
+			if(r == null)
+				return "redirect:/erreur-lien?slug="+slug+"&code=1&id="+idSalarie+"&objet=Salarie";
+			avance.setExercice(s.exoEncours());
+			avance.setSalarie(r);
+			avance.setDate(new Date());
+			avanceService.enregistrer(avance);
+			return "redirect:/societe/"+slug+"/gerer-salaries/avances-salarie/"+idSalarie;
+		}
+		return "redirect:/erreur-lien?slug="+slug+"&code="+veri;
+	}
 	/*
+	 * FIN VACANCES
+	 * -----------------------------------------------------------------------------------------------------------
+	 */
+	
+	/***********************************************************************************************
+	 * Les commissions salarié
+	 */
+	@RequestMapping(value="/gerer-salaries/commissions-salarie/{idSalarie}",method = RequestMethod.GET)
+	public String commissionssalarieSubmit(ModelMap model,@PathVariable("slug") String slug,
+			@PathVariable("idSalarie") Integer idSalarie
+			){
+		
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String login = auth.getName();
+		Utilisateur u = utilisateurService.trouverParLogin(login);
+		Societe s = societeService.trouverParSlug(slug);
+		int veri = Tool.verificationLien(u, s);
+		
+		if(veri == 1){
+			model.addAttribute("link", "salarie");
+			model.addAttribute("action", "commissions");
+			model.addAttribute("slug", slug);
+			model.addAttribute("scte", s);
+			Salarie r = s.recupererSalarie(idSalarie);
+			if(r == null)
+				return "redirect:/erreur-lien?slug="+slug+"&code=1&id="+idSalarie+"&objet=Salarie";
+			model.addAttribute("salarie",r);
+			DateTime today = new DateTime();
+			Map<Integer, String> mois = new TreeMap<Integer, String>();
+			
+			for(int i = today.getMonthOfYear();i<=new DateTime(s.exoEncours().getDateFin()).getMonthOfYear();i++ ){
+				mois.put(i,Tool.mois(i));
+			}
+				
+			model.addAttribute("mois", mois);
+			model.addAttribute("moisActuelle", today.getMonthOfYear());
+			return "scte/commissionssalarier";
+		}
+		return "redirect:/erreur-lien?slug="+slug+"&code="+veri;
+	}
+	@RequestMapping(value="/gerer-salaries/commissions-salarie/{idSalarie}",method = RequestMethod.POST)
+	public String commissionSubmitsalarieSubmit(ModelMap model,@PathVariable("slug") String slug,
+			@PathVariable("idSalarie") Integer idSalarie,
+			@ModelAttribute("commission") Commission commission
+			){
+		
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String login = auth.getName();
+		Utilisateur u = utilisateurService.trouverParLogin(login);
+		Societe s = societeService.trouverParSlug(slug);
+		int veri = Tool.verificationLien(u, s);
+		
+		if(veri == 1){
+			Salarie r = s.recupererSalarie(idSalarie);
+			if(r == null)
+				return "redirect:/erreur-lien?slug="+slug+"&code=1&id="+idSalarie+"&objet=Salarie";
+			commission.setExercice(s.exoEncours());
+			commission.setSalarie(r);
+			commission.setDate(new Date());
+			System.out.print(commission);
+			//avanceService.enregistrer(avance);
+			commissionService.enregistrer(commission);
+			return "redirect:/societe/"+slug+"/gerer-salaries/commissions-salarie/"+idSalarie;
+		}
+		return "redirect:/erreur-lien?slug="+slug+"&code="+veri;
+	}
+	
+	/*
+	 * FIN COMMISSION
+	 *_______________________________________________________________________________
+	 */
+	
+	/*
+	 * Les primes d'un salarié
+	 */
+	@RequestMapping(value="/gerer-salaries/primes-salarie/{idSalarie}",method = RequestMethod.GET)
+	public String primessalarieSubmit(ModelMap model,@PathVariable("slug") String slug,
+			@PathVariable("idSalarie") Integer idSalarie
+			){
+		
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String login = auth.getName();
+		Utilisateur u = utilisateurService.trouverParLogin(login);
+		Societe s = societeService.trouverParSlug(slug);
+		int veri = Tool.verificationLien(u, s);
+		
+		if(veri == 1){
+			model.addAttribute("link", "salarie");
+			model.addAttribute("action", "primes");
+			model.addAttribute("slug", slug);
+			model.addAttribute("scte", s);
+			Salarie r = s.recupererSalarie(idSalarie);
+			if(r == null)
+				return "redirect:/erreur-lien?slug="+slug+"&code=1&id="+idSalarie+"&objet=Salarie";
+			model.addAttribute("salarie",r);
+			DateTime today = new DateTime();
+			Map<Integer, String> mois = new TreeMap<Integer, String>();
+			
+			for(int i = today.getMonthOfYear();i<=new DateTime(s.exoEncours().getDateFin()).getMonthOfYear();i++ ){
+				mois.put(i,Tool.mois(i));
+			}
+				
+			model.addAttribute("mois", mois);
+			model.addAttribute("moisActuelle", today.getMonthOfYear());
+			return "scte/primessalarier";
+		}
+		return "redirect:/erreur-lien?slug="+slug+"&code="+veri;
+	}
+	
+	@RequestMapping(value="/gerer-salaries/primes-salarie/{idSalarie}",method = RequestMethod.POST)
+	public String primeSubmitsalarieSubmit(ModelMap model,@PathVariable("slug") String slug,
+			@PathVariable("idSalarie") Integer idSalarie,
+			@ModelAttribute("prime") Prime prime,
+			HttpServletRequest re
+			){
+		
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String login = auth.getName();
+		Utilisateur u = utilisateurService.trouverParLogin(login);
+		Societe s = societeService.trouverParSlug(slug);
+		int veri = Tool.verificationLien(u, s);
+		
+		if(veri == 1){
+			Salarie r = s.recupererSalarie(idSalarie);
+			if(r == null)
+				return "redirect:/erreur-lien?slug="+slug+"&code=1&id="+idSalarie+"&objet=Salarie";
+			Integer mois = Integer.parseInt(re.getParameter("mois"));
+			prime.setType("individuelle");
+			prime.setSociete(s);
+			primeService.enregistrer(prime);
+			Primedate pd = new Primedate();
+			pd.setMois(mois);
+			pd.setPrime(prime);
+			primedateService.enregistrer(pd);
+			Primesalarie ps = new Primesalarie();
+			ps.setDate(new Date());
+			ps.setExercice(s.exoEncours());
+			ps.setPrime(prime);
+			ps.setSalarie(r);
+			primesalarieService.enregistrer(ps);
+			return "redirect:/societe/"+slug+"/gerer-salaries/primes-salarie/"+idSalarie;
+		}
+		return "redirect:/erreur-lien?slug="+slug+"&code="+veri;
+	}
+	
+	// Affecter une prime
+	
+	@RequestMapping(value="/affectation-prime/{idSalarie}",method = RequestMethod.POST)
+	public String primeaffectercollectivesalarieSubmit(ModelMap model,@PathVariable("slug") String slug,
+			@PathVariable("idSalarie") Integer idSalarie,
+			HttpServletRequest re
+			){
+		
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String login = auth.getName();
+		Utilisateur u = utilisateurService.trouverParLogin(login);
+		Societe s = societeService.trouverParSlug(slug);
+		int veri = Tool.verificationLien(u, s);
+		
+		if(veri == 1){
+			Salarie r = s.recupererSalarie(idSalarie);
+			if(r == null)
+				return "redirect:/erreur-lien?slug="+slug+"&code=1&id="+idSalarie+"&objet=Salarie";
+			
+			Enumeration<String> params = re.getParameterNames();
+			while(params.hasMoreElements()){
+				String str = params.nextElement();
+				if(str.indexOf("prime") != -1){
+					Prime p = primeService.trouverParId(Integer.parseInt(re.getParameter(str)));
+					Primesalarie ps = new Primesalarie();
+					ps.setDate(new Date());
+					ps.setExercice(s.exoEncours());
+					ps.setPrime(p);
+					ps.setSalarie(r);
+					primesalarieService.enregistrer(ps);
+				}
+				
+			}
+			
+			return "redirect:/societe/"+slug+"/gerer-salaries/primes-salarie/"+idSalarie;
+		}
+		return "redirect:/erreur-lien?slug="+slug+"&code="+veri;
+	}
+	/*
+	 * FIn PRIME SALARIE
+	 * =============================================================================
+	 */
+	
+	/*
+	 * Les primes collectives
+	 */
+	@RequestMapping(value="/les-primes",method = RequestMethod.GET)
+	public String primecollectives(ModelMap model,@PathVariable("slug") String slug
+			){
+		
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String login = auth.getName();
+		Utilisateur u = utilisateurService.trouverParLogin(login);
+		Societe s = societeService.trouverParSlug(slug);
+		int veri = Tool.verificationLien(u, s);
+		
+		if(veri == 1){
+			model.addAttribute("link", "salarie");
+			model.addAttribute("action", "primes-collectives");
+			model.addAttribute("slug", slug);
+			model.addAttribute("scte", s);
+			Map<Integer, String> mois = new TreeMap<Integer, String>();
+			
+			for(int i = 1;i<=12;i++ ){
+				mois.put(i,Tool.mois(i));
+			}
+				
+			model.addAttribute("mois", mois);
+			return "scte/primescollective";
+		}
+		return "redirect:/erreur-lien?slug="+slug+"&code="+veri;
+	}
+	
+	@RequestMapping(value="/les-primes",method = RequestMethod.POST)
+	public String primecollectivesSubmit(ModelMap model,@PathVariable("slug") String slug,
+			@ModelAttribute("prime") Prime prime,
+			HttpServletRequest re
+			){
+		
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String login = auth.getName();
+		Utilisateur u = utilisateurService.trouverParLogin(login);
+		Societe s = societeService.trouverParSlug(slug);
+		int veri = Tool.verificationLien(u, s);
+		
+		if(veri == 1){
+			prime.setSociete(s);
+			prime.setType("collective");
+			primeService.enregistrer(prime);
+			Enumeration<String> params = re.getParameterNames();
+			while(params.hasMoreElements()){
+				String str = params.nextElement();
+				if(str.indexOf("mois") != -1){
+					Primedate pd = new Primedate();
+					pd.setMois(Integer.parseInt(re.getParameter(str)));
+					pd.setPrime(prime);
+					primedateService.enregistrer(pd);
+				}
+				
+			}
+			return "redirect:/societe/"+slug+"/les-primes";
+		}
+		return "redirect:/erreur-lien?slug="+slug+"&code="+veri;
+	}
+	/*
+	 * FIn PRIME SALARIE
 	 * =============================================================================
 	 */
 	
@@ -725,9 +1201,13 @@ public class SocieteCTRL {
 							model.addAttribute("message", "La date de debut doit être inférieure ou égale à la date de fin ");
 						}else{
 							exercice.setSociete(s);
+							for(Exercice e:s.getExercices()){
+								e.setEncours(false);
+								exerciceService.enregistrer(e);
+							}
+							exercice.setEncours(true);
 							exerciceService.enregistrer(exercice);
-							model.addAttribute("message", "Exercice enregistré avec succès ");
-							System.out.println(exercice);
+							return "redirect:/societe/"+slugScte+"/gerer-societe/exercices";
 						}
 					}catch(Exception e){
 						model.addAttribute("message","Erreur date : "+ e.getMessage());
@@ -976,6 +1456,28 @@ public class SocieteCTRL {
 					return "redirect:/erreur-lien?slug="+slug+"&code="+veri;
 				}
 		
+				//Voir les details d'un barème
+				@RequestMapping(value="/gerer-bareme/voir-detail-un-bareme/{idBareme}",method = RequestMethod.GET)
+				public String informationDunbareme(ModelMap model,@PathVariable("slug") String slug,
+						@PathVariable("idBareme") Integer idBareme
+						){
+					
+					Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+					String login = auth.getName();
+					Utilisateur u = utilisateurService.trouverParLogin(login);
+					Societe s = societeService.trouverParSlug(slug);
+					int veri = Tool.verificationLien(u, s);
+					
+					if(veri == 1){
+						Bareme b = s.trouverBareme(idBareme);
+						if(b == null)
+							return "redirect:/erreur-lien?slug="+slug+"&code=1&id="+idBareme+"&objet=Bareme";
+						model.addAttribute("bareme", b);
+						return "scte/detailunbareme";
+					}
+					return "redirect:/erreur-lien?slug="+slug+"&code="+veri;
+				}
+		
 		/*
 		 * Fin gestion barèmes
 		 * ==================================---------------***************
@@ -1070,7 +1572,34 @@ public class SocieteCTRL {
 		/*
 		 * =============================================================
 		 */
+				
+				/*
+				 * Recherche
+				 */
+		
 	
-	
+				@RequestMapping(value="/recherche",method = RequestMethod.GET)
+				public String recherche(ModelMap model,@PathVariable("slug") String slug,
+						HttpServletRequest req){
+					
+					Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+					String login = auth.getName();
+					Utilisateur u = utilisateurService.trouverParLogin(login);
+					Societe s = societeService.trouverParSlug(slug);
+					int veri = Tool.verificationLien(u, s);
+					
+					if(veri == 1){
+						try{
+							model.addAttribute("scte", s);
+							model.addAttribute("societe", s);
+							model.addAttribute("slug", slug);
+							String q = req.getParameter("q");
+							model.addAttribute("q", q);
+							model.addAttribute("result",s.recherche(q) );
+						}catch(Exception e){}
+						return "scte/recherche";
+					}
+					return "redirect:/erreur-lien?slug="+slug+"&code="+veri;
+				}
 	
 }

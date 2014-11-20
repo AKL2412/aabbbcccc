@@ -27,22 +27,22 @@
 					</div>
 					<form action="" method="post" class="form-blocd" modelAttribute="exercice">
 					<c:if test="${message != null}">
-						<div class="message alert alert-info">
+						<div class=" alert alert-info">
 							<i class="fi-x"></i>
 								${message }
 							</div>
 					</c:if>
 						<div class="input c1">
 							<label>intitulé de l'exercice : </label>
-							<input type="text"  placeholder="intitulé de l'exercice"   name="intituleExercice"/>
+							<input required="required" type="text"  placeholder="intitulé de l'exercice"   name="intituleExercice"/>
 						</div>
 						<div class="input c2">
 							<label>Date de debut d'exercice: </label>
-							<input type="date"   name="_dateDebut"/>
+							<input required="required" type="date"   name="_dateDebut"/>
 						</div>
 						<div class="input c2">
 							<label>Date de fin d'exercice : </label>
-							<input type="date"    name="_dateFin"/>
+							<input required="required" type="date"    name="_dateFin"/>
 						</div>
 						<div class="submit">
 							<input type="submit" class="btn btn-default" value="Enregistrer">
@@ -56,7 +56,7 @@
 				<table  class="table table-bordered table-striped table-condensed">
 				<thead>
 					<tr>
-						<th></th>
+<!-- 						<th></th> -->
 						<th>Intitulé de l'exercice</th>
 						<th>Debut d'exercice</th>
 						<th> Fin d'exercice</th>
@@ -66,8 +66,15 @@
 					<c:forEach items="${scte.exercices }" var="exo" varStatus="stat">
 					
 					<tr>
-					<td>${stat.index + 1 }</td>
-						<td>${exo.intituleExercice }</td>
+<%-- 					<td>${exo.exerciceId }</td> --%>
+						<td>
+							${exo.intituleExercice }
+							<c:if test="${exo.encours }">
+								<span class="badge">
+									Actuel
+								</span>
+							</c:if>
+						</td>
 						<td>${exo.dateDebut }</td>
 						<td>${exo.dateFin }</td>
 					</tr>
