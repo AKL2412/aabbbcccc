@@ -202,6 +202,36 @@ public class SocieteCTRL {
 		return "redirect:/erreur-lien?slug="+slug+"&code="+veri;
 	}
 	
+	// SUBMIT DE LA DEFINITION DU DELAI DE NOTIFICATION
+	
+		@RequestMapping(value="/submit-unite-de-travail",method = RequestMethod.POST)
+		public String submitunitedetravail(ModelMap model,@PathVariable("slug") String slug,
+				HttpServletRequest req
+				){
+			
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+			String login = auth.getName();
+			Utilisateur u = utilisateurService.trouverParLogin(login);
+			Societe s = societeService.trouverParSlug(slug);
+			int veri = Tool.verificationLien(u, s);
+			
+			if(veri == 1){
+				try{
+					Integer delai = Integer.parseInt(req.getParameter("nbre"));
+					Parametre p = s.getParametre();
+					p.setNbreunite(delai);
+					p.setUnite(req.getParameter("unite"));
+					parametreService.enregistrer(p);
+				}catch(Exception e){
+					System.out.println(e.getMessage());
+				}
+				
+				
+				return "redirect:/societe/"+slug+"/parametres";
+			}
+			return "redirect:/erreur-lien?slug="+slug+"&code="+veri;
+		}
+	
 	
 	
 	

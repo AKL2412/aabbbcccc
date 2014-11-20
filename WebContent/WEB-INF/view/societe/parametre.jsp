@@ -33,4 +33,37 @@
 			</div>
 		</div>
 	</div>
+	
+	
+	<div class="col-md-6">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<i class="fa fa-calendar"></i>
+				Unité de travail
+			</div>
+			<div class="panel-body">
+				<c:if test="${scte.parametre.unite != null && scte.parametre.nbreunite != null}">
+					<div class="alert alert-success text-center">
+						<h3> ${scte.parametre.nbreunite} ${scte.parametre.unite } / Mois </h3> 
+					</div>
+				</c:if>
+				<form role="form" method="post" action="<c:url value="/societe/${slug }/submit-unite-de-travail"/>">
+					<div class="form-group col-md-6">
+						<label>Unité  :</label>
+						<select required="required" class="form-control" name="unite" >
+							<option value>Choisir unité</option>
+							<option value="jours">Jours</option>
+							<option value="mois">Mois</option>
+						</select>
+					</div>
+					<div class="form-group col-md-6">
+						<label>Nombre par mois  :</label>
+						<input required="required" class="form-control" name="nbre" type="number"/>
+					</div>
+					<input type="submit" class="btn btn-primary" value="Définir">
+				</form>
+				
+			</div>
+		</div>
+	</div>
  </div>

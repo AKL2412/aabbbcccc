@@ -1,6 +1,6 @@
 package com.gp.domain;
 
-// Generated 19 nov. 2014 15:09:54 by Hibernate Tools 3.4.0.CR1
+// Generated 20 nov. 2014 22:21:26 by Hibernate Tools 3.4.0.CR1
 
 import java.util.HashSet;
 import java.util.Set;
@@ -22,17 +22,23 @@ public class Parametre implements java.io.Serializable {
 
 	private Integer parametreId;
 	private Integer alertefinperiodeessai;
+	private String unite;
+	private Integer nbreunite;
 	private Set<Societe> societes = new HashSet<Societe>(0);
 
 	public Parametre() {
 	}
 
-	public Parametre(Integer alertefinperiodeessai) {
-		this.alertefinperiodeessai = alertefinperiodeessai;
+	public Parametre(String unite, Integer nbreunite) {
+		this.unite = unite;
+		this.nbreunite = nbreunite;
 	}
 
-	public Parametre(Integer alertefinperiodeessai, Set<Societe> societes) {
+	public Parametre(Integer alertefinperiodeessai, String unite,
+			Integer nbreunite, Set<Societe> societes) {
 		this.alertefinperiodeessai = alertefinperiodeessai;
+		this.unite = unite;
+		this.nbreunite = nbreunite;
 		this.societes = societes;
 	}
 
@@ -47,13 +53,31 @@ public class Parametre implements java.io.Serializable {
 		this.parametreId = parametreId;
 	}
 
-	@Column(name = "alertefinperiodeessai", nullable = false)
+	@Column(name = "alertefinperiodeessai")
 	public Integer getAlertefinperiodeessai() {
 		return this.alertefinperiodeessai;
 	}
 
 	public void setAlertefinperiodeessai(Integer alertefinperiodeessai) {
 		this.alertefinperiodeessai = alertefinperiodeessai;
+	}
+
+	@Column(name = "unite", nullable = true, length = 100)
+	public String getUnite() {
+		return this.unite;
+	}
+
+	public void setUnite(String unite) {
+		this.unite = unite;
+	}
+
+	@Column(name = "nbreunite", nullable = true)
+	public Integer getNbreunite() {
+		return this.nbreunite;
+	}
+
+	public void setNbreunite(Integer nbreunite) {
+		this.nbreunite = nbreunite;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "parametre")
