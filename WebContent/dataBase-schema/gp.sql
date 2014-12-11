@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  127.0.0.1
--- Généré le :  Jeu 20 Novembre 2014 à 22:41
+-- Généré le :  Ven 12 Décembre 2014 à 00:42
 -- Version du serveur :  5.6.17
 -- Version de PHP :  5.5.12
 
@@ -66,14 +66,16 @@ CREATE TABLE IF NOT EXISTS `avance` (
   PRIMARY KEY (`avanceID`),
   KEY `exercice` (`exercice`),
   KEY `salarie` (`salarie`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 --
 -- Contenu de la table `avance`
 --
 
 INSERT INTO `avance` (`avanceID`, `montant`, `motif`, `exercice`, `mois`, `date`, `salarie`) VALUES
-(1, 5000, 'Avance sur salaire, pour des problèmes de santé', 1, 11, '2014-11-20', 5);
+(1, 5000, 'Avance sur salaire, pour des problèmes de santé', 1, 11, '2014-11-20', 5),
+(2, 700, 'test1', 1, 11, '2014-11-21', 5),
+(3, 500, 'tt-', 1, 12, '2014-11-21', 5);
 
 -- --------------------------------------------------------
 
@@ -92,20 +94,14 @@ CREATE TABLE IF NOT EXISTS `bareme` (
   `description` text NOT NULL,
   PRIMARY KEY (`baremeID`),
   KEY `compagnieID` (`compagnieID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=13 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=14 ;
 
 --
 -- Contenu de la table `bareme`
 --
 
 INSERT INTO `bareme` (`baremeID`, `nom`, `tranche`, `version`, `type`, `compagnieID`, `caractere`, `description`) VALUES
-(2, 'Impot sur revenu', 'somme', '1.0.0', 'Salarié', 2, 'optionnel', 'ras'),
-(3, 'CNSS barème', 'somme', '1.0.0', 'Salarié', 3, 'obligatoire', ''),
-(7, 'Mon bareme', 'somme', '1.0.0', 'Salarié', 1, 'obligatoire', 'ju'),
-(8, 'Impot sur revenu', 'somme', '1.0.0', 'Salarié', 3, 'obligatoire', ''),
-(9, 'Impot sur revenu', 'somme', '1.0.0', 'Salarié', 2, 'obligatoire', 'RAS'),
-(10, 'Test barème patronal', 'anciennente', '1.0.0', 'Patronal', 3, 'optionnel', 'détails du barème'),
-(12, 'un bareme obligat.', 'anciennente', '1.0.0', 'Patronal', 5, 'obligatoire', 'azeertyh');
+(13, 'Prestations ', 'somme', '1.0.0', 'Salarié', 6, 'obligatoire', '');
 
 -- --------------------------------------------------------
 
@@ -144,17 +140,14 @@ CREATE TABLE IF NOT EXISTS `compagnie` (
   `nom` varchar(255) NOT NULL,
   `description` text,
   PRIMARY KEY (`compagnieID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
 
 --
 -- Contenu de la table `compagnie`
 --
 
 INSERT INTO `compagnie` (`compagnieID`, `nom`, `description`) VALUES
-(1, 'AXA', 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\r\ntempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,\r\nquis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo\r\nconsequat. Duis aute irure dolor in reprehenderit in voluptate velit esse\r\ncillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non\r\nproident, sunt in culpa qui officia deserunt mollit anim id est laborum.'),
-(2, 'RMA Watanya', 'Filiale du 2ème groupe plus grand groupe privé au Maroc, FinanceCom, RMA WATANYA a pris l?engagement, depuis plus de 60 ans, de protéger les biens et les personnes contre les risques de la vie et d?accompagner les particuliers, les professionnels et les entreprises dans la réalisation de leurs projets d?avenir en toute sérénité.\r\n \r\nPlusieurs centaines de milliers de particuliers et de professionnels et plusieurs milliers d?entreprises ont choisi les produits et bénéficient des services de RMA WATANYA avec des taux de satisfaction, régulièrement mesurés, particulièrement élevés.\r\n \r\nLa certification ISO 9001 de nos activités atteste de notre excellence opérationnelle notamment illustrée par HIFAD EXPRESS, notre service de règlement des sinistres matériels Auto en 24 H.\r\n \r\nAssureur leader des risques techniques -barrages, centrales thermiques, aéroports, etc.- mais également des assurances de la personne -maladie, décès, incapacité, etc.- RMA WATANYA s?affirme comme le premier assureur des entreprises au Maroc et entretient des partenariats avec plusieurs réseaux d?assureurs internationaux de renom : INI (International Network of Insurance), INSUROPE, etc.'),
-(3, 'CNSS', ''),
-(5, 'compagnie de bareme obligat.', 'ras');
+(6, 'La caisse nationale de sécurité sociale', 'La caisse nationale de sécurité sociale est un établissement public marocain, à vocation sociale et à caractère administratif, créé en 1959 et placé sous la tutelle administrative du ministre chargé de l''emploi. Il est l''unique régime social au Maroc pour les salariés de l?industrie, du commerce et des professions libérales.\r\nIl siège à Casablanca.');
 
 -- --------------------------------------------------------
 
@@ -171,7 +164,7 @@ CREATE TABLE IF NOT EXISTS `conge` (
   `salarieID` int(11) DEFAULT NULL,
   PRIMARY KEY (`congeID`),
   KEY `FK_Conge_Salarie` (`salarieID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 --
 -- Contenu de la table `conge`
@@ -276,7 +269,7 @@ CREATE TABLE IF NOT EXISTS `enfant` (
   `etatcivileID` int(11) DEFAULT NULL,
   PRIMARY KEY (`enfantID`),
   KEY `FK_Enfant_Etatcivile` (`etatcivileID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
 
 --
 -- Contenu de la table `enfant`
@@ -286,7 +279,8 @@ INSERT INTO `enfant` (`datenaissance`, `nom`, `prenom`, `enfantID`, `etatcivileI
 ('2010-10-23', 'RIOUK', 'ManDADA', 1, 5),
 ('2000-04-01', 'RIOUK', 'Jeanne D''Arc', 2, 5),
 ('2014-10-25', 'Romuald', 'Améssan', 4, 5),
-('2011-11-18', 'ABY', 'Jean D''arc', 5, 4);
+('2011-11-18', 'ABY', 'Jean D''arc', 5, 4),
+('2014-12-10', 'marco', 'julien', 6, 11);
 
 -- --------------------------------------------------------
 
@@ -301,7 +295,8 @@ CREATE TABLE IF NOT EXISTS `etatcivile` (
   `prenom` varchar(255) DEFAULT NULL,
   `situationfamiliale` varchar(255) DEFAULT NULL,
   `etatcivileID` int(11) NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`etatcivileID`)
+  PRIMARY KEY (`etatcivileID`),
+  UNIQUE KEY `matricule` (`matricule`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=14 ;
 
 --
@@ -310,12 +305,12 @@ CREATE TABLE IF NOT EXISTS `etatcivile` (
 
 INSERT INTO `etatcivile` (`civilite`, `matricule`, `nom`, `prenom`, `situationfamiliale`, `etatcivileID`) VALUES
 ('homme', '00OL', 'ABY', 'Kouassi léon JR', 'célibataire', 4),
-('homme', '000OP', 'RIOUK', 'Benzema Palmo', 'Marié', 5),
+('homme', 'BPR0078', 'RIOUK', 'Benzema Palmo', 'Marié', 5),
 ('homme', '000OP', 'RIOUK', 'Benzema', 'Marié', 6),
 ('homme', 'aza', 'aa', 'zzz', 'Marié', 7),
 ('homme', 'zp00', 'Zoe', 'Palmo', 'célibataire', 8),
-('femme', '000OP', 'Zoe', 'Bars', 'célibataire', 9),
-('femme', '000OP', 'Zoe', 'Bars', 'célibataire', 10),
+('femme', '000OPrtr', 'Zoe', 'Bars', 'célibataire', 9),
+('femme', 'fghjjjjfg', 'Zoe', 'Bars', 'célibataire', 10),
 ('homme', 'RM00785', 'Reus', 'Marco', 'marié', 11),
 ('homme', 'DLM7890', 'DUPON', 'Jean Marc la Bière', 'Marié', 12),
 ('homme', '4c260f15', 'Russo', 'Ophelia Gross Gay', 'Marié', 13);
@@ -333,19 +328,42 @@ CREATE TABLE IF NOT EXISTS `exercice` (
   `dateDebut` date NOT NULL,
   `dateFin` date NOT NULL,
   `encours` tinyint(1) NOT NULL,
+  `feriers` int(11) DEFAULT NULL,
   PRIMARY KEY (`exerciceID`),
-  KEY `FK_Excercice_Societe` (`societeID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+  KEY `FK_Excercice_Societe` (`societeID`),
+  KEY `feriers` (`feriers`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
 
 --
 -- Contenu de la table `exercice`
 --
 
-INSERT INTO `exercice` (`exerciceID`, `societeID`, `intituleExercice`, `dateDebut`, `dateFin`, `encours`) VALUES
-(1, 2, 'Exo du l''année 2015', '2015-01-06', '2015-12-26', 1),
-(2, 2, 'Exo du l''année 2016', '2016-01-06', '2016-12-31', 0),
-(4, 2, 'Exo du l''année 2017', '2017-01-01', '2017-11-30', 0),
-(5, 3, 'Exo premier', '2014-01-06', '2014-12-31', 1);
+INSERT INTO `exercice` (`exerciceID`, `societeID`, `intituleExercice`, `dateDebut`, `dateFin`, `encours`, `feriers`) VALUES
+(1, 2, 'Exo du l''année 2015', '2015-01-06', '2015-12-26', 1, 1),
+(2, 2, 'Exo du l''année 2016', '2016-01-06', '2016-12-31', 0, NULL),
+(4, 2, 'Exo du l''année 2017', '2017-01-01', '2017-11-30', 0, NULL),
+(5, 3, 'Exo premier', '2014-01-06', '2014-12-31', 1, 2),
+(6, 7, 'Mon premier Exo', '2014-12-01', '2014-12-31', 1, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `ferier`
+--
+
+CREATE TABLE IF NOT EXISTS `ferier` (
+  `ferierID` int(11) NOT NULL AUTO_INCREMENT,
+  `dateajout` date NOT NULL,
+  PRIMARY KEY (`ferierID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+
+--
+-- Contenu de la table `ferier`
+--
+
+INSERT INTO `ferier` (`ferierID`, `dateajout`) VALUES
+(1, '2014-12-11'),
+(2, '2014-12-11');
 
 -- --------------------------------------------------------
 
@@ -392,15 +410,31 @@ CREATE TABLE IF NOT EXISTS `message` (
   `emetteur` int(11) NOT NULL,
   `destinataire` int(11) NOT NULL,
   `message` text NOT NULL,
-  `date` datetime NOT NULL,
+  `dateenvoi` datetime NOT NULL,
   `lu` tinyint(1) NOT NULL,
   `objet` varchar(250) NOT NULL,
-  `propbareme` tinyint(1) NOT NULL,
-  `description` text,
+  `fichier` tinyint(1) DEFAULT NULL,
+  `nomfichier` varchar(255) DEFAULT NULL,
+  `nomdossier` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`messageID`),
   KEY `emetteur` (`emetteur`),
   KEY `destinataire` (`destinataire`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
+
+--
+-- Contenu de la table `message`
+--
+
+INSERT INTO `message` (`messageID`, `emetteur`, `destinataire`, `message`, `dateenvoi`, `lu`, `objet`, `fichier`, `nomfichier`, `nomdossier`) VALUES
+(1, 8, 1, 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\r\ntempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,\r\nquis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo\r\nconsequat. Duis aute irure dolor in reprehenderit in voluptate velit esse\r\ncillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non\r\nproident, sunt in culpa qui officia deserunt mollit anim id est laborum.', '2014-12-10 00:00:00', 1, 'Text de la boite de messagerie', 1, 'all of me.txt', '0957562023260558610122014164746'),
+(2, 8, 1, 'Contenu du message', '2014-12-10 00:00:00', 1, 'Deuxième text sans fichier', 0, NULL, NULL),
+(3, 8, 1, 'voici le contenu il n''y aura pas de fichier attaché', '2014-12-10 00:00:00', 1, 'Text de la boite de messagerie | la date en dateTime', 0, NULL, NULL),
+(4, 9, 1, 'Un fichier contenant les details est joint', '2014-12-10 00:00:00', 1, 'Salutation', 1, 'RENOUVELLEMENT_DE_PASSEPORT.docx', '0855588765462100810122014185229'),
+(5, 36, 1, 'Salut tecxt', '2014-12-10 00:00:00', 1, 'Test ', 0, NULL, NULL),
+(6, 1, 8, 'Lorem', '2014-12-10 00:00:00', 0, 'Objet de test', 1, 'Calcul de salaire.txt', '403484689731786110122014215247'),
+(7, 1, 36, 'tytyt', '2014-12-10 00:00:00', 1, 'aze', 0, NULL, NULL),
+(8, 8, 1, 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\r\ntempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,\r\nquis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo\r\nconsequat. Duis aute irure dolor in reprehenderit in voluptate velit esse\r\ncillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non\r\nproident, sunt in culpa qui officia deserunt mollit anim id est laborum.\r\nLorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\r\ntempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,\r\nquis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo\r\nconsequat. Duis aute irure dolor in reprehenderit in voluptate velit esse\r\ncillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non\r\nproident, sunt in culpa qui officia deserunt mollit anim id est laborum.\r\nLorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\r\ntempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,\r\nquis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo\r\nconsequat. Duis aute irure dolor in reprehenderit in voluptate velit esse\r\ncillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non\r\nproident, sunt in culpa qui officia deserunt mollit anim id est laborum.', '2014-12-11 00:00:00', 1, 'Lorem', 0, NULL, NULL),
+(9, 1, 8, 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\r\ntempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,\r\nquis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo\r\nconsequat. Duis aute irure dolor in reprehenderit in voluptate velit esse\r\ncillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non\r\nproident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\r\ntempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,\r\nquis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo\r\nconsequat. Duis aute irure dolor in reprehenderit in voluptate velit esse\r\ncillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non\r\nproident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\r\ntempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,\r\nquis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo\r\nconsequat. Duis aute irure dolor in reprehenderit in voluptate velit esse\r\ncillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non\r\nproident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\r\ntempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,\r\nquis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo\r\nconsequat. Duis aute irure dolor in reprehenderit in voluptate velit esse\r\ncillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non\r\nproident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\r\ntempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,\r\nquis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo\r\nconsequat. Duis aute irure dolor in reprehenderit in voluptate velit esse\r\ncillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non\r\nproident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\r\ntempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,\r\nquis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo\r\nconsequat. Duis aute irure dolor in reprehenderit in voluptate velit esse\r\ncillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non\r\nproident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\r\ntempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,\r\nquis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo\r\nconsequat. Duis aute irure dolor in reprehenderit in voluptate velit esse\r\ncillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non\r\nproident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\r\ntempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,\r\nquis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo\r\nconsequat. Duis aute irure dolor in reprehenderit in voluptate velit esse\r\ncillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non\r\nproident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\r\ntempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,\r\nquis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo\r\nconsequat. Duis aute irure dolor in reprehenderit in voluptate velit esse\r\ncillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non\r\nproident, sunt in culpa qui officia deserunt mollit anim id est laborum.', '2014-12-11 00:00:00', 1, 'lorem', 0, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -444,14 +478,16 @@ CREATE TABLE IF NOT EXISTS `parametre` (
   `unite` varchar(100) DEFAULT NULL,
   `nbreunite` int(11) DEFAULT NULL,
   PRIMARY KEY (`parametreId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 --
 -- Contenu de la table `parametre`
 --
 
 INSERT INTO `parametre` (`parametreId`, `alertefinperiodeessai`, `unite`, `nbreunite`) VALUES
-(1, 14, 'jours', 26);
+(1, 21, 'heure', 176),
+(2, 21, 'jours', 26),
+(3, 14, 'jours', 26);
 
 -- --------------------------------------------------------
 
@@ -510,7 +546,7 @@ CREATE TABLE IF NOT EXISTS `prime` (
   `societe` int(11) DEFAULT NULL,
   PRIMARY KEY (`primeID`),
   KEY `societe` (`societe`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 --
 -- Contenu de la table `prime`
@@ -518,7 +554,8 @@ CREATE TABLE IF NOT EXISTS `prime` (
 
 INSERT INTO `prime` (`primeID`, `montant`, `motif`, `type`, `nom`, `societe`) VALUES
 (1, 400, 'Pour tous le travail de confiance', 'individuelle', 'Prime pour confiance', 2),
-(2, 1500, 'Pour le respect des obligations', 'collective', 'Prime d''assiduité', 2);
+(2, 1500, 'Pour le respect des obligations', 'collective', 'Prime d''assiduité', 2),
+(3, 1500, 'pour test l''appli', 'collective', 'Une prime pour le test', 2);
 
 -- --------------------------------------------------------
 
@@ -532,7 +569,7 @@ CREATE TABLE IF NOT EXISTS `primedate` (
   `mois` int(11) NOT NULL,
   PRIMARY KEY (`primedateID`),
   KEY `prime` (`prime`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
 
 --
 -- Contenu de la table `primedate`
@@ -543,7 +580,10 @@ INSERT INTO `primedate` (`primedateID`, `prime`, `mois`) VALUES
 (2, 2, 1),
 (3, 2, 3),
 (4, 2, 6),
-(5, 2, 12);
+(5, 2, 12),
+(6, 3, 1),
+(7, 3, 6),
+(8, 3, 10);
 
 -- --------------------------------------------------------
 
@@ -561,7 +601,7 @@ CREATE TABLE IF NOT EXISTS `primesalarie` (
   KEY `salarie` (`salarie`),
   KEY `prime` (`prime`),
   KEY `exercice` (`exercice`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 --
 -- Contenu de la table `primesalarie`
@@ -629,6 +669,7 @@ CREATE TABLE IF NOT EXISTS `salarie` (
   `dossier` varchar(255) NOT NULL,
   `image` varchar(255) DEFAULT NULL,
   `nbrejour` int(11) NOT NULL,
+  `active` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`salarieID`),
   KEY `FK_Salarie_Contrat` (`contratID`),
   KEY `FK_Salarie_Immatriculation` (`immatriculationID`),
@@ -643,15 +684,15 @@ CREATE TABLE IF NOT EXISTS `salarie` (
 -- Contenu de la table `salarie`
 --
 
-INSERT INTO `salarie` (`salarieID`, `contratID`, `immatriculationID`, `societeID`, `posteID`, `coordoneebancaireID`, `paieID`, `etatcivileID`, `dossier`, `image`, `nbrejour`) VALUES
-(4, 4, 4, 2, 4, 4, 1, 4, 'ABY-Kouassi-leon', 'logo.jpg', 11),
-(5, 5, 5, 2, 5, 5, 2, 5, 'RIOUK-Benzema', 'logo.jpg', 17),
-(6, 7, 7, 5, 7, 7, 4, 7, 'aa-zzz', NULL, 22),
-(7, 8, 8, 5, 8, 8, 5, 8, 'Zoe-Palmo', NULL, 22),
-(9, 10, 10, 5, 10, 10, 7, 10, 'Zoe-Bars', NULL, 22),
-(10, 11, 11, 3, 11, 11, 8, 11, 'Reus-Marco', 'logo.jpg', 22),
-(11, 12, 12, 2, 12, 12, 9, 12, 'DLM7890', 'logo.jpg', 22),
-(12, 13, 13, 2, 13, 13, 10, 13, 'salarie20112014214351', 'logo.jpg', 22);
+INSERT INTO `salarie` (`salarieID`, `contratID`, `immatriculationID`, `societeID`, `posteID`, `coordoneebancaireID`, `paieID`, `etatcivileID`, `dossier`, `image`, `nbrejour`, `active`) VALUES
+(4, 4, 4, 2, 4, 4, 1, 4, 'ABY-Kouassi-leon', 'logo.jpg', 11, 1),
+(5, 5, 5, 2, 5, 5, 2, 5, 'RIOUK-Benzema', 'logo.jpg', 17, 1),
+(6, 7, 7, 5, 7, 7, 4, 7, 'aa-zzz', NULL, 22, 1),
+(7, 8, 8, 5, 8, 8, 5, 8, 'Zoe-Palmo', NULL, 22, 1),
+(9, 10, 10, 5, 10, 10, 7, 10, 'Zoe-Bars', NULL, 22, 1),
+(10, 11, 11, 3, 11, 11, 8, 11, 'Reus-Marco', 'logo.jpg', 22, 1),
+(11, 12, 12, 2, 12, 12, 9, 12, 'DLM7890', 'logo.jpg', 22, 1),
+(12, 13, 13, 2, 13, 13, 10, 13, 'salarie20112014214351', 'logo.jpg', 22, 1);
 
 -- --------------------------------------------------------
 
@@ -667,18 +708,15 @@ CREATE TABLE IF NOT EXISTS `salariebareme` (
   PRIMARY KEY (`salariebaremeID`),
   KEY `salarie` (`salarie`),
   KEY `salariebareme_ibfk_2` (`bareme`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 --
 -- Contenu de la table `salariebareme`
 --
 
 INSERT INTO `salariebareme` (`salariebaremeID`, `salarie`, `bareme`, `salarieID`) VALUES
-(6, 5, 12, '45564'),
-(7, 5, 11, 'CDE45'),
-(8, 4, 12, 'aze123'),
-(9, 5, 15, 'aee14'),
-(10, 5, 10, 'IOP20158');
+(1, 5, 22, 'AZDF789'),
+(2, 12, 22, 'AVTG2158');
 
 -- --------------------------------------------------------
 
@@ -715,12 +753,12 @@ CREATE TABLE IF NOT EXISTS `societe` (
 
 INSERT INTO `societe` (`societeID`, `intituleSociete`, `patente`, `idfiscale`, `rcCodeTribunal`, `cnss`, `cimr`, `telephone`, `fax`, `email`, `adresse`, `mutuelle`, `dateajout`, `logo`, `slug`, `ville`, `maxcompte`, `parametre`) VALUES
 (1, 'Kal .INC', '000789', '7852', '5643212', '32153', '02255', '(+212) 587 896 320', '31645', 'kal@inc-service.fr', '33 rue Brahim Nakhai', '2326', '2014-09-19', 'logo2.png', '-', '', 3, NULL),
-(2, 'Real de Madrid', '0580', '752014', '784215', '000368', '0014', '(+235) 789 421 569', '201856', 'real.madrid@rm.com', 'madrid rue 400', '2041452', '2014-09-19', 'Satellite.png', 'real-de-madrid', '', 3, 1),
+(2, 'Real de Madrid', '0580', '752014', '784215', '000368', '0014', '(+235) 789 421 569', '201856', 'real.madrid@rm.com', '								madrid rue 400\r\n	\r\n	\r\n	\r\n	', '2041452', '2014-09-19', 'logo7.png', 'real-de-madrid', 'Madrid', 0, 3),
 (3, 'Dortmund Borissia', '656', '7854', '64546', '86465', '23856', '2588523', '6455465', 'dortmund@gmail.com', 'berlin 44 rue adjoint', '6565', '2014-09-19', 'logo.png', 'dortmund-borissia', '', 3, NULL),
 (4, 'Apple Inc', '6454', '54564564556', '564654', '64554', '5649649', '035464', '65454', 'apple@gmail.com', 'rue 789 carlifornie', '654564', '2014-09-19', 'logo.png', 'apple-inc', '', 3, NULL),
 (5, 'Societe de raffinage', '7855', '564564', '564654', '5455', '88555', '(+212) 587 896 320', '54654', 'so@yoo.vom', 'rue 78 casablanca - maroc', '5555', '2014-09-20', 'logo1.jpg', 'societe-de-raffinage', '', 3, NULL),
 (6, 'TEDY CONSULTING SARL', '34291195', '14402014', '273941', '9392359', 'NEANT', '(0522)662250', 'NEANT', 'TEDY.CONSULTING@GMAIL.COM', '10 BD LIBERTE 3EME ETG APPART 6 CASA ', 'NEANT', '2014-10-08', 'logo.jpg', 'tedy-consulting-sarl', 'Casa', 3, NULL),
-(7, 'Google', '656', '7852', '5643212', '5455', 'NEANT', '2588523', '6455465', 'google@gmail.com', 'Googleplex, Mountain View (États-Unis)', '2326', '2014-10-17', 'logo.jpg', 'google', 'Carlifonie', 3, NULL);
+(7, 'Google', '656', '7852', '5643212', '5455', 'NEANT', '2588523', '6455465', 'google@gmail.com', 'Googleplex, Mountain View (États-Unis)', '2326', '2014-10-17', 'logo.jpg', 'google', 'Carlifonie', 3, 2);
 
 -- --------------------------------------------------------
 
@@ -735,32 +773,44 @@ CREATE TABLE IF NOT EXISTS `societebareme` (
   PRIMARY KEY (`societebaremeID`),
   KEY `Bareme` (`baremeID`),
   KEY `Societe` (`societeID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=22 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=29 ;
 
 --
 -- Contenu de la table `societebareme`
 --
 
 INSERT INTO `societebareme` (`baremeID`, `societeID`, `societebaremeID`) VALUES
-(3, 6, 2),
-(9, 6, 3),
-(9, 5, 5),
-(9, 3, 6),
-(9, 1, 7),
-(9, 4, 8),
-(9, 7, 9),
-(7, 2, 10),
-(9, 2, 11),
-(2, 2, 12),
-(3, 7, 13),
-(10, 2, 14),
-(12, 2, 15),
-(12, 5, 16),
-(12, 3, 17),
-(12, 1, 18),
-(12, 4, 19),
-(12, 6, 20),
-(12, 7, 21);
+(13, 2, 22),
+(13, 3, 23),
+(13, 1, 24),
+(13, 4, 25),
+(13, 5, 26),
+(13, 6, 27),
+(13, 7, 28);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `tableferier`
+--
+
+CREATE TABLE IF NOT EXISTS `tableferier` (
+  `tableferierID` int(11) NOT NULL AUTO_INCREMENT,
+  `ferier` int(11) NOT NULL,
+  `jour` date NOT NULL,
+  PRIMARY KEY (`tableferierID`),
+  KEY `ferier` (`ferier`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+
+--
+-- Contenu de la table `tableferier`
+--
+
+INSERT INTO `tableferier` (`tableferierID`, `ferier`, `jour`) VALUES
+(1, 1, '2015-01-06'),
+(3, 1, '2015-06-27'),
+(4, 1, '2015-11-16'),
+(5, 1, '2015-12-20');
 
 -- --------------------------------------------------------
 
@@ -777,20 +827,16 @@ CREATE TABLE IF NOT EXISTS `tranche` (
   `bareme` int(11) NOT NULL,
   PRIMARY KEY (`trancheId`),
   KEY `bareme` (`bareme`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=14 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=24 ;
 
 --
 -- Contenu de la table `tranche`
 --
 
 INSERT INTO `tranche` (`trancheId`, `debut`, `fin`, `taux`, `formule`, `bareme`) VALUES
-(4, 1000, 1500, 20, '', 2),
-(8, 1000, 20000, 10, 'Salaire * Taux', 8),
-(9, 20001, 50000, 30, 'S*T', 8),
-(10, 1000, 20000, 10, '', 9),
-(11, 0, 2000, 5, '', 3),
-(12, 2001, 5000, 8, '', 3),
-(13, 1, 5, 10, '', 10);
+(19, 1200, 1860.3, 5.6, '', 13),
+(21, 15000, 2000, 8.6, '', 13),
+(23, 45454, 45454, 45.5, '', 13);
 
 -- --------------------------------------------------------
 
@@ -809,14 +855,14 @@ CREATE TABLE IF NOT EXISTS `utilisateur` (
   UNIQUE KEY `login` (`login`),
   KEY `FK_Utilisateur_Societe` (`societeID`),
   KEY `roleID` (`roleID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=39 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=37 ;
 
 --
 -- Contenu de la table `utilisateur`
 --
 
 INSERT INTO `utilisateur` (`utilisateurID`, `societeID`, `login`, `motdepasse`, `roleID`, `enabled`) VALUES
-(1, 1, 'admin', 'd033e22ae348aeb5660fc2140aec35850c4da997', 1, 1),
+(1, NULL, 'admin', 'd033e22ae348aeb5660fc2140aec35850c4da997', 1, 1),
 (7, 1, 'kal.Inc', '12dea96fec20593566ab75692c9949596833adc9', 3, 1),
 (8, 2, 'realdemadrid', 'b52573e0e181b5d14a698395224281ba639ebd75', 3, 1),
 (9, 3, 'dortmundborissia', '26e51538fc0217a3258ff394430a27ca51831e9a', 3, 1),
@@ -824,8 +870,7 @@ INSERT INTO `utilisateur` (`utilisateurID`, `societeID`, `login`, `motdepasse`, 
 (18, 5, 'societederaffinage', 'c87c3aeb2970737ff596811cfd3a846c228ee2ac', 3, 1),
 (32, NULL, 'user', '12dea96fec20593566ab75692c9949596833adc9', 2, 1),
 (34, 6, 'tedyconsultingsarl', 'ef7671dc4c897303286d60e41afc8315ac431973', 3, 1),
-(36, 7, 'google', '759730a97e4373f3a0ee12805db065e3a4a649a5', 3, 1),
-(38, 3, 'dort', 'de217d1cab8d51642413e5b152bc37d5c93356ff', 2, 1);
+(36, 7, 'google', '759730a97e4373f3a0ee12805db065e3a4a649a5', 3, 1);
 
 --
 -- Contraintes pour les tables exportées
@@ -835,8 +880,8 @@ INSERT INTO `utilisateur` (`utilisateurID`, `societeID`, `login`, `motdepasse`, 
 -- Contraintes pour la table `avance`
 --
 ALTER TABLE `avance`
-  ADD CONSTRAINT `avance_ibfk_2` FOREIGN KEY (`salarie`) REFERENCES `salarie` (`salarieID`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `avance_ibfk_1` FOREIGN KEY (`exercice`) REFERENCES `exercice` (`exerciceID`);
+  ADD CONSTRAINT `avance_ibfk_1` FOREIGN KEY (`exercice`) REFERENCES `exercice` (`exerciceID`),
+  ADD CONSTRAINT `avance_ibfk_2` FOREIGN KEY (`salarie`) REFERENCES `salarie` (`salarieID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Contraintes pour la table `bareme`
@@ -873,6 +918,7 @@ ALTER TABLE `enfant`
 -- Contraintes pour la table `exercice`
 --
 ALTER TABLE `exercice`
+  ADD CONSTRAINT `exercice_ibfk_1` FOREIGN KEY (`feriers`) REFERENCES `ferier` (`ferierID`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `FK_Excercice_Societe` FOREIGN KEY (`societeID`) REFERENCES `societe` (`societeID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
@@ -904,16 +950,16 @@ ALTER TABLE `primedate`
 -- Contraintes pour la table `primesalarie`
 --
 ALTER TABLE `primesalarie`
-  ADD CONSTRAINT `primesalarie_ibfk_3` FOREIGN KEY (`exercice`) REFERENCES `exercice` (`exerciceID`),
   ADD CONSTRAINT `primesalarie_ibfk_1` FOREIGN KEY (`salarie`) REFERENCES `salarie` (`salarieID`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `primesalarie_ibfk_2` FOREIGN KEY (`prime`) REFERENCES `prime` (`primeID`);
+  ADD CONSTRAINT `primesalarie_ibfk_2` FOREIGN KEY (`prime`) REFERENCES `prime` (`primeID`),
+  ADD CONSTRAINT `primesalarie_ibfk_3` FOREIGN KEY (`exercice`) REFERENCES `exercice` (`exerciceID`);
 
 --
 -- Contraintes pour la table `salaire`
 --
 ALTER TABLE `salaire`
-  ADD CONSTRAINT `salaire_ibfk_2` FOREIGN KEY (`exercice`) REFERENCES `exercice` (`exerciceID`),
-  ADD CONSTRAINT `salaire_ibfk_1` FOREIGN KEY (`salarie`) REFERENCES `salarie` (`salarieID`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `salaire_ibfk_1` FOREIGN KEY (`salarie`) REFERENCES `salarie` (`salarieID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `salaire_ibfk_2` FOREIGN KEY (`exercice`) REFERENCES `exercice` (`exerciceID`);
 
 --
 -- Contraintes pour la table `salarie`
@@ -946,6 +992,12 @@ ALTER TABLE `societe`
 ALTER TABLE `societebareme`
   ADD CONSTRAINT `Bareme` FOREIGN KEY (`baremeID`) REFERENCES `bareme` (`baremeID`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `Societe` FOREIGN KEY (`societeID`) REFERENCES `societe` (`societeID`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Contraintes pour la table `tableferier`
+--
+ALTER TABLE `tableferier`
+  ADD CONSTRAINT `tableferier_ibfk_1` FOREIGN KEY (`ferier`) REFERENCES `ferier` (`ferierID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Contraintes pour la table `tranche`
