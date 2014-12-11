@@ -1,6 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
  <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-
+<%@taglib prefix="s" uri="http://www.springframework.org/tags" %>
   
  <div class="row">
 
@@ -29,7 +29,8 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    	<c:forEach items="${scte.salaries }" var="s">
+                                    <s:eval expression="T(com.outils.gp.Tool).trie(scte.salaries,'salarie')" var="listSalarie" />
+                                    	<c:forEach items="${listSalarie }" var="s">
  											<tr>
  												<td>
  													<img width="20" style="border-radius:5px" src="<c:url value="/documents/${s.profil() }"/>" />
@@ -67,8 +68,8 @@
                                  </div>
                                  </div>
                                  </div>
- 
-      
+
+
             <script>
     $(document).ready(function() {
         $('#dataTables').dataTable();

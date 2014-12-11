@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.gp.domain.Utilisateur;
+import com.gp.service.MessageService;
 import com.gp.service.RoleService;
 import com.gp.service.UtilisateurService;
 import com.outils.gp.Fichier;
@@ -27,6 +28,8 @@ public class LoginController {
 	private UtilisateurService utilisateurService;
 	@Autowired
 	private RoleService roleService;
+	@Autowired
+	private MessageService messageService;
 	
 	@RequestMapping(value="/",method = RequestMethod.POST)
 	public String openApp(ModelMap model,@RequestParam("file") MultipartFile file,HttpServletRequest request){
@@ -73,9 +76,11 @@ public class LoginController {
 		if(role.equals("ROLE_ADMIN")){
 			Utilisateur u = utilisateurService.trouverParLogin(login);
 			model.addAttribute("user", u);
+			model.addAttribute("messages", messageService.messagenonlus(u));
 		}else if(role.equals("ROLE_USER") || role.equals("ROLE_SOCIETE") ){
 			Utilisateur u = utilisateurService.trouverParLogin(login);
 			model.addAttribute("user", u);
+			model.addAttribute("messages", messageService.messagenonlus(u));
 		}
 		return "connected";
 	}

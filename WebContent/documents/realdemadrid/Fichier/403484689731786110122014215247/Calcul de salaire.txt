@@ -1,0 +1,18 @@
+Sb : salaire de base
+En jours : 26
+
+Sb/26 = Salaire journalier de l'employé (SjE)
+
+------------------------------------------------------
+Pour un calcul de salaire
+
+Saisir le nombre de jour travaillés par l'employé NjTe
+
+NjTe * SjE = S1
+
+B = Somme des cotisations
+C = somme de commissions
+A = somme des avances
+P = somme des primes
+
+Sb = S1 + C +P - A - B;

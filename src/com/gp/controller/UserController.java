@@ -19,12 +19,17 @@ import com.gp.domain.Bareme;
 import com.gp.domain.Compagnie;
 import com.gp.domain.Conge;
 import com.gp.domain.Enfant;
+import com.gp.domain.Exercice;
+import com.gp.domain.Ferier;
 import com.gp.domain.Primesalarie;
 import com.gp.domain.Salarie;
 import com.gp.domain.Salariebareme;
+import com.gp.domain.Societe;
+import com.gp.domain.Tableferier;
 import com.gp.domain.Utilisateur;
 import com.gp.domain.Societebareme;
 import com.gp.service.*;
+import com.outils.gp.Tool;
 
 
 @Controller
@@ -50,6 +55,14 @@ public class UserController {
 	private EnfantService enfantService;
 	@Autowired
 	private PrimesalarieService primesalarieService;
+	@Autowired
+	private ExerciceService exerciceService;
+	@Autowired
+	private FerierService ferierService;
+	@Autowired
+	private JourferierService jourferierService;
+	@Autowired
+	private SocieteService societeService;
 	/*-------------------------------------------------------------------
 	 *	GESTION DE SON PROPRE COMPTE 
 	 ------------------------------------------------------------------
@@ -177,6 +190,14 @@ public class UserController {
 							ps.getSalarie().getEtatcivile().getNom()+"</strong> avec succès");
 					else
 						out.print("<i class=\"fa fa-check-square-o fa-2x\" style=\"color:red\" ></i> ERREUR");
+				}else if(type.equals("tableferier")){
+					Tableferier c = jourferierService.trouverParId(id);
+					if(jourferierService.supprimer(c))
+						out.print("<i class=\"fa fa-check-square-o fa-2x\" style=\"color:#63ce71\" ></i>Le date : "+
+					c+" a été supprimé avec succès");
+					else
+						out.print("<i class=\"fa fa-times fa-2x\" style=\"color:red\" ></i> L'opération a échouée ! ");
+					
 				}
 				
 			}else if(action.equals("update")){
@@ -198,6 +219,30 @@ public class UserController {
 						s.getEtatcivile().getPrenom()+" "+s.getEtatcivile().getNom() +
 						"</u> : Code : <strong><u>"+code+"</u></strong>"
 								);
+					}else if(type.equals("exercice")){
+						Exercice exo = exerciceService.trouverParId(id);
+						
+						if(exo.getFerier() == null){
+							Ferier ferier = new Ferier();
+							ferier.setDateajout(new DateTime().toDate());
+							ferierService.enregistrer(ferier);
+							String chaine = req.getParameter("chaine");
+							for(String str:chaine.split("##")){
+								
+								if(str.length() > 3 ){
+									Tableferier tabfe =new Tableferier();
+									tabfe.setFerier(ferier);
+									tabfe.setJour(new DateTime(str).toDate());
+									jourferierService.enregistrer(tabfe);
+									//System.out.println(str+" "+new DateTime(str).toString("EEEE dd MMMMM yyyy"));
+								}
+									
+							}
+							exo.setFerier(ferier);
+							exerciceService.enregistrer(exo);
+						}
+						out.print("<i class=\"fa fa-check-square-o fa-2x\" style=\"color:#63ce71\" ></i>  Jours feriés ajoutés avec succès ");
+						
 					}
 			}
 			//out.print("ACTION : "+action+" | TYPE : "+type+" | ID : "+id);
@@ -217,23 +262,45 @@ public class UserController {
 		res.setCharacterEncoding("utf-8");
 		res.setContentType("text/html");
 		PrintWriter out = res.getWriter();
-		try{
-			DateTime debut = new DateTime(req.getParameter("debut"));
-			DateTime fin = new DateTime(req.getParameter("fin"));
-			//out.print(debut.getDayOfWeek()+" -- "+fin.getDayOfWeek());
-			
-			DateTime temp =debut;
-			int j = 0;
-			while(temp.getMillis() < fin.getMillis()){
-				if(temp.getDayOfWeek() != 6 && temp.getDayOfWeek() != 7 ){
-					j++;
+		String slug = req.getParameter("slug");
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String login = auth.getName();
+		Utilisateur u = utilisateurService.trouverParLogin(login);
+		Societe s = societeService.trouverParSlug(slug);
+		int veri = Tool.verificationLien(u, s);
+		
+		if(veri == 1){
+			try{
+				DateTime debut = new DateTime(req.getParameter("debut"));
+				DateTime fin = new DateTime(req.getParameter("fin"));
+				//out.print(debut.getDayOfWeek()+" -- "+fin.getDayOfWeek());
+				Exercice exo = s.exoEncours();
+				DateTime temp =debut;
+				int j = 0;
+				if(exo != null){
+					if(exo.getFerier() != null){
+						while(temp.getMillis() < fin.getMillis()){
+							if(temp.getDayOfWeek() != 6 && temp.getDayOfWeek() != 7 && !exo.jourferie(temp)){
+								j++;
+							}
+							temp = new DateTime(temp.plusDays(1).toString("YYYY-MM-dd"));
+						}
+						out.print(j);
+					}else
+						out.print("Veuillez définir les jours fériés d'abord !");
+					
+				}else{
+					out.print("Veuillez définir l'exercie en cours!");
 				}
-				temp = new DateTime(temp.plusDays(1).toString("YYYY-MM-dd"));
+				
+			}catch(Exception e){
+				out.print(e.getMessage());
 			}
-			out.print(j);
-		}catch(Exception e){
-			out.print(e.getMessage());
-		}
+		}else
+		out.print("Vous ne pouvez pas continuer cette action");
+		
+		
+		
 		
 	}
 }

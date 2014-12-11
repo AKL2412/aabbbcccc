@@ -3,7 +3,8 @@ package com.gp.controller;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -25,13 +26,22 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.gp.domain.Bareme;
 import com.gp.domain.Compagnie;
-import com.gp.domain.Exercice;
-import com.gp.domain.Role;
+import com.gp.domain.Message;
+import com.gp.domain.Parametre;
 import com.gp.domain.Societe;
 import com.gp.domain.Societebareme;
 import com.gp.domain.Tranche;
 import com.gp.domain.Utilisateur;
-import com.gp.service.*;
+import com.gp.service.BaremeService;
+import com.gp.service.CompagnieService;
+import com.gp.service.ExerciceService;
+import com.gp.service.MessageService;
+import com.gp.service.ParametreService;
+import com.gp.service.RoleService;
+import com.gp.service.SocieteService;
+import com.gp.service.SocietebaremeService;
+import com.gp.service.TrancheService;
+import com.gp.service.UtilisateurService;
 import com.outils.gp.Fichier;
 import com.outils.gp.PassWord;
 import com.outils.gp.Tool;
@@ -55,6 +65,10 @@ public class AdminCTRL {
 	private CompagnieService compagnieService;
 	@Autowired
 	private SocietebaremeService societebaremeService;
+	@Autowired
+	ParametreService parametreService;
+	@Autowired
+	MessageService messageService;
 	
 	@RequestMapping(value={"/accueil","/"},method = RequestMethod.GET)
 	public String loginReussi(ModelMap model){
@@ -71,14 +85,113 @@ public class AdminCTRL {
 	 * BOITE DE RECPTION
 	 ******************************************************************************/
 	@RequestMapping(value="/boite-de-reception",method = RequestMethod.GET)
-	public String BOITEDERECPTION(ModelMap model){
+	public String BOITEDERECPTION(ModelMap model,HttpServletRequest req){
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String login = auth.getName();
+		Utilisateur u = utilisateurService.trouverParLogin(login);
+		
+		
 		model.addAttribute("link", "reception");
-		//model.addAttribute("societes", societeService.trouverTous());
-		//model.addAttribute("baremes", baremeService.trouverParCaractere("obligatoire"));
-		model.addAttribute("title", 15+" Messages");
+		String rubrique = "boite-de-reception";
+		List<Message> data = new ArrayList<Message>();
+		Message message = null;
+		Integer nonLus = messageService.messagenonlus(u).size();
+		try{
+			rubrique = req.getParameter("rubrique");
+			if(!rubrique.equals("boite-de-reception") && !rubrique.equals("messages-non-lus")
+					&& !rubrique.equals("message-envoyes"))
+			rubrique = "boite-de-reception";
+			
+		}catch(Exception e){
+			rubrique = "boite-de-reception";
+		}
+		if(rubrique.equals("boite-de-reception")){
+			data = messageService.messagerecus(u);
+		}else if(rubrique.equals("messages-non-lus")){
+			data = messageService.messagenonlus(u);
+		}else{
+			data = messageService.messageenvoyes(u);
+		}
+		
+		try{
+			Integer messageId = Integer.parseInt(req.getParameter("message"));
+			for(Message m : data){
+				if(m.getMessageId().equals(messageId))
+					message = m;
+			}
+			if(message != null && !message.isLu()){
+				message.setLu(true);
+				messageService.enregistrer(message);
+			}
+				
+		}catch(Exception e){
+			message = null;
+		}
+		model.addAttribute("title", rubrique);
+		model.addAttribute("rubrique", rubrique);
+		model.addAttribute("nonlus", nonLus);
+		model.addAttribute("data", data);
+		model.addAttribute("message", message);
 		return "admin/boite";
 		
 	}
+	
+	//Envoyer 
+			@RequestMapping(value="/envoyer-message",method = RequestMethod.GET)
+			public String envoyerbareme(ModelMap model,HttpServletRequest request){
+				
+				
+					model.addAttribute("link", "envoyer-message");
+					model.addAttribute("societes", societeService.trouverTous());
+					try{
+						model.addAttribute("message", request.getParameter("message"));
+					}catch(Exception e){}
+					return "admin/envoyermessage";
+				
+			}
+			@RequestMapping(value="/envoyer-message",method = RequestMethod.POST)
+			public String envoyerbaremesubmit(ModelMap model,HttpServletRequest request,
+					@RequestParam("file") MultipartFile file,
+					@ModelAttribute("message") Message message){
+				Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+				String login = auth.getName();
+				Utilisateur u = utilisateurService.trouverParLogin(login);
+				
+					
+					
+					try{
+						message.setUtilisateurByEmetteur(u);
+						Societe ss = societeService.trouverParSlug(request.getParameter("societe"));
+						Utilisateur us = ss.compteDefaut();
+						message.setUtilisateurByDestinataire(us);
+						message.setDateenvoi(new DateTime().toDate());
+						message.setFichier(false);
+						message.setLu(false);
+						if(!file.isEmpty()){
+							String nomFolder = Math.random()+"";
+							nomFolder = nomFolder.substring(2, nomFolder.length());
+							nomFolder = Tool.NomDeDossierSalarie(nomFolder);
+							String cheminSauvegarde = request.getServletContext().getInitParameter("documents-societes");
+							cheminSauvegarde += us.getLogin()+File.separator+"Fichier"+File.separator+nomFolder;
+							String nf = Fichier.uploderFichier(file, file.getOriginalFilename(), cheminSauvegarde);
+							if(!nf.equals("ERROR")){
+								message.setNomfichier(nf);
+								message.setNomdossier(nomFolder);
+								message.setFichier(true);
+							}
+							
+							
+						}
+						messageService.enregistrer(message);
+						model.addAttribute("message", "Message envoyé!!");
+					}catch(Exception e){
+						model.addAttribute("message", e.getMessage());
+					}
+					System.out.println(message);
+					return "redirect:/admin/envoyer-message";
+				
+			}
 	
 	/*=================================================================
 	 * 	GERER LES SOCIETES
@@ -107,7 +220,8 @@ public class AdminCTRL {
 	}
 	@RequestMapping(value="/gerer-societes/creer",method = RequestMethod.POST)
 	public String creersocieteSauvegarde(ModelMap model,@RequestParam("file") MultipartFile file,
-			@ModelAttribute("societe") Societe societe,HttpServletRequest request ){
+			@ModelAttribute("societe") Societe societe,  
+			HttpServletRequest request ){
 		model.addAttribute("link", "societe");
 		model.addAttribute("action", "creer");
 		societe.setDateajout(new Date());
@@ -125,6 +239,10 @@ public class AdminCTRL {
 			societe.setLogo(logo);
 		}
 		societe.setSlug(Tool.creerSlug(societe.getIntituleSociete()).toLowerCase());
+		Parametre p = new Parametre();
+		parametreService.enregistrer(p);
+		
+		societe.setParametre(p);
 		societeService.enregistrer(societe);
 		//Creation du compte de la societe
 		//new DateTime()
@@ -455,7 +573,19 @@ public class AdminCTRL {
 			Bareme b = baremeService.trouverParId(idBareme);
 			tranche.setBareme(b);
 			trancheService.enregistrer(tranche);
-			model.addAttribute("bareme",baremeService.trouverParId(idBareme) );
+			b = baremeService.trouverParId(idBareme);
+			
+			Comparator<Tranche> compatranche = new Comparator<Tranche>() {
+
+				@Override
+				public int compare(Tranche arg0, Tranche arg1) {
+					// TODO Auto-generated method stub
+					return arg0.getTrancheId().compareTo(arg1.getTrancheId());
+				}
+			};
+			
+			//Arrays.sort(b.getTranches(),compatranche);
+			model.addAttribute("bareme",b );
 		}
 		
 		return "admin/creerbareme";
@@ -480,12 +610,8 @@ public class AdminCTRL {
 			HttpServletRequest req){
 		model.addAttribute("link", "bareme");
 		model.addAttribute("action", "lister");
-		try{
-			String c = req.getParameter("char");
-			model.addAttribute("baremes", baremeService.trouverParCaractere(c));
-		}catch(Exception e){
 			model.addAttribute("baremes", baremeService.trouverParCaractere("obligatoire"));
-		}
+		
 		return "admin/listerbareme";
 		
 	}

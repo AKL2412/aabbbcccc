@@ -1,9 +1,16 @@
 jQuery(document).ready(function($) {
-	
-	
-	//alert(getRacine());
-	//notifier("verificaion");
-
+	var notif = 0;
+	$.each($('.nombre-notification'),function(index,val){
+		var i = parseInt($(val).text());
+		if(!isNaN(i)) notif +=i;
+	});
+	if(notif > 0){
+		var text = '('+notif+')';
+		var title = $('html title').text();
+		if(title.indexOf(text) == -1 )
+			$('html title').text(title+" "+text);
+	}
+		
 	/*
 		Suppression des objets
 	*/
@@ -106,6 +113,15 @@ $.each($('.panel .panel-heading'), function(index, val) {
 		 });
 	
 	//=============================================================================
+
+	/*
+		Insertion de date picker dans tous les champs de type date
+	*/
+	$.each($('input'), function(index, val) {
+		 var input = $(val);
+		 if(input.attr('type') == "date" )
+		 	input.datepicker( );
+	});
 
 });
 	function conrfimerDelete(datas,elt,etat){

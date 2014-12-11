@@ -2,7 +2,8 @@ jQuery(document).ready(function($) {
 	$('#dateDedebut').datepicker( );
 	$('#dateDefin').datepicker();
 	$('#btn-valider').attr('disabled', 'disabled');
-
+	var slug = $('#slug').attr('slug');
+	
 	var total = $('#dateDedebut').attr('total');
 
 	$('#dateDedebut').change(function(event) {
@@ -36,17 +37,18 @@ jQuery(document).ready(function($) {
 				var dfF = new Date($(this).val());
 				var dfFs = dfF.getFullYear()+'-'+parseInt(dfF.getMonth()+1)+'-'+dfF.getDate();
 
-				nbreDejour(ddFs,dfFs,total);
+				nbreDejour(ddFs,dfFs,total,slug);
 			}
 		}
 			
 	});
 });
 
-function nbreDejour(debut,fin,total){
+function nbreDejour(debut,fin,total,slug){
 	var d = {
 		debut:debut,
-		fin:fin
+		fin:fin,
+		slug:slug
 	};
 	$.post(getRacine()+'/nombre-de-jour', d, function(data, textStatus, xhr) {
 		

@@ -1,7 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <div class="panel panel-default">
-<div class="panel-heading">Liste de barèmes</div>
+<div class="panel-heading">Liste de barèmes obligatoires</div>
 <div class="panel-body">
 	<c:if test="${fn:length(baremes) > 0 }">
 		<table class="table table-bordered">

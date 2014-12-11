@@ -245,6 +245,57 @@ div.image{
 	.contenu{
 		border-left: 1px solid rgba(0,0,0,0.1);
 		min-height: 400px;
+		.entete-message{
+			padding-bottom: 7px;
+			border-bottom: 1px solid rgba(0,0,0,0.3);
+
+			.objet{
+				font-weight: bolder;
+			}
+			.details{
+				color: rgba(0,0,0,0.4);
+			}
+		}
+
+		.contenu-message{
+			padding: 10px;
+			font-family: "Trebuchet MS";
+			text-align: justify;
+			font-size: 1.1em;
+			color: rgba(0,0,0,0.7); 
+
+		}
+		.fichier-telecharger{
+			border-top: 1px solid rgba(0,0,0,0.4);
+			border-bottom: 1px solid rgba(0,0,0,0.4);
+			background-color: #f2f2f2;
+			padding: 8px 0;
+		}
+		.unMessage{
+			
+			border-bottom: 1px solid rgba(0,0,0,0.3);
+			background-color: #f2f2f2;
+			padding: 5px 0;
+			div{
+				display: inline-block;
+				color: rgba(0,0,0,0.7);
+			}
+			.dateenvoi{
+				color: rgba(0,0,0,0.5);
+				font-size: 0.9em;
+				font-style: italic;
+			}
+			.objet{
+				font-weight: bold;
+			}
+			&:hover{
+				background-color: #f1f1f1;
+				
+			}
+		}
+		.non-lu{
+			background-color: #ffffff;
+		}
 	}
 }
 	.boitemessage-send{
@@ -254,7 +305,58 @@ div.image{
 
 	
 }
+#calendrier-ferier{
+	overflow: auto;
+	min-height: 30px;
+	min-width: 100%;
+	border:1px solid rgba(0,0,0,0.5);
+	margin-bottom: 20px;
+	.annee{
+		margin: 2px;
+		background-color: #f1f1f1;
+		.titre{
+			background-color: #777;
+			color: #ffffff;
+			text-align: center;
+			font-size: 1.3em;
+		}
+		.contenu{
+			.mois{
+				display: inline-block;
+				width: 16%;
+				margin: 4px 1px;
 
+				.titre{
+					background-color: #ccc;
+					text-align: center;
+					font-size: 1em;
+				}
+				.contenu{
+					.unJour{
+						padding: 1px 2px;
+						span{
+							display: inline-block;
+						}
+						.chaine{
+							width: 70%;
+							font-family: "Courier New";
+							color:rgba(0,0,0,0.7);
+						}
+						
+							cursor: pointer;
+						
+					}
+					.success{
+						background-color: #dff0d8;
+						color: #3c763d;
+					}
+				}
+			}
+		}
+	}
+	
+	
+}
 .panel .panel-heading i.plis{
 	float: right;
 	cursor: pointer;

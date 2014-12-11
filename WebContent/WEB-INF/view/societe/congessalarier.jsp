@@ -148,5 +148,5 @@
 	</c:otherwise>
 </c:choose>
 
-<script src=" <c:url value="/sources/js/jquery-ui.js"/>"></script>
+
 <script src=" <c:url value="/sources/js/conges.js"/>"></script>

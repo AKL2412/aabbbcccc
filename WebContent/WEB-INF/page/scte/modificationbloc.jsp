@@ -7,7 +7,10 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title></title>
+<script src=" <c:url value="/sources/js/jquery-1.11.0.js"/>"></script> 
+ <script src=" <c:url value="/sources/js/jquery-ui.js"/>"></script>
  <script src=" <c:url value="/sources/js/app.js"/>"></script>
+ 
 </head>
 <body>
 	
@@ -24,7 +27,7 @@
 			role="form"
 			method="post"
 			>
-				
+				<div class="panel-body">
 						<div class="form-group" >
 							<label>Nom : </label>
 							<input type="text" required="required" class="form-control" placeholder="nom de l'enfant" name="nom"/>
@@ -34,9 +37,10 @@
 							<input type="text" required="required" class="form-control" placeholder="prenom de l'enfant" name="prenom"/>
 						</div>
 						<div class="form-group">
-							<label>Matricule : </label>
-							<input type="date" required="required"  class="form-control" name="_datenaissance"/>
+							<label>Date de naissance : </label>
+							<input id="dateDeNaissanceInput" placeholder="date de naissance de l'enfant : YYYY/MM/JJ" type="date" required="required"  class="form-control" name="_datenaissance"/>
 						</div>
+					</div>
 						 <div class="panel-footer">
 						 <div class="form-group">
 						<input type="submit" value="valider" class="btn btn-primary " /> 
@@ -135,6 +139,13 @@
 		
 	
 	</c:choose>
+<%-- 	<script src=" <c:url value="/sources/js/jquery-1.11.0.js"/>"></script> --%>
+<%-- 	<script src=" <c:url value="/sources/js/app.js"/>"></script> --%>
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+	 $('#dateDeNaissanceInput').datepicker();
 	
+});
+</script>
 </body>
 </html>

@@ -37,7 +37,11 @@ http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
 		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
 		<property name="annotatedClasses">
-	<list> 
+	<list>
+	    
+	    <value> com.gp.domain.Ferier</value>
+		<value> com.gp.domain.Tableferier</value>
+		
 		<value> com.gp.domain.Salarie</value>
 		<value> com.gp.domain.Affectation</value>
 		<value> com.gp.domain.Avance</value>
@@ -69,6 +73,7 @@ http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
 		<value> com.gp.domain.Primedate</value>
 		<value> com.gp.domain.Primesalarie</value>
 		<value> com.gp.domain.Salaire</value>
+		
 	</list>
 		</property>
 		<property name="hibernateProperties">

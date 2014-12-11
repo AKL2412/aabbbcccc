@@ -1,8 +1,10 @@
 package com.gp.controller;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -54,6 +56,7 @@ import com.gp.service.EnfantService;
 import com.gp.service.EtatcivilService;
 import com.gp.service.ExerciceService;
 import com.gp.service.ImmatriculationService;
+import com.gp.service.MessageService;
 import com.gp.service.PaieService;
 import com.gp.service.ParametreService;
 import com.gp.service.PosteService;
@@ -119,7 +122,8 @@ public class SocieteCTRL {
 	private PrimesalarieService primesalarieService;
 	@Autowired
 	private BaremeService baremeService;
-	
+	@Autowired
+	private MessageService messageService;
 	
 	
 	
@@ -167,6 +171,10 @@ public class SocieteCTRL {
 			model.addAttribute("action", "param");
 			model.addAttribute("slug", slug);
 			model.addAttribute("scte", s);
+			Exercice exo = s.exoEncours();
+			//DateTime today = new DateTime("2000-08-20");
+			//System.out.println(today.toString("EEEE"));
+			model.addAttribute("calendrier", Tool.calendrierFerier(new DateTime(exo.getDateDebut()), new DateTime(exo.getDateFin())));
 			return "scte/parametre";
 		}
 		return "redirect:/erreur-lien?slug="+slug+"&code="+veri;
@@ -189,9 +197,19 @@ public class SocieteCTRL {
 			try{
 				Integer delai = Integer.parseInt(req.getParameter("delai"));
 				Parametre p = s.getParametre();
+				boolean bok = false;
+				if(p == null){
+					p = new Parametre();
+					bok = true;
+				}
+					
 				p.setAlertefinperiodeessai(delai);
 				parametreService.enregistrer(p);
-				System.out.println(delai);
+				if(bok){
+					s.setParametre(p);
+					societeService.enregistrer(s);
+				}
+				System.out.println("delai :"+delai);
 			}catch(Exception e){
 				System.out.println(e.getMessage());
 			}
@@ -223,7 +241,7 @@ public class SocieteCTRL {
 					p.setUnite(req.getParameter("unite"));
 					parametreService.enregistrer(p);
 				}catch(Exception e){
-					System.out.println(e.getMessage());
+					System.out.println("Erreur catch:"+e.getMessage());
 				}
 				
 				
@@ -831,6 +849,31 @@ public class SocieteCTRL {
 		return "redirect:/erreur-lien?slug="+slug+"&code="+veri;
 	}
 	
+	/*
+	 * Supprimer un salarier
+	 */
+	@RequestMapping(value="/gerer-salaries/supprimer-salarie/{idSalarie}",method = RequestMethod.GET)
+	public String deletesalarie(ModelMap model,@PathVariable("slug") String slug,
+			@PathVariable("idSalarie") Integer idSalarie){
+		
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String login = auth.getName();
+		Utilisateur u = utilisateurService.trouverParLogin(login);
+		Societe s = societeService.trouverParSlug(slug);
+		int veri = Tool.verificationLien(u, s);
+		
+		if(veri == 1){
+			Salarie r = s.recupererSalarie(idSalarie);
+			if(r == null)
+				return "redirect:/erreur-lien?slug="+slug+"&code=1&id="+idSalarie+"&objet=Salarie";
+			r.setActive(false);
+			salarieService.enregistrer(r);
+			return "redirect:/societe/"+slug+"/gerer-salaries/lister";
+		}
+		return "redirect:/erreur-lien?slug="+slug+"&code="+veri;
+	}
+	
 	/*-------------------------------------------------------------------------------------------------------
 	 * Les avances salarié
 	 */
@@ -1394,8 +1437,8 @@ public class SocieteCTRL {
 		 * Gestion des barèmes
 		 */
 		//Envoyer un bareme a l'administrateur
-		@RequestMapping(value="/gerer-baremes/envoyer",method = RequestMethod.GET)
-		public String envoyerbareme(ModelMap model,@PathVariable("slug") String slug){
+		@RequestMapping(value="/envoyer-message",method = RequestMethod.GET)
+		public String envoyerbareme(ModelMap model,@PathVariable("slug") String slug,HttpServletRequest request){
 			
 			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 			String login = auth.getName();
@@ -1409,15 +1452,21 @@ public class SocieteCTRL {
 				model.addAttribute("scte", s);
 				model.addAttribute("societe", s);
 				model.addAttribute("compte", u);
-				
+				try{
+					model.addAttribute("message", request.getParameter("message"));
+				}catch(Exception e){}
 				return "scte/envoyerbareme";
 			}
 			return "redirect:/erreur-lien?slug="+slug+"&code="+veri;
 		}
 		//Envoyer un bareme a l'administrateur
-				@RequestMapping(value="/gerer-baremes/envoyer",method = RequestMethod.POST)
-				public String envoyerbaremeSubmit(ModelMap model,@PathVariable("slug") String slug,
-						@ModelAttribute("message") Message message){
+				@RequestMapping(value="/envoyer-message",method = RequestMethod.POST)
+				public String envoyerbaremeSubmit(
+						ModelMap model,
+						@PathVariable("slug") String slug,
+						@RequestParam("file") MultipartFile file,
+						@ModelAttribute("message") Message message,
+						HttpServletRequest request){
 					
 					Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 					String login = auth.getName();
@@ -1428,13 +1477,53 @@ public class SocieteCTRL {
 					if(veri == 1){
 						message.setUtilisateurByDestinataire(utilisateurService.trouverParLogin("admin"));
 						message.setUtilisateurByEmetteur(u);
-						message.setDate(new DateTime().toDate());
-						System.out.println(message);
-						return "redirect:/societe/"+slug+"/gerer-baremes/envoyer";
+						message.setDateenvoi(new DateTime().toDate());
+						message.setFichier(false);
+						if(!file.isEmpty()){
+							String nomFolder = Math.random()+"";
+							nomFolder = nomFolder.substring(2, nomFolder.length());
+							nomFolder = Tool.NomDeDossierSalarie(nomFolder);
+							String cheminSauvegarde = request.getServletContext().getInitParameter("documents-societes");
+							cheminSauvegarde += login+File.separator+"Fichier"+File.separator+nomFolder;
+							String nf = Fichier.uploderFichier(file, file.getOriginalFilename(), cheminSauvegarde);
+							if(!nf.equals("ERROR")){
+								message.setNomfichier(nf);
+								message.setNomdossier(nomFolder);
+								message.setFichier(true);
+							}
+							
+							
+						}
+						model.addAttribute("message", "Message envoyé!!");
+						//System.out.println(message);
+						messageService.enregistrer(message);
+						return "redirect:/societe/"+slug+"/envoyer-message";
 					}
 					return "redirect:/erreur-lien?slug="+slug+"&code="+veri;
 				}
-		
+				
+				//Envoyer un bareme a l'administrateur
+				@RequestMapping(value="/marquer-non-lu/{idMessage}",method = RequestMethod.GET)
+				public String marquermessagecommenonlu(ModelMap model,@PathVariable("slug") String slug,
+						@PathVariable("idMessage") Integer idMessage){
+					
+					Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+					String login = auth.getName();
+					Utilisateur u = utilisateurService.trouverParLogin(login);
+					Societe s = societeService.trouverParSlug(slug);
+					int veri = Tool.verificationLien(u, s);
+					
+					if(veri == 1){
+						try{
+							Message m =messageService.trouverParId(idMessage);
+							m.setLu(false);
+							messageService.enregistrer(m);
+							model.addAttribute("message", "Message marqué comme non lu");
+						}catch(Exception e){}
+						return "redirect:/societe/"+slug+"/boite-de-reception";
+					}
+					return "redirect:/erreur-lien?slug="+slug+"&code="+veri;
+				}
 		//Envoyer un bareme a l'administrateur
 				@RequestMapping(value="/boite-de-reception",method = RequestMethod.GET)
 				public String boitereception(ModelMap model,@PathVariable("slug") String slug,HttpServletRequest req){
@@ -1451,14 +1540,46 @@ public class SocieteCTRL {
 						model.addAttribute("scte", s);
 						model.addAttribute("societe", s);
 						model.addAttribute("compte", u);
+						List<Message> data = new ArrayList<Message>();
+						Message message = null;
+						Integer nonLus = messageService.messagenonlus(u).size();
 						try{
 							rubrique = req.getParameter("rubrique");
-							rubrique = rubrique != null ? rubrique : "boite-de-reception";
+							if(!rubrique.equals("boite-de-reception") && !rubrique.equals("messages-non-lus")
+									&& !rubrique.equals("message-envoyes"))
+							rubrique = "boite-de-reception";
 							
 						}catch(Exception e){
+							rubrique = "boite-de-reception";
+						}
+						if(rubrique.equals("boite-de-reception")){
+							data = messageService.messagerecus(u);
+						}else if(rubrique.equals("messages-non-lus")){
+							data = messageService.messagenonlus(u);
+						}else{
+							data = messageService.messageenvoyes(u);
+						}
+						
+						try{
+							Integer messageId = Integer.parseInt(req.getParameter("message"));
+							for(Message m : data){
+								if(m.getMessageId().equals(messageId))
+									message = m;
+							}
+							if(message != null && !message.isLu()){
+								message.setLu(true);
+								messageService.enregistrer(message);
+							}
+							
+						}catch(Exception e){
+							message = null;
 						}
 						model.addAttribute("title", rubrique);
 						model.addAttribute("rubrique", rubrique);
+						model.addAttribute("nonlus", nonLus);
+						model.addAttribute("data", data);
+						model.addAttribute("message", message);
+						
 						
 						return "scte/boitereception";
 					}

@@ -2,8 +2,10 @@ package com.gp.domain;
 
 // Generated 20 nov. 2014 15:33:35 by Hibernate Tools 3.4.0.CR1
 
-import java.io.File;
+import static javax.persistence.GenerationType.IDENTITY;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -13,9 +15,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-
-import static javax.persistence.GenerationType.IDENTITY;
-
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -24,10 +23,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import com.gp.domain.Exercice;
-import com.gp.domain.Salarie;
-import com.gp.domain.Societebareme;
-import com.gp.domain.Utilisateur;
 import com.outils.gp.Tool;
 
 /**
@@ -284,7 +279,13 @@ public class Societe implements java.io.Serializable {
 
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "societe")
 	public Set<Salarie> getSalaries() {
-		return this.salaries;
+		Set<Salarie> sal =  new HashSet<Salarie>(0) ;
+		for(Salarie s:this.salaries){
+			if(s.getActive())
+				sal.add(s);
+		}
+		
+		return sal;
 	}
 
 	public void setSalaries(Set<Salarie> salaries) {
@@ -334,8 +335,8 @@ public class Societe implements java.io.Serializable {
 	
 	public List<Salarie> salarieAnotifier(){
 		List<Salarie> list = new ArrayList<Salarie>();
-		for(Salarie s:this.salaries)
-			if(s.notifiable()) list.add(s);
+//		for(Salarie s:this.salaries)
+//			if(s.notifiable()) list.add(s);
 		return list;
 	}
 	public Salarie recupererSalarie(Integer id){
@@ -350,7 +351,7 @@ public class Societe implements java.io.Serializable {
 	public String lienLogo(){
 		Utilisateur u = this.compteDefaut();
 		if(u != null){
-			return u.getLogin()+File.separator+"logos"+File.separator+this.logo;
+			return u.getLogin()+"/logos/"+this.logo;
 		}
 		return "vide";
 			

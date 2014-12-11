@@ -127,4 +127,7 @@
                        	 <li class="<c:if test="${link == \"reception\"}">active</c:if>">
                             <a  href="<c:url value="/admin/boite-de-reception"/>"> <i class="fa fa-envelope-o"></i> Boite de reception</a>
                         </li>
+                         <li class="<c:if test="${link == \"envoyer-message\"}">active</c:if>">
+                            <a  href="<c:url value="/admin/envoyer-message"/>"> <i class="fa fa-envelope"></i> Envoyer message</a>
+                        </li>
                     </ul>

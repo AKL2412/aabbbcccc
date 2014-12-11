@@ -36,12 +36,7 @@ public class Utilisateur implements java.io.Serializable {
 	private Set<Message> messagesForDestinataire = new HashSet<Message>(0);
 	private Set<Message> messagesForEmetteur = new HashSet<Message>(0);
 
-	@Override
-	public String toString() {
-		// TODO Auto-generated method stub
-		return "Compte : ----------------\nLogin : "+this.login+"\nSociété : "+this.societe.getIntituleSociete()+"\nStatut : "+
-				this.role.getDetail();
-	}
+	
 	public Utilisateur() {
 		this.enabled = true;
 	}
@@ -146,5 +141,23 @@ public class Utilisateur implements java.io.Serializable {
 	public void setMessagesForEmetteur(Set<Message> messagesForEmetteur) {
 		this.messagesForEmetteur = messagesForEmetteur;
 	}
-
+	/*
+	 * Mes fonctions
+	 */
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		if(this.societe != null)
+		return "Compte : ----------------\nLogin : "+this.login+"\nSociété : "+this.societe.getIntituleSociete()+"\nStatut : "+
+				this.role.getDetail();
+		return "Compte : ----------------\nLogin : "+this.login+"\nSociété : "+"\nStatut : "+
+		this.role.getDetail();
+	}
+	public String nom(){
+		if(this.societe != null)
+			return this.societe.getIntituleSociete();
+		if(this.login.equals("admin"))
+			return "L'administrateur";
+		return this.login;
+	}
 }

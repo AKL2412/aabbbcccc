@@ -53,8 +53,8 @@ public class BaremeDaompl implements BaremeDao {
 	@Override
 	public List<Bareme> trouverParCaractere(String caractere) {
 		Criteria crit = sessionfactory.getCurrentSession().createCriteria(Bareme.class);
-		crit.add(Restrictions.like("caractere", caractere));
-		crit.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		//crit.add(Restrictions.eq("caractere", caractere));
+		//crit.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		return crit.list();
 	}
 

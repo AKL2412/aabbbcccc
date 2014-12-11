@@ -49,15 +49,15 @@
 		    <input type="text" hidden="hidden" name="action" required="required" value="a-t"/>
 		    		<div class="form-group c4 ">
 		    			<label>Debut:</label>
-		    			<input type="number" class="form-control" name="debut" required="required"/>
+		    			<input type="text" pattern="([1-9])[0-9]*.([0-9])*" placeholder="1500.0" class="form-control" name="debut" required="required"/>
 		    		</div>
 		    		<div class="form-group c4 ">
 		    			<label>Fin:</label>
-		    			<input type="number" class="form-control" name="fin" required="required"/>
+		    			<input type="text" pattern="([1-9])[0-9]*.([0-9])*" placeholder="1500.0" class="form-control" name="fin" required="required"/>
 		    		</div>
 		    		<div class="form-group c4 ">
 		    			<label>Taux:</label>
-		    			<input type="number" class="form-control" name="taux" required="required"/>
+		    			<input type="text"  class="form-control" name="taux" required="required" placeholder="05.40" pattern="([0-9])[0-9].[0-9]*">
 		    		</div>
 		    		<div class="form-group c4 ">
 		    			<label>formule:</label>

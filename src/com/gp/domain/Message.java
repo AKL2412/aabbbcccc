@@ -1,6 +1,6 @@
 package com.gp.domain;
 
-// Generated 10 nov. 2014 19:05:50 by Hibernate Tools 3.4.0.CR1
+// Generated 10 déc. 2014 16:46:00 by Hibernate Tools 3.4.0.CR1
 
 import java.util.Date;
 
@@ -29,38 +29,40 @@ public class Message implements java.io.Serializable {
 	private Utilisateur utilisateurByDestinataire;
 	private Utilisateur utilisateurByEmetteur;
 	private String message;
-	private Date date;
+	private Date dateenvoi;
 	private boolean lu;
 	private String objet;
-	private boolean propbareme;
-	private String description;
+	private Boolean fichier;
+	private String nomfichier;
+	private String nomdossier;
 
 	public Message() {
 	}
 
 	public Message(Utilisateur utilisateurByDestinataire,
-			Utilisateur utilisateurByEmetteur, String message, Date date,
-			boolean lu, String objet, boolean propbareme) {
+			Utilisateur utilisateurByEmetteur, String message, Date dateenvoi,
+			boolean lu, String objet) {
 		this.utilisateurByDestinataire = utilisateurByDestinataire;
 		this.utilisateurByEmetteur = utilisateurByEmetteur;
 		this.message = message;
-		this.date = date;
+		this.dateenvoi = dateenvoi;
 		this.lu = lu;
 		this.objet = objet;
-		this.propbareme = propbareme;
 	}
 
 	public Message(Utilisateur utilisateurByDestinataire,
-			Utilisateur utilisateurByEmetteur, String message, Date date,
-			boolean lu, String objet, boolean propbareme, String description) {
+			Utilisateur utilisateurByEmetteur, String message, Date dateenvoi,
+			boolean lu, String objet, Boolean fichier, String nomfichier,
+			String nomdossier) {
 		this.utilisateurByDestinataire = utilisateurByDestinataire;
 		this.utilisateurByEmetteur = utilisateurByEmetteur;
 		this.message = message;
-		this.date = date;
+		this.dateenvoi = dateenvoi;
 		this.lu = lu;
 		this.objet = objet;
-		this.propbareme = propbareme;
-		this.description = description;
+		this.fichier = fichier;
+		this.nomfichier = nomfichier;
+		this.nomdossier = nomdossier;
 	}
 
 	@Id
@@ -74,7 +76,7 @@ public class Message implements java.io.Serializable {
 		this.messageId = messageId;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "destinataire", nullable = false)
 	public Utilisateur getUtilisateurByDestinataire() {
 		return this.utilisateurByDestinataire;
@@ -85,7 +87,7 @@ public class Message implements java.io.Serializable {
 		this.utilisateurByDestinataire = utilisateurByDestinataire;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "emetteur", nullable = false)
 	public Utilisateur getUtilisateurByEmetteur() {
 		return this.utilisateurByEmetteur;
@@ -104,14 +106,14 @@ public class Message implements java.io.Serializable {
 		this.message = message;
 	}
 
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "date", nullable = false, length = 19)
-	public Date getDate() {
-		return this.date;
+	@Temporal(TemporalType.DATE)
+	@Column(name = "dateenvoi", nullable = false, length = 10)
+	public Date getDateenvoi() {
+		return this.dateenvoi;
 	}
 
-	public void setDate(Date date) {
-		this.date = date;
+	public void setDateenvoi(Date dateenvoi) {
+		this.dateenvoi = dateenvoi;
 	}
 
 	@Column(name = "lu", nullable = false)
@@ -132,22 +134,31 @@ public class Message implements java.io.Serializable {
 		this.objet = objet;
 	}
 
-	@Column(name = "propbareme", nullable = false)
-	public boolean isPropbareme() {
-		return this.propbareme;
+	@Column(name = "fichier")
+	public Boolean getFichier() {
+		return this.fichier;
 	}
 
-	public void setPropbareme(boolean propbareme) {
-		this.propbareme = propbareme;
+	public void setFichier(Boolean fichier) {
+		this.fichier = fichier;
 	}
 
-	@Column(name = "description", length = 65535)
-	public String getDescription() {
-		return this.description;
+	@Column(name = "nomfichier")
+	public String getNomfichier() {
+		return this.nomfichier;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setNomfichier(String nomfichier) {
+		this.nomfichier = nomfichier;
+	}
+
+	@Column(name = "nomdossier")
+	public String getNomdossier() {
+		return this.nomdossier;
+	}
+
+	public void setNomdossier(String nomdossier) {
+		this.nomdossier = nomdossier;
 	}
 	/*
 	 * Mes fonctions
@@ -155,10 +166,24 @@ public class Message implements java.io.Serializable {
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return "Message :\n Send by "+this.utilisateurByEmetteur.getLogin()+"\nReceiver : "+
-				this.utilisateurByDestinataire.getLogin()+"\nObject :"+this.objet+"\nContent : "+
-		this.message+"\n Is  proposition : "+this.propbareme+"\nDescription : "+this.description+"\nSend the :"+
-				this.date;
+		return "Message de "+this.utilisateurByEmetteur.getLogin()+" pour "+this.utilisateurByDestinataire.getLogin()+
+				"\nContenu : "+this.message+"\nObjet : "+this.objet+
+				"\nAttach fichier : "+this.fichier+
+				"\nNom du fichier : "+this.nomfichier+
+				"\nNom du dossier : "+this.nomdossier+
+				"\nMessage envoyé le "+this.dateenvoi;
+	}
+	public String inter(String rubrique){
+		if(rubrique.equals("message-envoyes"))
+			return this.utilisateurByDestinataire.nom();
+		return this.utilisateurByEmetteur.nom();
+	}
+	public String lien(){
+		String lien  = "/documents/"+this.utilisateurByEmetteur.getLogin()+"/Fichier/"+this.nomdossier+"/"+this.nomfichier;
+		if(this.utilisateurByEmetteur.getLogin().equals("admin")){
+			lien = "/documents/"+this.utilisateurByDestinataire.getLogin()+"/Fichier/"+this.nomdossier+"/"+this.nomfichier;
+		}
+		return lien;
 	}
 
 }

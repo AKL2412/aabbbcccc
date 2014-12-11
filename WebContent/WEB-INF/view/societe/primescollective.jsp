@@ -30,8 +30,7 @@
   		</div>
   	</c:when>
   	<c:otherwise>
-  		 <div class="row">
-  		 <div class="container">
+  		 <div class="rowg">
  	<div class="col-md-12">
  		<c:if test="${fn:length(scte.primesCollectives()) > 0 }">
  		
@@ -73,7 +72,6 @@
  		</div>
  		</c:if>
  	</div>
- </div>
  </div>
   		<div class="row">
  	<div class="col-md-8 col-md-offset-2">

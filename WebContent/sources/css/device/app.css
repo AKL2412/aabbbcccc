@@ -298,21 +298,131 @@ div.image {
   border-left: 1px solid rgba(0, 0, 0, 0.1);
   min-height: 400px;
 }
+/* line 248, ../projet/sass/app.scss */
+.boitemessage .contenu .entete-message {
+  padding-bottom: 7px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+}
+/* line 252, ../projet/sass/app.scss */
+.boitemessage .contenu .entete-message .objet {
+  font-weight: bolder;
+}
+/* line 255, ../projet/sass/app.scss */
+.boitemessage .contenu .entete-message .details {
+  color: rgba(0, 0, 0, 0.4);
+}
+/* line 260, ../projet/sass/app.scss */
+.boitemessage .contenu .contenu-message {
+  padding: 10px;
+  font-family: "Trebuchet MS";
+  text-align: justify;
+  font-size: 1.1em;
+  color: rgba(0, 0, 0, 0.7);
+}
+/* line 268, ../projet/sass/app.scss */
+.boitemessage .contenu .fichier-telecharger {
+  border-top: 1px solid rgba(0, 0, 0, 0.4);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+  background-color: #f2f2f2;
+  padding: 8px 0;
+}
+/* line 274, ../projet/sass/app.scss */
+.boitemessage .contenu .unMessage {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+  background-color: #f2f2f2;
+  padding: 5px 0;
+}
+/* line 279, ../projet/sass/app.scss */
+.boitemessage .contenu .unMessage div {
+  display: inline-block;
+  color: rgba(0, 0, 0, 0.7);
+}
+/* line 283, ../projet/sass/app.scss */
+.boitemessage .contenu .unMessage .dateenvoi {
+  color: rgba(0, 0, 0, 0.5);
+  font-size: 0.9em;
+  font-style: italic;
+}
+/* line 288, ../projet/sass/app.scss */
+.boitemessage .contenu .unMessage .objet {
+  font-weight: bold;
+}
+/* line 291, ../projet/sass/app.scss */
+.boitemessage .contenu .unMessage:hover {
+  background-color: #f1f1f1;
+}
+/* line 296, ../projet/sass/app.scss */
+.boitemessage .contenu .non-lu {
+  background-color: #ffffff;
+}
 
-/* line 250, ../projet/sass/app.scss */
+/* line 301, ../projet/sass/app.scss */
 .boitemessage-send {
   /*
   Boite d'envoi
   */
 }
 
-/* line 258, ../projet/sass/app.scss */
+/* line 308, ../projet/sass/app.scss */
+#calendrier-ferier {
+  overflow: auto;
+  min-height: 30px;
+  min-width: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  margin-bottom: 20px;
+}
+/* line 314, ../projet/sass/app.scss */
+#calendrier-ferier .annee {
+  margin: 2px;
+  background-color: #f1f1f1;
+}
+/* line 317, ../projet/sass/app.scss */
+#calendrier-ferier .annee .titre {
+  background-color: #777;
+  color: #ffffff;
+  text-align: center;
+  font-size: 1.3em;
+}
+/* line 324, ../projet/sass/app.scss */
+#calendrier-ferier .annee .contenu .mois {
+  display: inline-block;
+  width: 16%;
+  margin: 4px 1px;
+}
+/* line 329, ../projet/sass/app.scss */
+#calendrier-ferier .annee .contenu .mois .titre {
+  background-color: #ccc;
+  text-align: center;
+  font-size: 1em;
+}
+/* line 335, ../projet/sass/app.scss */
+#calendrier-ferier .annee .contenu .mois .contenu .unJour {
+  padding: 1px 2px;
+  cursor: pointer;
+}
+/* line 337, ../projet/sass/app.scss */
+#calendrier-ferier .annee .contenu .mois .contenu .unJour span {
+  display: inline-block;
+}
+/* line 340, ../projet/sass/app.scss */
+#calendrier-ferier .annee .contenu .mois .contenu .unJour .chaine {
+  width: 70%;
+  font-family: "Courier New";
+  color: rgba(0, 0, 0, 0.7);
+}
+/* line 349, ../projet/sass/app.scss */
+#calendrier-ferier .annee .contenu .mois .contenu .success {
+  background-color: #dff0d8;
+  color: #3c763d;
+}
+
+/* line 360, ../projet/sass/app.scss */
 .panel .panel-heading i.plis {
   float: right;
   cursor: pointer;
 }
 
-/* line 263, ../projet/sass/app.scss */
+/* line 365, ../projet/sass/app.scss */
 .consultation-societe {
   border: 1px solid #dddddd;
   height: 400px;
@@ -323,7 +433,7 @@ div.image {
   -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 }
-/* line 271, ../projet/sass/app.scss */
+/* line 373, ../projet/sass/app.scss */
 .consultation-societe .icon {
   width: 30%;
   height: 400px;
@@ -340,7 +450,7 @@ div.image {
   background-image: -webkit-linear-gradient(top, #356aa0 0%, #356aa0 100%);
   background-image: linear-gradient(to bottom, #356aa0 0%, #356aa0 100%);
 }
-/* line 282, ../projet/sass/app.scss */
+/* line 384, ../projet/sass/app.scss */
 .consultation-societe .icon .nom {
   text-align: center;
   text-transform: uppercase;
@@ -350,34 +460,34 @@ div.image {
   color: #ffffff;
   text-shadow: 0 2px 1px rgba(0, 0, 0, 0.8);
 }
-/* line 292, ../projet/sass/app.scss */
+/* line 394, ../projet/sass/app.scss */
 .consultation-societe .icon .image {
   width: 100%;
   height: 250px;
   line-height: 250px;
 }
-/* line 296, ../projet/sass/app.scss */
+/* line 398, ../projet/sass/app.scss */
 .consultation-societe .icon .image img {
   width: 100%;
   display: inline-block;
 }
-/* line 301, ../projet/sass/app.scss */
+/* line 403, ../projet/sass/app.scss */
 .consultation-societe .icon .lien {
   padding-top: 20px;
 }
-/* line 303, ../projet/sass/app.scss */
+/* line 405, ../projet/sass/app.scss */
 .consultation-societe .icon .lien a {
   text-decoration: none;
   color: rgba(255, 255, 255, 0.8);
   display: inline-block;
   margin: 2px;
 }
-/* line 308, ../projet/sass/app.scss */
+/* line 410, ../projet/sass/app.scss */
 .consultation-societe .icon .lien a:hover {
   text-decoration: underline;
   color: #ffffff;
 }
-/* line 313, ../projet/sass/app.scss */
+/* line 415, ../projet/sass/app.scss */
 .consultation-societe .icon .lien a.active {
   border: 1px solid rgba(0, 0, 0, 0.2);
   background-color: white;
@@ -396,35 +506,35 @@ div.image {
   font-weight: bolder;
   padding: 0 4px;
 }
-/* line 323, ../projet/sass/app.scss */
+/* line 425, ../projet/sass/app.scss */
 .consultation-societe .icon .lien a.active:hover {
   text-decoration: none;
 }
-/* line 329, ../projet/sass/app.scss */
+/* line 431, ../projet/sass/app.scss */
 .consultation-societe .detail {
   display: inline-block;
   width: 68%;
   height: 100%;
   overflow: auto;
 }
-/* line 334, ../projet/sass/app.scss */
+/* line 436, ../projet/sass/app.scss */
 .consultation-societe .detail .add-exo {
   overflow: hidden;
   /*height: 30px;*/
   border-bottom: 3px solid #ccc;
   margin-bottom: 6px;
 }
-/* line 339, ../projet/sass/app.scss */
+/* line 441, ../projet/sass/app.scss */
 .consultation-societe .detail .add-exo .buttons {
   text-align: right;
   height: 30px;
 }
-/* line 344, ../projet/sass/app.scss */
+/* line 446, ../projet/sass/app.scss */
 .consultation-societe .detail .les-exos {
   background-color: #ffffff;
 }
 
-/* line 350, ../projet/sass/app.scss */
+/* line 452, ../projet/sass/app.scss */
 .message {
   background-color: #f7f7f9;
   border: 1px solid #444;
@@ -438,7 +548,7 @@ div.image {
   -webkit-border-radius: 3px;
   border-radius: 3px;
 }
-/* line 358, ../projet/sass/app.scss */
+/* line 460, ../projet/sass/app.scss */
 .message i {
   color: #ccc;
   position: absolute;
@@ -446,7 +556,7 @@ div.image {
   margin-left: -10px;
 }
 
-/* line 365, ../projet/sass/app.scss */
+/* line 467, ../projet/sass/app.scss */
 #logoSociete {
   display: inline-block;
   width: 100%;
@@ -455,30 +565,30 @@ div.image {
 /*
 presentation employ├®
 */
-/* line 372, ../projet/sass/app.scss */
+/* line 474, ../projet/sass/app.scss */
 .salarie-presentation {
   padding: 10px 0;
   padding-left: 5px;
 }
-/* line 378, ../projet/sass/app.scss */
+/* line 480, ../projet/sass/app.scss */
 .salarie-presentation .image img {
   -moz-border-radius: 8px;
   -webkit-border-radius: 8px;
   border-radius: 8px;
 }
-/* line 382, ../projet/sass/app.scss */
+/* line 484, ../projet/sass/app.scss */
 .salarie-presentation div.sblock {
   border: 1px solid rgba(0, 0, 0, 0.1);
 }
-/* line 385, ../projet/sass/app.scss */
+/* line 487, ../projet/sass/app.scss */
 .salarie-presentation div.block {
   background-color: #ffffff;
 }
-/* line 386, ../projet/sass/app.scss */
+/* line 488, ../projet/sass/app.scss */
 .salarie-presentation div.block .modifier-block {
   text-align: right;
 }
-/* line 392, ../projet/sass/app.scss */
+/* line 494, ../projet/sass/app.scss */
 .salarie-presentation div.block .titre-bloc {
   height: 30px;
   line-height: 30px;

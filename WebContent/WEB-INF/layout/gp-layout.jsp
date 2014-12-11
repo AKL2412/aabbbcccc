@@ -14,6 +14,7 @@
 <!-- jQuery Version 1.11.0 -->
     <script src=" <c:url value="/sources/js/jquery-1.11.0.js"/>"></script>
     <!-- jQuery Version 1.11.0 -->
+    <script src=" <c:url value="/sources/js/jquery-ui.js"/>"></script>
     <script src=" <c:url value="/sources/js/app.js"/>"></script>
  <link rel="stylesheet" type="text/css" href="<c:url value="/sources/css/device/app.css"/> "> 
     <!-- Bootstrap Core CSS -->

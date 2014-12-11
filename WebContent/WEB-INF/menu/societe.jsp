@@ -1,5 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-
+<span id="slug" slug="${scte.slug }"></span>
 <ul class="nav" id="side-menu">
                         <li class="sidebar-search">
                             <form method="get" action="<c:url value="/societe/${scte.slug }/recherche"/>">

@@ -78,8 +78,7 @@
   	</c:when>
   	<c:otherwise>
   		
-  		  <div class="row">
-  		  <div class="container">
+  		  <div class="rowg">
  	<div class="col-md-12">
  		<c:if test="${fn:length(salarie.primeExercice(salarie.societe.exoEncours())) > 0 }">
  		
@@ -131,13 +130,12 @@
  		</div>
  		</c:if>
  	</div>
+ 
  </div>
- </div>
   		
   		
   		
-  		<div class="row">
-  		<div class="container">
+  		<div class="rowd">
  	<div class="col-md-6">
  		<div class="panel panel-default">
  			<div class="panel-heading">
@@ -217,7 +215,7 @@
  		</div>
  	</div>
  	
- </div>
+ 
  </div>
 
   		

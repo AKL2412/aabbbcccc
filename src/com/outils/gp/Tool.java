@@ -3,12 +3,14 @@ package com.outils.gp;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.joda.time.DateTime;
 
+import com.gp.domain.Salarie;
 import com.gp.domain.Societe;
 import com.gp.domain.Utilisateur;
 
@@ -78,7 +80,7 @@ public class Tool {
 		
 		try {
 			  
-			  id = (int) method.invoke(o);
+			  id = (Integer) method.invoke(o);
 			} catch (IllegalArgumentException e) {
 			} catch (IllegalAccessException e) {
 			} catch (InvocationTargetException e) {
@@ -203,28 +205,94 @@ public class Tool {
 		int mois = 0;
 		int annee = 0;
 		DateTime temp = debut;
-		int dmois = temp.getMonthOfYear();
-		int dannee = temp.getYear();
+//		int dmois = temp.getMonthOfYear();
+//		int dannee = temp.getYear();
 		if(temp.getMillis() <= fin.getMillis())
 		while(temp.getMillis() <= fin.getMillis()){
 			temp = temp.plusDays(1);
 			jours++;
+			/*
 			if(temp.getMonthOfYear() != dmois){
 				 dmois = temp.getMonthOfYear();
 				mois++;
 				jours = 1;
 			}
 			if(temp.getYear() != dannee){
+				
 				dannee = temp.getYear();
+				dmois = temp.getMonthOfYear();
 				annee++;
+				mois = 0;
+				jours = 1;
 			}
-			
-			System.out.println(temp.toString("EEEE dd MMMM YYYY"));
+			//*/
+			//System.out.println(temp.toString("EEEE dd MMMM YYYY"));
 		}
-		
+		annee = jours / 365;
+		mois = (jours - (annee*365)) / 30;
+		jours = (jours - (mois *30) -(annee*365) );
 		anciennete.setAnnee(annee);
 		anciennete.setMois(mois);
 		anciennete.setJours(jours);
 		return anciennete;
+	}
+	
+	public static List<?> trie(Set<Object> sal,String type){
+		 
+		if(type.equals("salarie")){
+			List<Salarie>list = new ArrayList<Salarie>();
+			for(Object o:sal){
+				Salarie s  =(Salarie) o;
+				list.add(s);
+			}
+			Collections.sort(list);
+			return list;
+				
+		}
+	
+		return null;
+	}
+	
+	public static Calendrier calendrierFerier(DateTime debut,DateTime fin){
+		Calendrier calen = new Calendrier();
+		DateTime temp = debut;
+		if(temp.getMillis() <= fin.getMillis()){
+			Integer Iannee = temp.getYear();
+			Integer Imois = temp.getMonthOfYear();
+			Mois mois = new Mois();
+			mois.setNumero(Imois);
+			mois.setChaine(temp.toString("MMMMMM"));
+			Annee annee = new Annee();
+			annee.setNumero(Iannee);
+			calen.addAnnee(annee);
+			while(temp.getMillis() <= fin.getMillis()){
+				Jour jour = new Jour();
+				jour.setDay(temp.getDayOfMonth());
+				jour.setNumero(temp.getDayOfWeek());
+				jour.setChaine(temp.toString("EEEE"));
+				if(temp.getMonthOfYear() != Imois){
+					annee.addMois(mois);
+					//System.out.println(annee);
+					mois = new Mois();
+					Imois = temp.getMonthOfYear();
+					mois.setNumero(Imois);
+					mois.setChaine(temp.toString("MMMMMM"));
+					
+				}
+				if(temp.getYear() != Iannee){
+					
+					//System.out.println(annee);
+					annee = new Annee();
+					calen.addAnnee(annee);
+					Iannee = temp.getYear();
+					annee.setNumero(Iannee);
+				}
+				mois.addJour(jour);
+				temp = temp.plusDays(1);
+			}
+			if(mois.jours.size() > 0 )
+				annee.addMois(mois);
+		}
+		return calen;
 	}
 }
